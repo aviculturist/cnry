@@ -44,5 +44,5 @@ const InstallWalletDialog = () => {
       </Card>
     </Dialog>
   );
-}
+};
 export default InstallWalletDialog;

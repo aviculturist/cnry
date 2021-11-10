@@ -12,7 +12,6 @@ async function deploy() {
   const deployed = await TestProvider.fromContracts(contracts);
   cnry = deployed.cnry.contract;
   watcher = deployed.watcher.contract;
-
 }
 const delay = (ms: number | undefined) => new Promise(res => setTimeout(res, ms));
 
@@ -22,7 +21,10 @@ describe('Cnry contract', () => {
   });
 
   test('Cnry token holder #2 (Alice) can hatch a Cnry and the first Cnry has tokenId 0', async () => {
-    const tx = cnry.hatch('Acme Corp', 'Acme Corp has never received an order under Section 215 of the USA Patriot Act.');
+    const tx = cnry.hatch(
+      'Acme Corp',
+      'Acme Corp has never received an order under Section 215 of the USA Patriot Act.'
+    );
     const result = await txOk(tx, alice);
     expect(result.value).toEqual(0n);
   });
@@ -32,18 +34,18 @@ describe('Cnry contract', () => {
     const result = await txOk(setUriTx, alice);
     expect(result.value).toBeGreaterThan(0n);
     const getUriTx = cnry.getTokenUri(0);
-    expect(await getUriTx).toEqual({"value": "https://example.com"});
+    expect(await getUriTx).toEqual({ value: 'https://example.com' });
   });
 
   test('Alice can update the Cnry keepalive-timestamp', async () => {
     const getKeepaliveExpiry = cnry.getKeepaliveTimestamp(0);
     const keepalive = await getKeepaliveExpiry;
-    const keepaliveValue = "value" in keepalive ? keepalive.value : 0;
+    const keepaliveValue = 'value' in keepalive ? keepalive.value : 0;
     const keepaliveTx = cnry.keepalive(0);
     const result = await txOk(keepaliveTx, alice);
     const getKeepaliveExpiryAfter = cnry.getKeepaliveTimestamp(0);
     const keepaliveAfter = await getKeepaliveExpiryAfter;
-    const keepaliveAfterValue = "value" in keepaliveAfter ? keepaliveAfter.value : 0;
+    const keepaliveAfterValue = 'value' in keepaliveAfter ? keepaliveAfter.value : 0;
     expect(keepaliveAfterValue).toBeGreaterThan(keepaliveValue);
   });
 
@@ -53,10 +55,10 @@ describe('Cnry contract', () => {
     expect(result.value).toEqual(1n);
   });
 
-  test('Cnry token holders cannot update a different holder\'s Cnry', async () => {
+  test("Cnry token holders cannot update a different holder's Cnry", async () => {
     const keepaliveTx = cnry.keepalive(0);
     const result = await txErr(keepaliveTx, bob);
-    expect (result.value).toEqual(401n);
+    expect(result.value).toEqual(401n);
   });
 
   test('Anyone can watch a Cnry', async () => {
@@ -64,7 +66,7 @@ describe('Cnry contract', () => {
     const res = await txOk(getCnryAddressTx, bob);
     const watchTx = cnry.watch(0);
     const result = await txOk(watchTx, bob);
-    expect (result.value).toBeGreaterThan(10n)
+    expect(result.value).toBeGreaterThan(10n);
   });
 
   // test('Cnry cannot be updated after expiry', async () => {
@@ -80,5 +82,4 @@ describe('Cnry contract', () => {
 
   //   expect(keepaliveAfterValue).toBeGreaterThan(keepaliveValue);
   // });
-
 });

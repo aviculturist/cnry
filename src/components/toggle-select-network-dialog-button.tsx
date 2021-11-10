@@ -30,5 +30,5 @@ const ToggleSelectNetworkDialogButton = () => {
       <SelectNetworkDialog />
     </>
   );
-}
+};
 export default ToggleSelectNetworkDialogButton;

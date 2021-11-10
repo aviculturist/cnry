@@ -133,10 +133,14 @@ const NetworkListItem = ({ network, index }: { network: any; index: number }) =>
           </Avatar>
         </ListItemAvatar>
         <ListItemText
-          primary={<React.Fragment>{network.name}<Chip sx={{ml:1}} size="small" label={network.chain} /></React.Fragment>}
+          primary={
+            <React.Fragment>
+              {network.name}
+              <Chip sx={{ ml: 1 }} size="small" label={network.chain} />
+            </React.Fragment>
+          }
           secondary={<React.Fragment>{network.label}</React.Fragment>}
         />
-
       </ListItemButton>
       {isCustom && (
         <ListItemIcon>

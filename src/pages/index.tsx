@@ -3,7 +3,12 @@ import { NextPage } from 'next';
 import { GetQueries, getStaticQueryProps } from 'jotai-query-toolkit/nextjs';
 import { wrapWithMicroStacks } from '@micro-stacks/nextjs';
 import { StacksMainnet, StacksTestnet, StacksMocknet } from 'micro-stacks/network';
-import { DEFAULT_MAINNET_SERVER, DEFAULT_TESTNET_SERVER, DEFAULT_LOCALNET_SERVER, ENV } from '@utils/constants';
+import {
+  DEFAULT_MAINNET_SERVER,
+  DEFAULT_TESTNET_SERVER,
+  DEFAULT_LOCALNET_SERVER,
+  ENV,
+} from '@utils/constants';
 import Header from '@components/header';
 import CnryApp from '@components/cnry-app';
 import Footer from '@components/footer';
@@ -13,12 +18,12 @@ import SafeSuspense from '@components/safe-suspense';
 
 const Index: NextPage<any> = () => {
   return (
-    <Container sx={{mb: 8}} disableGutters maxWidth={false}>
+    <Container sx={{ mb: 8 }} disableGutters maxWidth={false}>
       <Header />
       <SafeSuspense
         fallback={
           <>
-            <Skeleton sx={{m:'auto'}} variant="rectangular" width={400} height={200} />
+            <Skeleton sx={{ m: 'auto' }} variant="rectangular" width={400} height={200} />
           </>
         }
       >

@@ -17,8 +17,11 @@ const deployed = NodeProvider.fromContracts(contracts, clarigenConfig);
 
 async function run() {
   const cnry = deployed.cnry.contract;
-  const tokenId=0;
-  const setNameTx = cnry.setUri(tokenId, 'ipfs://QmBLAHBLAHBLAH/{id}') as Transaction<bigint, Response<null, bigint>>;
+  const tokenId = 0;
+  const setNameTx = cnry.setUri(tokenId, 'ipfs://QmBLAHBLAHBLAH/{id}') as Transaction<
+    bigint,
+    Response<null, bigint>
+  >;
 
   const result = (await setNameTx.submit({
     postConditions: [],
@@ -26,7 +29,9 @@ async function run() {
 
   console.log(result);
   console.log(`curl -s 'http://localhost:3999/extended/v1/tx/0x${result.txId}' | jq -r .`);
-  console.log(`stx -I http://localhost:3999 -H http://localhost:3999 get_confirmations ${result.txId}`);
+  console.log(
+    `stx -I http://localhost:3999 -H http://localhost:3999 get_confirmations ${result.txId}`
+  );
 }
 
 run()

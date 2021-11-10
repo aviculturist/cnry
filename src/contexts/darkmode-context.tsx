@@ -74,5 +74,5 @@ const DarkModeProvider = ({ children }: { children: ReactNode }) => {
       <ThemeProvider theme={theme}>{children}</ThemeProvider>
     </DarkModeContext.Provider>
   );
-}
+};
 export default DarkModeProvider;

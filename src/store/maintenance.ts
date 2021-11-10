@@ -1,4 +1,3 @@
-
 import { smartContractsClientAtom, accountsClientAtom, transactionsClientAtom } from '@store/api';
 import { currentMaintenanceContractState } from '@store/current-network-state';
 import { GET_MAINTENANCE_FUNCTION } from '@utils/constants';
@@ -11,7 +10,7 @@ import { networkAtom, userStxAddressesAtom } from '@micro-stacks/react';
 import { cvToJSON, cvToHex, hexToCV, intToHexString } from '@stacks/transactions';
 import { fetchReadOnlyFunction } from 'micro-stacks/api';
 import { ChainID } from 'micro-stacks/common';
-import { uintCV, trueCV, stringAsciiCV} from 'micro-stacks/clarity';
+import { uintCV, trueCV, stringAsciiCV } from 'micro-stacks/clarity';
 
 export const maintenanceModeAtom = atomFamilyWithQuery<string, any>(
   'maintenanceModeAtom',

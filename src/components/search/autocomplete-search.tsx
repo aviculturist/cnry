@@ -246,5 +246,5 @@ const AutocompleteSearch = () => {
       />
     </Stack>
   );
-}
+};
 export default AutocompleteSearch;

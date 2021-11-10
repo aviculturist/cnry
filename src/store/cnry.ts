@@ -1,5 +1,8 @@
 import { smartContractsClientAtom, accountsClientAtom, transactionsClientAtom } from '@store/api';
-import { currentCnryContractState, currentWatcherContractState } from '@store/current-network-state';
+import {
+  currentCnryContractState,
+  currentWatcherContractState,
+} from '@store/current-network-state';
 import { HATCH_FUNCTION, LASTID_FUNCTION, METADATA_FUNCTION } from '@utils/constants';
 import { atomWithQuery, atomFamilyWithQuery } from 'jotai-query-toolkit';
 // TODO: this returns something differently
@@ -77,7 +80,7 @@ export const cnryTransactionIdsAtom = atomWithQuery<string[]>(
             tx.tx_status === 'success'
         )
         .map(tx => tx.tx_id);
-        //console.log(txids);
+      //console.log(txids);
       return txids;
       // const final = await Promise.all(
       //   txids.map(async txId => txClient.getTransactionById({ txId }))
@@ -111,7 +114,7 @@ export const cnryIdsAtom = atomWithQuery<string[]>(
             tx.tx_status === 'success'
         )
         .map(tx => tx.tx_id);
-        //console.log(txids);
+      //console.log(txids);
       return txids;
       // const final = await Promise.all(
       //   txids.map(async txId => txClient.getTransactionById({ txId }))

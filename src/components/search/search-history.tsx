@@ -79,5 +79,5 @@ const SearchHistory = () => {
       ))}
     </List>
   );
-}
+};
 export default SearchHistory;

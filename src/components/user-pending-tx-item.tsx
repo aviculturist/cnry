@@ -77,6 +77,6 @@ const UserPendingTxItem = ({ txid }: { txid: string }) => {
       </Tooltip>
     </ListItem>
   );
-}
+};
 
 export default UserPendingTxItem;

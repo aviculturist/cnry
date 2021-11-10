@@ -40,5 +40,5 @@ const useHatch = () => {
     },
     [handleContractCall, contractAddress, contractName, onFinish, onCancel]
   );
-}
+};
 export default useHatch;

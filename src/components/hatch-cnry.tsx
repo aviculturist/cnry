@@ -99,5 +99,5 @@ const HatchCnryDialog = () => {
       </Dialog>
     </>
   );
-}
+};
 export default HatchCnryDialog;

@@ -33,6 +33,6 @@ const ToggleDarkModeIconButton = () => {
       )}
     </IconButton>
   );
-}
+};
 
 export default ToggleDarkModeIconButton;

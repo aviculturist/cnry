@@ -7,7 +7,9 @@ interface InstallWalletDialogIsOpenType {
 }
 
 const useInstallWalletDialog = (): InstallWalletDialogIsOpenType => {
-  const [installWalletDialogIsOpen, setInstallWalletDialogIsOpen] = useAtom(installWalletDialogIsOpenAtom);
+  const [installWalletDialogIsOpen, setInstallWalletDialogIsOpen] = useAtom(
+    installWalletDialogIsOpenAtom
+  );
   return { installWalletDialogIsOpen, setInstallWalletDialogIsOpen };
-}
+};
 export default useInstallWalletDialog;

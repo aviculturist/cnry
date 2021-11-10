@@ -50,11 +50,9 @@ const ClearApplicationDataMenuItem = () => {
       </MenuItem>
 
       <Snackbar open={open} autoHideDuration={6000} onClose={handleClose} action={action}>
-        <Alert severity="success">
-        {t`Browser localStorage and sessionStorage Cleared`}
-        </Alert>
+        <Alert severity="success">{t`Browser localStorage and sessionStorage Cleared`}</Alert>
       </Snackbar>
     </>
   );
-}
+};
 export default ClearApplicationDataMenuItem;

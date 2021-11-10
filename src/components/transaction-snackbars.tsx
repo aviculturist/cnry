@@ -63,7 +63,7 @@ const SingleTransactionSnackbar = ({ txid }: { txid: string }) => {
       </Alert>
     </Snackbar>
   );
-}
+};
 
 // TODO: not entirely sure if looping through all pending transactions is the best pattern
 const TransactionSnackbars = () => {
@@ -75,5 +75,5 @@ const TransactionSnackbars = () => {
       ))}
     </div>
   );
-}
+};
 export default TransactionSnackbars;

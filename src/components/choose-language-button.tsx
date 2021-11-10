@@ -58,7 +58,7 @@ const LanguageMenu = () => {
       </MenuList>
     </Menu>
   );
-}
+};
 //LanguageMenu.whyDidYouRender = true
 //export { LanguageMenu };
 
@@ -79,7 +79,7 @@ const LanguageMenuItem = ({ locale, active }: { locale: Locale; active: boolean 
       </LanguageLink>
     </MenuItem>
   );
-}
+};
 
 const ChooseLanguageButton = () => {
   const [isOpen, setIsOpen] = useAtom(languageMenuIsOpenAtom);
@@ -107,5 +107,5 @@ const ChooseLanguageButton = () => {
       <LanguageMenu />
     </div>
   );
-}
+};
 export default ChooseLanguageButton;

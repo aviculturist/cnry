@@ -28,15 +28,16 @@ export const networksAtom = atom<Network[]>(get => {
   return [...DEFAULT_NETWORK_LIST, ...customItems];
 });
 
-export const currentNetworkIndexAtom = atomWithStorage('currentNetworkIndex', DEFAULT_NETWORK_INDEX);
-
-export const currentNetworkAtom = atom<Network>(
-  get => {
-    const networks = get(networksAtom);
-    const index = get(currentNetworkIndexAtom);
-    return networks[index];
-  }
+export const currentNetworkIndexAtom = atomWithStorage(
+  'currentNetworkIndex',
+  DEFAULT_NETWORK_INDEX
 );
+
+export const currentNetworkAtom = atom<Network>(get => {
+  const networks = get(networksAtom);
+  const index = get(currentNetworkIndexAtom);
+  return networks[index];
+});
 
 export const anyNetworkInfoAtom = atomFamilyWithQuery<string, CoreNodeInfoResponse>(
   'any-network-info',

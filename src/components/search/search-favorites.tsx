@@ -65,5 +65,5 @@ const SearchFavorites = () => {
       ))}
     </List>
   );
-}
+};
 export default SearchFavorites;

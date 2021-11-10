@@ -1,6 +1,6 @@
 import { networkAtom, userStxAddressesAtom } from '@micro-stacks/react';
 import { smartContractsClientAtom, transactionsClientAtom } from '@store/api';
-import { cvToJSON, cvToHex, hexToCV,intToHexString } from '@stacks/transactions';
+import { cvToJSON, cvToHex, hexToCV, intToHexString } from '@stacks/transactions';
 import { fetchReadOnlyFunction } from 'micro-stacks/api';
 import { uintCV } from 'micro-stacks/clarity';
 import {

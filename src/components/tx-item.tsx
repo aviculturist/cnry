@@ -127,15 +127,15 @@ const TxItem = ({ txid }: { txid: string }) => {
     <ListItem button key={tx.tx_id}>
       <ListItemIcon>
         {/* <Tooltip key={tx.tx_id} title={tx.tx_status}> */}
-          {tx.tx_status === 'success' ? (
-            <CheckCircleOutlineIcon color="success" />
-          ) : tx.tx_status === 'pending' ? (
-            <ChangeCircleOutlinedIcon color="info" />
-          ) : tx.tx_status === 'abort_by_response' || tx.tx_status === 'abort_by_post_condition' ? (
-            <CancelOutlinedIcon color="error" />
-          ) : (
-            <HelpOutlineOutlinedIcon color="error" />
-          )}
+        {tx.tx_status === 'success' ? (
+          <CheckCircleOutlineIcon color="success" />
+        ) : tx.tx_status === 'pending' ? (
+          <ChangeCircleOutlinedIcon color="info" />
+        ) : tx.tx_status === 'abort_by_response' || tx.tx_status === 'abort_by_post_condition' ? (
+          <CancelOutlinedIcon color="error" />
+        ) : (
+          <HelpOutlineOutlinedIcon color="error" />
+        )}
         {/* </Tooltip> */}
       </ListItemIcon>
       <TransactionTypeSelector key={tx.tx_id} tx={tx} />

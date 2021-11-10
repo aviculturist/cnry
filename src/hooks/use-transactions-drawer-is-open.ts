@@ -14,5 +14,5 @@ const useTransactionsDrawerIsOpen = (): TransactionsDrawer => {
     transactionsDrawerIsOpen: transactionsDrawerIsOpen,
     setTransactionsDrawerIsOpen: setTransactionsDrawerIsOpen,
   };
-}
+};
 export default useTransactionsDrawerIsOpen;

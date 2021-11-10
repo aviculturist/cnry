@@ -17,18 +17,23 @@ const deployed = NodeProvider.fromContracts(contracts, clarigenConfig);
 
 async function run() {
   const cnry = deployed.cnry.contract;
-  const tokenId=1;
+  const tokenId = 1;
   //const incrementTx = counter.increment() as NodeTransaction<boolean, null>;
-  const setNameTx = cnry.setStatement(tokenId, 'Foobar') as Transaction<bigint, Response<null, bigint>>;
+  const setNameTx = cnry.setStatement(tokenId, 'Foobar') as Transaction<
+    bigint,
+    Response<null, bigint>
+  >;
 
   const result = (await setNameTx.submit({
     postConditions: [],
   })) as WebTransactionReceipt<bigint, bigint>;
-//  })) as WebTransactionReceipt<number, null>;
+  //  })) as WebTransactionReceipt<number, null>;
 
   console.log(result);
   console.log(`curl -s 'http://localhost:3999/extended/v1/tx/0x${result.txId}' | jq -r .`);
-  console.log(`stx -I http://localhost:3999 -H http://localhost:3999 get_confirmations ${result.txId}`);
+  console.log(
+    `stx -I http://localhost:3999 -H http://localhost:3999 get_confirmations ${result.txId}`
+  );
 }
 
 run()

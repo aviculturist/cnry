@@ -33,5 +33,5 @@ const BitcoinBlockHeightButton = () => {
       </Button>
     </Tooltip>
   );
-}
+};
 export default BitcoinBlockHeightButton;

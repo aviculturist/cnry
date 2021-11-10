@@ -7,10 +7,9 @@ import { StacksMocknet } from '@stacks/network';
 // this is the private key making transactions.
 const privateKey = '753b7cc01a1a2e86221266a154af739463fce51219d97e4f856cd7200c3bd2a601';
 
-const commitHash = process.argv[2]
+const commitHash = process.argv[2];
 const maintenance = process.argv[3] === 'true' ? true : false;
 const wall = process.argv[4];
-
 
 const clarigenConfig = {
   privateKey,
@@ -23,7 +22,10 @@ const deployed = NodeProvider.fromContracts(contracts, clarigenConfig);
 // yarn ts-node scripts/add-maintenanceMode 'true' 'Maintenance Mode Enabled, new release being depoyed'
 async function run() {
   const maintenanceMode = deployed.maintenance.contract;
-  const mmTx = maintenanceMode.addMaintenanceMode(commitHash, maintenance, wall) as Transaction<bigint, Response<null, bigint>>;
+  const mmTx = maintenanceMode.addMaintenanceMode(commitHash, maintenance, wall) as Transaction<
+    bigint,
+    Response<null, bigint>
+  >;
 
   const result = (await mmTx.submit({
     postConditions: [],

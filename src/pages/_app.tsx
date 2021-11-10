@@ -34,7 +34,6 @@ function DirectionProvider({ children }: { children: ReactNode }) {
 }
 
 async function dynamicActivate(queryLocale: Locale | undefined, userLocale: Locale | null) {
-
   const locale: Locale = queryLocale ?? userLocale ?? navigatorLocale() ?? DEFAULT_LOCALE;
   i18n.loadLocaleData(locale, { plurals: () => plurals[locale] });
   const { messages } =

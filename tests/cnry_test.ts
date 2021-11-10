@@ -5,7 +5,7 @@ import {
   Chain,
   Account,
   types,
-// @ts-ignore
+  // @ts-ignore
 } from 'https://deno.land/x/clarinet@v0.18.3/index.ts';
 // @ts-ignore
 import { assertEquals } from 'https://deno.land/std@0.90.0/testing/asserts.ts';

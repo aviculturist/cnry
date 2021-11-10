@@ -7,12 +7,10 @@ interface MetadataDialogProps {
 }
 
 const useMetadataDialogIsOpen = (): MetadataDialogProps => {
-  const [metadataDialogIsOpen, setMetadataDialogIsOpen] = useAtom(
-    metadataDialogIsOpenAtom
-  );
+  const [metadataDialogIsOpen, setMetadataDialogIsOpen] = useAtom(metadataDialogIsOpenAtom);
   return {
     metadataDialogIsOpen: metadataDialogIsOpen,
     setMetadataDialogIsOpen: setMetadataDialogIsOpen,
   };
-}
+};
 export default useMetadataDialogIsOpen;

@@ -7,7 +7,7 @@ import { darken } from '@mui/material/styles';
 //import { DefaultTheme } from '@mui/system';
 
 const StyledLink = styled(ReactRouterDomLink)(
-  ({ theme }: {theme:any}) => `
+  ({ theme }: { theme: any }) => `
   color: ${theme.palette.primary.main};
   text-decoration: none;
   &:focus,
@@ -25,7 +25,7 @@ const StyledLink = styled(ReactRouterDomLink)(
 
 const LanguageLink = (props: LinkProps) => {
   return <StyledLink {...props} />;
-}
+};
 export default LanguageLink;
 
 // const StyledLink = styled(Link)`

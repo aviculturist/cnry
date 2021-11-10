@@ -26,5 +26,5 @@ const SearchDialog = () => {
       <SearchFavorites />
     </Dialog>
   );
-}
+};
 export default SearchDialog;

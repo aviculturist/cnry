@@ -12,5 +12,5 @@ const StacksIcon = (props: any) => {
       />
     </SvgIcon>
   );
-}
+};
 export default StacksIcon;

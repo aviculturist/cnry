@@ -9,7 +9,7 @@ module.exports = withTM({
   assetPrefix: './',
   trailingSlash: true,
   reactStrictMode: true,
-  webpack(config, {isServer}) {
+  webpack(config, { isServer }) {
     const fallback = config.resolve.fallback || (config.resolve.fallback = {});
     if (!isServer) fallback['crypto'] = fallback['stream'] = false;
 

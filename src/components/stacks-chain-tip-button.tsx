@@ -30,5 +30,5 @@ const StacksChainTipButton = () => {
       </Button>
     </Tooltip>
   );
-}
+};
 export default StacksChainTipButton;

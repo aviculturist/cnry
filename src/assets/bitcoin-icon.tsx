@@ -17,5 +17,5 @@ const BitcoinIcon = (props: any) => {
       </>
     </SvgIcon>
   );
-}
+};
 export default BitcoinIcon;

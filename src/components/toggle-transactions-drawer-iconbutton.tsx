@@ -23,5 +23,5 @@ const ToggleTransactionsDrawerIconButton = () => {
       </Badge>
     </IconButton>
   );
-}
+};
 export default ToggleTransactionsDrawerIconButton;

@@ -44,5 +44,5 @@ const NetworkOfflineSnackbar = () => {
       </Alert>
     </Snackbar>
   );
-}
+};
 export default NetworkOfflineSnackbar;

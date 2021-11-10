@@ -1046,5 +1046,5 @@ const WalletImage = () => {
       />
     </svg>
   );
-}
+};
 export default WalletImage;
