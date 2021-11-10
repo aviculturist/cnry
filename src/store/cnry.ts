@@ -179,12 +179,13 @@ export const cnryMetadataResultAtom = atomFamilyWithQuery<string, any>(
   'cnry-get-metadata',
   async (get, query) => {
     const network = get(networkAtom);
-    const chain = network?.chainId === ChainID.Mainnet ? 'mainnet' : 'testnet';
-    const userStxAddresses = get(userStxAddressesAtom);
-    const userStxAddress = userStxAddresses?.[chain] || '';
-    const client = get(smartContractsClientAtom);
     const cnryContract = get(currentCnryContractState);
     const [contractAddress, contractName] = cnryContract.split('.');
+    const chain = network?.chainId === ChainID.Mainnet ? 'mainnet' : 'testnet';
+    const userStxAddresses = get(userStxAddressesAtom);
+    const userStxAddress = userStxAddresses?.[chain] || contractAddress; // bcuz when user is not logged in, queries fail
+    const client = get(smartContractsClientAtom);
+
     const id = BigInt(query);
     try {
       const data = await client.callReadOnlyFunction({
