@@ -1,0 +1,20 @@
+[project]
+name = "cnry"
+requirements = []
+costs_version = 1
+
+[contracts.nft-trait]
+path = "contracts/nft-trait.clar"
+depends_on = []
+
+[contracts.watcher]
+path = "contracts/watcher.clar"
+depends_on = ["nft-trait"]
+
+[contracts.cnry]
+path = "contracts/cnry.clar"
+depends_on = ["nft-trait", "watcher"]
+
+[contracts.maintenance]
+path = "contracts/maintenance.clar"
+depends_on = []

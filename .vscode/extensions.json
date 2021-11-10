@@ -1,0 +1,8 @@
+{
+  "recommendations": [
+    "hirosystems.clarity-lsp",
+    "2gua.rainbow-brackets",
+    "bungcip.better-toml",
+    "editorconfig.editorconfig"
+  ]
+}
