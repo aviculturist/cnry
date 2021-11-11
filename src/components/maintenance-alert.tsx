@@ -13,14 +13,20 @@ const MaintenanceAlert = () => {
   const maintenance = useAtomValue(maintenanceModeAtom(buildHashShort));
 
   return (
-    <SafeSuspense fallback={<>loading</>}>
-      <Stack direction="column" spacing={2} justifyContent="center">
-        <Alert severity="warning">
-          <AlertTitle>{t`MAINTENANCE MODE: USE AT YOUR OWN RISK`}</AlertTitle>
-          {t`${maintenance.wall.value}`}
-        </Alert>
-      </Stack>
-    </SafeSuspense>
+    <>
+      {maintenance && maintenance.wall && maintenance.wall.value !== undefined ? (
+        <SafeSuspense fallback={<>loading</>}>
+          <Stack direction="column" spacing={2} justifyContent="center">
+            <Alert severity="warning">
+              <AlertTitle>{t`MAINTENANCE MODE: USE AT YOUR OWN RISK`}</AlertTitle>
+              {maintenance.wall.value}
+            </Alert>
+          </Stack>
+        </SafeSuspense>
+      ) : (
+        <></>
+      )}
+    </>
   );
 };
 export default MaintenanceAlert;
