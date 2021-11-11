@@ -73,7 +73,7 @@ const CnryApp = () => {
                   <a
                     rel="noreferrer"
                     target="_blank"
-                    href="https://github.com/aviculturist/cnry#--cnry"
+                    href="https://github.com/aviculturist/cnry#-cnry"
                   >
                     Learn more.
                   </a>

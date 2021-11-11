@@ -15,7 +15,7 @@ As an open source project, Cnry contains a set of [Clarity](https://clarity-lang
 
 **NOTE: THIS PROJECT AND SUPPORTING LIBRARIES HAVE NOT BEEN AUDITED, IT IS IN ALPHA STATE. USE AT YOUR OWN RISK / DISCRETION**
 
-**IN PARTICULAR, THE CONTRACTS HAVE SOME KNOWN ISSUES AND SHOULD NOT BE USED UNTIL AUDITED AND PUBLISHED TO MAINNET**
+**IN PARTICULAR, THE CONTRACTS HAVE SOME KNOWN ISSUES AND SHOULD NOT BE TRUSTED UNTIL AUDITED AND PUBLISHED TO MAINNET**
 
 ## Accessing Cnry
 
@@ -46,7 +46,7 @@ cd cnry
 clarinet integrate
 ```
 
-4. Grab a beverage while the integration environment bootstraps and when you start seeing mempool transactions, opena different terminal, deploy the contracts, install the dependencies and start the development web server:
+4. Grab a beverage while the integration environment bootstraps and when you start seeing mempool transactions, open a different terminal, deploy the contracts, install the dependencies and start the development web server:
 
 ```bash
 clarinet publish --devnet
@@ -57,7 +57,7 @@ yarn && yarn run dev
 
 6. Open [http://localhost:3000](http://localhost:3000) with your browser to load the app. Click on `Connect Stacks Wallet` and make sure you are connected to `Localnet`, then publish your first Cnry. Open the [Chrome DevTools](https://developer.chrome.com/docs/devtools/) to view the console and network queries.
 
-As your transaction moves from submitted to pending and finally succeeds, you can track its progress via the notifications or using the activity drawer (the bell icon).
+As your transaction moves from submitted to pending and finally succeeds, you can track its progress via the notifications or using the activity drawer (the bell icon in the header).
 
 ## Testing
 
@@ -83,7 +83,6 @@ Time:        4.085 s, estimated 6 s
 Ran all test suites.
 
 Running file:///Projects/cnry/tests/cnry_test.ts
-* Ensure that <...> ... ok (15ms)
 * it adds the cnry contract to watcher watched-contract storage ... ok (17ms)
 * deployer can hatch a Cnry ... ok (21ms)
 * non-depoyer account can hatch Cnry ... ok (17ms)
@@ -91,7 +90,7 @@ Running file:///Projects/cnry/tests/cnry_test.ts
 * it fails when a non-deployer account updates the contract metadata ... ok (23ms)
 * it lets an account watch a Cnry ... ok (26ms)
 
-test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out (1877ms)
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out (1877ms)
 ```
 
 Each testing framework can also be run independently `npx jest` for the Clarigen test and `clarinet test tests/cnry_test.ts` for the Clarinet one.
@@ -116,7 +115,7 @@ yarn ts-node scripts/set-name.ts '1' 'Acme Corporation Warrant Canary'
 yarn ts-node scripts/set-uri.ts '1' 'https://example.com'
 yarn ts-node scripts/add-maintenance.ts '4c28f47' 'true' 'This is a message from the deployer'
 ```
-The last two are pretty neat. The penultimate one lets you set a Cnry-specific uri. And the last one shows how to use a small contract to manage a `maintenance` messaging and storage system on the bockchain. Because Cnry's interface is a fully static site (there's no server), it's by definition impossible to make changes once it's deployed without releasing a new version. The maintenance contract lets the deployer deploy a message on any build of the site by publishing it in the contract storage. The little hash is based on the last git commit hash for any given release and it's displayed in the footer of the Cnry frontend.
+The last two are pretty neat. The penultimate one lets you set a Cnry-specific uri. And the last one shows how to use a small contract to manage a `maintenance` messaging and storage system on the bockchain. Because Cnry's interface is a fully static site (there's no server), it's by definition impossible to make changes once it's deployed without releasing a new version. The maintenance contract lets the deployer display a message on any build of the site by publishing it in the contract storage. The little hash is based on the last git commit hash for any given release which is displayed in the footer of the Cnry frontend.
 
 ## Translation
 
@@ -130,7 +129,7 @@ It was bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/t
 
 The interface is currently built with components from [MUI v5](https://mui.com/) and the [styled-components](https://styled-components.com/) library but that could change in the future if more flexible options become apparent (suggestions welcome!).
 
-Implementing a `fully static` `SSG` build using `Next.js` `export`, "no compromises" `DarkMode`, `i18n/l10n` (including RTL support) are core principles of the project. There's no server and you keep custody of your private keys at all times using the app. You also keep custody of all your data which you can download using the links in the privacy shield menu.
+Implementing a `fully static` `SSG` build using `Next.js` `export`, "no compromises" `DarkMode`, `i18n/l10n` (including RTL support) are core principles of the project. There's no server and you keep custody of your private keys at all times using the app. You also keep custody of all your session data which you can download using the links in the privacy shield menu icon.
 
 ### Deploying
 
@@ -142,7 +141,7 @@ ipfs add -r out
 ipfs name publish /ipfs/<...Content Identifier (CID) of the out folder...>
 ```
 
-WI used to manually run the above, and I also set up an account at [Pinata](https://www.pinata.cloud/) to manually pin each release (to make sure at least one IPFS node has a copy):
+I used to manually run the above, and I also set up an account at [Pinata](https://www.pinata.cloud/) to manually pin each release (to make sure at least one IPFS node has a copy):
 
 ```bash
 ipfs pin remote add --service=pinata /ipfs/<...Content Identifier (CID) of the out folder...>
@@ -174,9 +173,11 @@ ipfs pin add -r /ipfs/<...Content Identifier (CID) of the out folder...>
 
 If you'd like to contribute to the project, please reach out on Discord or via Twitter.
 
+The current version is very much a WIP, things are still broken or partly implemented and many of the contract functions haven't been expressed in the ui.
+
 ## Design Caveats
 
-- Technically, `cnry` and `watcher` are NFTs. But don't ape in with any expectation that they will increase in value. In fact, the current drafts of the `cnry` and `watcher` contracts have disabled the `transfer` function ... because ... well, I still need to work out if there's any way to preserve those functions given the way the contracts interact.
+- The `cnry` and `watcher` are NFTs. But don't ape in with any expectation that they will increase in value. In fact, the current `testnet` contracts have the `transfer` function disabled  ... because ... well, I still need to work out if there's any way to preserve those functions given the way the contracts interact.
 - There is at times an error about a className missmatch when running `yarn run dev`, does not seem to effect production. See e.g., https://github.com/mui-org/material-ui/issues/18018 and https://github.com/mui-org/material-ui/pull/27088
 - Most of the app is wrapped in `NoSsr` because `Next.js` does not currently support `i18n` static `export`. The main implication is that only the English version of the page is built during `export` and translations are loaded dynamically.
 - Because of this limitation, the language pages are implemented using `react-router-dom` `HashRouter` rather than `next` router's `usePath` or domain endpoints, which is less than ideal for SEO but in my view is better than the alternative (no static export).
