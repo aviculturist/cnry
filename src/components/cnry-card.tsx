@@ -81,19 +81,7 @@ const PendingCnryCardFromTxId = ({ txid }: { txid: string }) => {
   const tx = useAtomValue(userPendingTxAtom(txid));
 
   const [expanded, setExpanded] = React.useState(false);
-  // const [network] = useAtom(networkAtom);
-  // const chain = network?.chainId === ChainID.Mainnet ? 'mainnet' : 'testnet';
-  // const [userStxAddresses] = useAtom(userStxAddressesAtom);
-  // const userStxAddress = userStxAddresses?.[chain] || '';
-  // console.log(tokenId);
-  // const [cnry] = useAtom(cnryMetadataResultAtom(tokenId));
-  // const hatchedDate = toDate(cnry.hatchedTimestamp.value * 1000);
-  // const keepaliveTimestamp = cnry.keepaliveTimestamp.value * 1000;
-  // const keepaliveExpiry = cnry.keepaliveExpiry.value * 1000;
-  // const daysRemainingUntilExpiry = toRelativeTime(keepaliveTimestamp + keepaliveExpiry);
-  // const handleWatch = useWatch();
-  // const handleKeepalive = useKeepalive();
-  // cnry.cnryKeeper ===
+
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };

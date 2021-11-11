@@ -45,5 +45,5 @@ export const maintenanceModeAtom = atomFamilyWithQuery<string, any>(
     }
     return {} as any;
   },
-  { refetchInterval: 30000 }
+  { refetchInterval: 300000 }
 ); // every minute
