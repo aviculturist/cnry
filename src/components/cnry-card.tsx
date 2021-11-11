@@ -23,7 +23,7 @@ import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import ChangeCircleOutlinedIcon from '@mui/icons-material/ChangeCircleOutlined';
 import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
-
+import ContentCopyOutlinedIcon from '@mui/icons-material/ContentCopyOutlined';
 import Collapse from '@mui/material/Collapse';
 import Avatar from '@mui/material/Avatar';
 import IconButton, { IconButtonProps } from '@mui/material/IconButton';
@@ -49,6 +49,7 @@ import { userPendingTxIdsAtom, userPendingTxAtom } from '@store/user-pending-tra
 import { currentStacksExplorerState, currentChainState } from '@store/helpers';
 import { t } from '@lingui/macro';
 import CircularProgress from '@mui/material/CircularProgress';
+import { string } from 'yup/lib/locale';
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -98,7 +99,7 @@ const PendingCnryCardFromTxId = ({ txid }: { txid: string }) => {
 
       <CardContent>
         <Typography variant="body2" color="text.secondary">
-          Awaiting <strong>{tx.function}</strong> function
+          Running <strong>{tx.function}</strong> function
         </Typography>
         <CircularProgress />
       </CardContent>
@@ -108,6 +109,9 @@ const PendingCnryCardFromTxId = ({ txid }: { txid: string }) => {
         </IconButton>
         <IconButton disabled aria-label="share">
           <ShareIcon />
+        </IconButton>
+        <IconButton disabled aria-label="share">
+          <ContentCopyOutlinedIcon />
         </IconButton>
         <IconButton disabled aria-label="keepalive">
           <RestoreIcon />
@@ -167,6 +171,11 @@ const CnryCard = ({ tokenId }: { tokenId: number }) => {
   const keepaliveTimestamp = cnry.keepaliveTimestamp.value * 1000;
   const keepaliveExpiry = cnry.keepaliveExpiry.value * 1000;
   const daysRemainingUntilExpiry = toRelativeTime(keepaliveTimestamp + keepaliveExpiry);
+
+  const handleCopyToClipboard = ({ link }: { link: string }) => {
+    const uri = `${typeof window !== 'undefined' ? window.location.href.split('#')[0] : ''}${link}`;
+    navigator.clipboard.writeText(uri);
+  };
 
   // cnry.cnryKeeper ===
   const handleExpandClick = () => {
@@ -230,19 +239,33 @@ const CnryCard = ({ tokenId }: { tokenId: number }) => {
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
-        <IconButton aria-label="watch" onClick={() => handleWatch({ tokenId: cnry.index.value })}>
-          <FavoriteIcon />
-        </IconButton>
-        <IconButton aria-label="share" target="_blank" href={`./?id=${cnry.index.value}`}>
-          <ShareIcon />
-        </IconButton>
-        {userStxAddress === cnry.cnryKeeper.value ? (
-          <IconButton
-            aria-label="keepalive"
-            onClick={() => handleKeepalive({ tokenId: cnry.index.value })}
-          >
-            <RestoreIcon />
+        <Tooltip title="Watch Cnry">
+          <IconButton aria-label="watch" onClick={() => handleWatch({ tokenId: cnry.index.value })}>
+            <FavoriteIcon />
           </IconButton>
+        </Tooltip>
+        <Tooltip title="Open in new tab">
+          <IconButton target="_blank" href={`./?id=${cnry.index.value}`} aria-label="share">
+            <ShareIcon />
+          </IconButton>
+        </Tooltip>
+        <Tooltip title="Copy permalink to clipboard">
+          <IconButton
+            aria-label="copy"
+            onClick={() => handleCopyToClipboard({ link: `./?id=${cnry.index.value}` })}
+          >
+            <ContentCopyOutlinedIcon />
+          </IconButton>
+        </Tooltip>
+        {userStxAddress === cnry.cnryKeeper.value ? (
+          <Tooltip title="Run keepalive">
+            <IconButton
+              aria-label="keepalive"
+              onClick={() => handleKeepalive({ tokenId: cnry.index.value })}
+            >
+              <RestoreIcon />
+            </IconButton>
+          </Tooltip>
         ) : (
           <></>
         )}

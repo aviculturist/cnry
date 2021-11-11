@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useEffect } from 'react';
 import { useAtom } from 'jotai';
 import { ChainID } from 'micro-stacks/common';
 import { networkAtom, userStxAddressesAtom } from '@micro-stacks/react';
@@ -56,8 +57,14 @@ const CnryList = () => {
   const [cnryUserTokenIds] = useAtom(cnryUserTokenIdsAtom(userStxAddress));
   const [watcherUserTokenIds] = useAtom(cnryUserWatcherTokenIdsAtom(userStxAddress));
   const [value, setValue] = useAtom(cnryListTabStateAtom);
-  const userHasCnrys = (cnryUserTokenIds === undefined || cnryUserTokenIds.length == 0) ? false: true;
-  const userHasWatching = (watcherUserTokenIds === undefined || watcherUserTokenIds.length == 0) ? false: true;
+  const userHasCnrys =
+    cnryUserTokenIds === undefined || cnryUserTokenIds.length == 0 ? false : true;
+  const userHasWatching =
+    watcherUserTokenIds === undefined || watcherUserTokenIds.length == 0 ? false : true;
+
+  useEffect(() => {
+    userHasCnrys !== undefined && setValue('two');
+  }, []);
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
@@ -132,7 +139,6 @@ const CnryList = () => {
       {/* </Stack> */}
     </ImageList>
   );
-
 
   return (
     <div>
