@@ -9,13 +9,15 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import { userPendingTxIdsAtom } from '@store/user-pending-transactions';
-import { cnryTokenIdsAtom } from '@store/cnry';
+import { cnryTokenIdsAtom, userCnryTokenIdsAtom } from '@store/cnry';
 import { PendingCnryCardFromTxId, CnryCardFromTxId } from '@components/cnry-card';
 import HatchCnryForm from '@components/hatch-cnry-form';
 import SafeSuspense from '@components/safe-suspense';
 import cnryListTabStateAtom from '@store/cnry-list-tab-state';
 import { t } from '@lingui/macro';
 import Skeleton from '@mui/material/Skeleton';
+import { networkAtom, userStxAddressesAtom } from '@micro-stacks/react';
+import { ChainID } from 'micro-stacks/common';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -44,8 +46,13 @@ const TabPanel = (props: TabPanelProps) => {
 };
 
 const CnryList = () => {
+  const [network] = useAtom(networkAtom);
+  const chain = network?.chainId === ChainID.Mainnet ? 'mainnet' : 'testnet';
+  const [userStxAddresses] = useAtom(userStxAddressesAtom);
+  const userStxAddress = userStxAddresses?.[chain] || '';
   const [userPendingTxIds] = useAtom(userPendingTxIdsAtom);
   const [cnryTransactionIds] = useAtom(cnryTokenIdsAtom);
+  const [userCnryTokenIds] = useAtom(userCnryTokenIdsAtom(userStxAddress));
   const [value, setValue] = useAtom(cnryListTabStateAtom);
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
@@ -111,6 +118,17 @@ const CnryList = () => {
     </ImageList>
   );
 
+  const verticalBrowseUserCnrysList = () => (
+    <ImageList cols={2} sx={{ mt: 0 }}>
+      {/* <Stack  sx={{justifyContent: 'center'}} component="div" direction="column" spacing={2}> */}
+      {userCnryTokenIds.map(txid => (
+        <ImageListItem sx={{ width: '100%', m: 'auto' }} key={txid}>
+          <CnryCardFromTxId key={txid} txid={txid} />
+        </ImageListItem>
+      ))}
+      {/* </Stack> */}
+    </ImageList>
+  );
   const cnryList = () => (
     <ImageList
       sx={{
@@ -157,7 +175,7 @@ const CnryList = () => {
       </TabPanel>
       <TabPanel value={value} index="two">
         <Stack maxWidth="sm" sx={{ m: 'auto' }}>
-          <SafeSuspense fallback={<CircularProgress />}>{verticalBrowseCnrysList()}</SafeSuspense>
+          <SafeSuspense fallback={<CircularProgress />}>{verticalBrowseUserCnrysList()}</SafeSuspense>
         </Stack>
       </TabPanel>
       <TabPanel value={value} index="three">

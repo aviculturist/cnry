@@ -70,7 +70,6 @@ const PendingCnryCardFromTxId = ({ txid }: { txid: string }) => {
   const [chain] = useAtom(currentChainState);
   const tx = useAtomValue(userPendingTxAtom(txid));
   const [expanded, setExpanded] = React.useState(false);
-
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };

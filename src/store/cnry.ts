@@ -88,6 +88,36 @@ export const cnryTokenIdsAtom = atomWithQuery<string[]>(
   { refetchInterval: 300000 }
 );
 
+// TODO: only grabs 50, convert to infinitequery
+export const userCnryTokenIdsAtom = atomFamilyWithQuery<string, string[]>(
+  'user-cnry-token-ids',
+  async (get, txId) => {
+    const accountsClient = get(accountsClientAtom);
+    const cnryContract = get(currentCnryContractState);
+
+    try {
+      const txs = await accountsClient.getAccountTransactions({
+        limit: 50,
+        principal: cnryContract,
+      });
+      const txids = (txs as TransactionResults).results
+        .filter(
+          tx =>
+            tx.sender_address === txId &&
+            tx.tx_type === 'contract_call' &&
+            tx.contract_call.function_name === HATCH_FUNCTION &&
+            tx.tx_status === 'success'
+        )
+        .map(tx => tx.tx_id);
+      return txids;
+    } catch (_e) {
+      console.log(_e);
+    }
+    return [];
+  },
+  { refetchInterval: 300000 }
+); // every minute
+
 // TODO: double check it always returns Transaction, may be other scenarios
 export const cnryContractTransactionAtom = atomFamilyWithQuery<string, Transaction | undefined>(
   'contract-transaction-id',
