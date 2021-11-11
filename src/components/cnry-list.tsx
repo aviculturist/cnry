@@ -1,10 +1,5 @@
 import * as React from 'react';
 import { useAtom } from 'jotai';
-import {
-  useCurrentAccountBalances,
-  useCurrentAccountAssetsList,
-  useCurrentAccountTransactionsList,
-} from '@micro-stacks/query';
 import Box from '@mui/material/Box';
 import List from '@mui/material/List';
 import Stack from '@mui/material/Stack';
@@ -13,20 +8,19 @@ import ImageListItem from '@mui/material/ImageListItem';
 import CircularProgress from '@mui/material/CircularProgress';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-import Typography from '@mui/material/Typography';
-import ListSubheader from '@mui/material/ListSubheader';
 import { userPendingTxIdsAtom } from '@store/user-pending-transactions';
-import { cnryIdsAtom } from '@store/cnry';
-import PendingCnryCardFromTxId from '@components/user-pending-tx-item';
-import { CnryCardFromTxId } from '@components/cnry-card';
+import { cnryTokenIdsAtom } from '@store/cnry';
+import { PendingCnryCardFromTxId, CnryCardFromTxId } from '@components/cnry-card';
 import HatchCnryForm from '@components/hatch-cnry-form';
 import SafeSuspense from '@components/safe-suspense';
+import cnryListTabStateAtom from '@store/cnry-list-tab-state';
 import { t } from '@lingui/macro';
+import Skeleton from '@mui/material/Skeleton';
 
 interface TabPanelProps {
   children?: React.ReactNode;
-  index: number;
-  value: number;
+  index: string;
+  value: string;
 }
 
 const TabPanel = (props: TabPanelProps) => {
@@ -51,14 +45,10 @@ const TabPanel = (props: TabPanelProps) => {
 
 const CnryList = () => {
   const [userPendingTxIds] = useAtom(userPendingTxIdsAtom);
-  const [cnryTransactionIds] = useAtom(cnryIdsAtom);
-  const [value, setValue] = React.useState(0);
-  //const [assetsList, dispatchAssetsList] = useCurrentAccountAssetsList();
-  // TODO: set a flag for each owned asset to determine which tabs should be disabled
-  // const assetList = assetsList?.pages[0].results.map(k => k.asset);
-  // const assetNew = assetList?.filter(m => m.asset_event_type === 'mint');
+  const [cnryTransactionIds] = useAtom(cnryTokenIdsAtom);
+  const [value, setValue] = useAtom(cnryListTabStateAtom);
 
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
   };
 
@@ -103,7 +93,7 @@ const CnryList = () => {
       <Stack component="div" direction="row" spacing={2}>
         {userPendingTxIds.map(txid => (
           <ImageListItem key={txid}>
-            <CnryCardFromTxId key={txid} txid={txid} />
+            <PendingCnryCardFromTxId key={txid} txid={txid} />
           </ImageListItem>
         ))}
       </Stack>
@@ -143,31 +133,39 @@ const CnryList = () => {
 
   return (
     <div>
-      <Tabs value={value} onChange={handleChange} aria-label="disabled tabs example" centered>
-        <Tab label="New" />
-        <Tab label="My Cnrys" disabled={userHasCnrys ? false : true} />
-        <Tab label="Watching" disabled={userHasWatching ? false : true} />
-        <Tab label="Browse" />
+      <Tabs value={value} onChange={handleChange} centered>
+        <Tab value="one" label="New" />
+        <Tab value="two" label="My Cnrys" disabled={userHasCnrys ? false : true} />
+        <Tab value="three" label="Watching" disabled={userHasWatching ? false : true} />
+        <Tab value="four" label="Browse" />
       </Tabs>
-      <TabPanel value={value} index={0}>
-        <HatchCnryForm />
-        <Stack maxWidth="sm" sx={{ m: 'auto' }}>
-          <SafeSuspense fallback={<CircularProgress />}>
-            {horizontalBrowseUserPendingCnrysList()}
-          </SafeSuspense>
-        </Stack>
+      <TabPanel value={value} index="one">
+        <SafeSuspense
+          fallback={
+            <>
+              <Skeleton sx={{ m: 'auto' }} variant="rectangular" width={400} height={200} />
+            </>
+          }
+        >
+          <HatchCnryForm />
+          <Stack maxWidth="sm" sx={{ m: 'auto' }}>
+            <SafeSuspense fallback={<CircularProgress />}>
+              {horizontalBrowseUserPendingCnrysList()}
+            </SafeSuspense>
+          </Stack>
+        </SafeSuspense>
       </TabPanel>
-      <TabPanel value={value} index={1}>
+      <TabPanel value={value} index="two">
         <Stack maxWidth="sm" sx={{ m: 'auto' }}>
           <SafeSuspense fallback={<CircularProgress />}>{verticalBrowseCnrysList()}</SafeSuspense>
         </Stack>
       </TabPanel>
-      <TabPanel value={value} index={2}>
+      <TabPanel value={value} index="three">
         <Stack maxWidth="sm" sx={{ m: 'auto' }}>
           <SafeSuspense fallback={<CircularProgress />}>{verticalBrowseCnrysList()}</SafeSuspense>{' '}
         </Stack>
       </TabPanel>
-      <TabPanel value={value} index={3}>
+      <TabPanel value={value} index="four">
         <Stack maxWidth="sm" sx={{ m: 'auto' }}>
           <SafeSuspense fallback={<CircularProgress />}>{verticalBrowseCnrysList()}</SafeSuspense>{' '}
         </Stack>

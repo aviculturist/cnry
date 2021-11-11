@@ -6,7 +6,7 @@ import List from '@mui/material/List';
 import ListSubheader from '@mui/material/ListSubheader';
 import useTransactionsDrawerIsOpen from '@hooks/use-transactions-drawer-is-open';
 import { userPendingTxIdsAtom, userPendingTxAtom } from '@store/user-pending-transactions';
-import { cnryTransactionIdsAtom } from '@store/cnry';
+import { cnryContractTransactionIdsAtom } from '@store/cnry';
 import { t } from '@lingui/macro';
 import UserPendingTxItem from '@components/user-pending-tx-item';
 import TxItem from '@components/tx-item';
@@ -14,7 +14,7 @@ import TxItem from '@components/tx-item';
 const ActivityDrawer = () => {
   const { transactionsDrawerIsOpen, setTransactionsDrawerIsOpen } = useTransactionsDrawerIsOpen();
   const [userPendingTxIds] = useAtom(userPendingTxIdsAtom);
-  const [cnryTransactionIds] = useAtom(cnryTransactionIdsAtom);
+  const [cnryTransactionIds] = useAtom(cnryContractTransactionIdsAtom);
   const toggleDrawer = (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
     if (
       event.type === 'keydown' &&

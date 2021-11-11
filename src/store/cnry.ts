@@ -3,14 +3,19 @@ import {
   currentCnryContractState,
   currentWatcherContractState,
 } from '@store/current-network-state';
-import { HATCH_FUNCTION, LASTID_FUNCTION, METADATA_FUNCTION } from '@utils/constants';
+import {
+  HATCH_FUNCTION,
+  LASTID_FUNCTION,
+  METADATA_FUNCTION,
+  ISALIVE_FUNCTION,
+} from '@utils/constants';
 import { atomWithQuery, atomFamilyWithQuery } from 'jotai-query-toolkit';
-// TODO: this returns something differently
+// TODO: these return differently
 //import { cvToJSON, hexToCV } from 'micro-stacks/clarity';
 //import { cvToJSON, hexToCV } from '@stacks/transactions';
 
 import { networkAtom, userStxAddressesAtom } from '@micro-stacks/react';
-import { cvToJSON, cvToHex, hexToCV, intToHexString } from '@stacks/transactions';
+import { cvToJSON, cvToHex, cvToValue, hexToCV, intToHexString } from '@stacks/transactions';
 import { fetchReadOnlyFunction } from 'micro-stacks/api';
 import { ChainID } from 'micro-stacks/common';
 import { uintCV } from 'micro-stacks/clarity';
@@ -24,48 +29,12 @@ import { atom } from 'jotai';
 
 export const queryAtom = atom('');
 
-const defaultOptions = {
-  refetchOnReconnect: true,
-  refetchOnWindowFocus: true,
-  refetchOnMount: true,
-  keepPreviousData: true,
-};
-
-// export const cnryTransactionsAtom = atomWithQuery<ContractCallTransaction[], string>(
-//   'contract-transactions'
-//   async get => {
-//   ...(defaultOptions as any),
-//   refetchInterval: 500,
-//   queryFn: async (): Promise<ContractCallTransaction[]> => {
-//     const client = get(accountsClientAtom);
-//     const txClient = get(transactionsClientAtom);
-//     const cnryContract = get(currentCnryContractState);
-
-//     const txs = await client.getAccountTransactions({
-//       limit: 50,
-//       principal: cnryContract,
-//     });
-//     const txids = (txs as TransactionResults).results
-//       .filter(
-//         tx =>
-//           tx.tx_type === 'contract_call' &&
-//           tx.contract_call.function_name === HATCH_FUNCTION &&
-//           tx.tx_status === 'success'
-//       )
-//       .map(tx => tx.tx_id);
-
-//     const final = await Promise.all(txids.map(async txId => txClient.getTransactionById({ txId })));
-//     return final as ContractCallTransaction[];
-//   },
-// });
-
-//export const cnryTransactionIdsAtom = atomWithQuery<ContractCallTransaction[]>(
-export const cnryTransactionIdsAtom = atomWithQuery<string[]>(
+// TODO: convert this to an infinite query? Will need to enable pagination, etc.
+export const cnryContractTransactionIdsAtom = atomWithQuery<string[]>(
   'contract-transactions',
   async get => {
     const accountsClient = get(accountsClientAtom);
     const cnryContract = get(currentCnryContractState);
-    const [contractAddress, contractName] = cnryContract.split('.');
 
     try {
       const txs = await accountsClient.getAccountTransactions({
@@ -76,30 +45,26 @@ export const cnryTransactionIdsAtom = atomWithQuery<string[]>(
         .filter(
           tx =>
             tx.tx_type === 'contract_call' &&
+            // TODO filter by the list of functions we care about in activity
             //tx.contract_call.function_name === HATCH_FUNCTION &&
             tx.tx_status === 'success'
         )
         .map(tx => tx.tx_id);
-      //console.log(txids);
       return txids;
-      // const final = await Promise.all(
-      //   txids.map(async txId => txClient.getTransactionById({ txId }))
-      // );
-      // return final as ContractCallTransaction[];
     } catch (_e) {
       console.log(_e);
     }
     return [];
   },
-  { refetchInterval: 30000 }
+  { refetchInterval: 300000 }
 );
 
-export const cnryIdsAtom = atomWithQuery<string[]>(
-  'cnry-ids',
+// TODO: convert to infinite query with pagination, etc.
+export const cnryTokenIdsAtom = atomWithQuery<string[]>(
+  'cnry-token-ids',
   async get => {
     const accountsClient = get(accountsClientAtom);
     const cnryContract = get(currentCnryContractState);
-    const [contractAddress, contractName] = cnryContract.split('.');
 
     try {
       const txs = await accountsClient.getAccountTransactions({
@@ -114,45 +79,33 @@ export const cnryIdsAtom = atomWithQuery<string[]>(
             tx.tx_status === 'success'
         )
         .map(tx => tx.tx_id);
-      //console.log(txids);
       return txids;
-      // const final = await Promise.all(
-      //   txids.map(async txId => txClient.getTransactionById({ txId }))
-      // );
-      // return final as ContractCallTransaction[];
     } catch (_e) {
       console.log(_e);
     }
     return [];
   },
-  { refetchInterval: 30000 }
+  { refetchInterval: 300000 }
 );
 
-export const cnryTransactionIdAtom = atomFamilyWithQuery<string, Transaction | undefined>(
+// TODO: double check it always returns Transaction, may be other scenarios
+export const cnryContractTransactionAtom = atomFamilyWithQuery<string, Transaction | undefined>(
   'contract-transaction-id',
   async (get, txId) => {
     const txClient = get(transactionsClientAtom);
     try {
       const data = await txClient.getTransactionById({ txId });
-      //console.log(data);
       return data as Transaction;
-      // if (data.okay && data.result) {
-      //   const result = cvToJSON(hexToCV(data.result as string));
-      //   if (data.result === '0x09' && data.cause === undefined) {
-      //     return result.value;
-      //   }
-      //   return result.value.value;
-      // } // TODO: failed to fetch
     } catch (_e) {
       console.log(_e);
     }
     return undefined;
   },
-  { refetchInterval: 30000 }
+  { refetchInterval: 300000 }
 ); // every minute
 
-// TODO: switch to micro-stacks
-// export const msCnryMetadataSearchResultsAtom = atomFamilyWithQuery<string, any>(
+// TODO: switch to micro-stacks !!
+// export const cnryGetMetadataAtom = atomFamilyWithQuery<string, any>(
 //   'ms-metadata-search-results',
 //   async (get, query) => {
 //     const networkUrl = get(networkAtom).getCoreApiUrl();
@@ -175,9 +128,10 @@ export const cnryTransactionIdAtom = atomFamilyWithQuery<string, Transaction | u
 //   { refetchInterval: 10000 }
 // ); // every minute
 
-export const cnryMetadataResultAtom = atomFamilyWithQuery<string, any>(
+export const cnryGetMetadataAtom = atomFamilyWithQuery<number | undefined, any | undefined>(
   'cnry-get-metadata',
-  async (get, query) => {
+  async (get, tokenId) => {
+    if (tokenId === undefined) return undefined;
     const network = get(networkAtom);
     const cnryContract = get(currentCnryContractState);
     const [contractAddress, contractName] = cnryContract.split('.');
@@ -186,7 +140,7 @@ export const cnryMetadataResultAtom = atomFamilyWithQuery<string, any>(
     const userStxAddress = userStxAddresses?.[chain] || contractAddress; // bcuz when user is not logged in, queries fail
     const client = get(smartContractsClientAtom);
 
-    const id = BigInt(query);
+    //const id = BigInt(query);
     try {
       const data = await client.callReadOnlyFunction({
         contractAddress,
@@ -194,27 +148,23 @@ export const cnryMetadataResultAtom = atomFamilyWithQuery<string, any>(
         functionName: METADATA_FUNCTION,
         readOnlyFunctionArgs: {
           sender: userStxAddress,
-          arguments: [cvToHex(uintCV(id))],
+          arguments: [cvToHex(uintCV(tokenId))],
         },
       });
       if (data.okay && data.result) {
-        const result = cvToJSON(hexToCV(data.result as string));
-        if (data.result === '0x09' && data.cause === undefined) {
-          return result.value;
+        if (data.cause && data.cause === undefined) {
+          return undefined;
         }
-        return result.value.value;
+        const result = cvToJSON(hexToCV(data.result as string));
+        return result && result.value && result.value.value ? result.value.value : undefined;
       } // TODO: failed to fetch
     } catch (_e) {
       console.log(_e);
     }
-    return {} as any;
+    return undefined;
   },
-  { refetchInterval: 30000 }
+  { refetchInterval: 30000 } // 30 seconds in milliseconds (5000 = 5 seconds)
 ); // every minute
-
-/*
- * Users assets
- */
 
 /*
  * Total number of cnrys
@@ -245,10 +195,7 @@ export const cnryLastIdAtom = atomWithQuery<number>(
     }
     return 0;
   },
-  {
-    refetchInterval: 30000,
-    // onSuccess: useToggleLoadingCount, // TODO
-  }
+  { refetchInterval: 300000 }
 );
 
 /*
@@ -280,8 +227,55 @@ export const watcherLastIdAtom = atomWithQuery<number>(
     }
     return 0;
   },
-  {
-    refetchInterval: 30000,
-    // onSuccess: useToggleLoadingCount, // TODO
-  }
+  { refetchInterval: 300000 }
 );
+
+/*
+ * Check if a specific cnry is alive
+ */
+export const cnryIsAliveAtom = atomFamilyWithQuery<number, boolean>(
+  'cnry-is-alive',
+  async (get, tokenId) => {
+    const client = get(smartContractsClientAtom);
+    const cnryContract = get(currentCnryContractState);
+    const [contractAddress, contractName] = cnryContract.split('.');
+
+    try {
+      const data = await client.callReadOnlyFunction({
+        contractAddress,
+        contractName,
+        functionName: ISALIVE_FUNCTION,
+        readOnlyFunctionArgs: {
+          sender: contractAddress,
+          arguments: [cvToHex(uintCV(tokenId))],
+        },
+      });
+      if (data.okay && data.result) {
+        if (data.cause && data.cause === undefined) {
+          return undefined;
+        }
+        const result = cvToJSON(hexToCV(data.result as string));
+        return result && result.value && result.value.value ? result.value.value : false;
+      } // TODO: failed to fetch
+    } catch (_e) {
+      console.log(_e);
+    }
+    return false;
+  },
+  { refetchInterval: 86400000 } // one day in milliseconds (5000 = 5 seconds)
+);
+
+export const acnryContractTransactionAtom = atomFamilyWithQuery<string, Transaction | undefined>(
+  'contract-transaction-id',
+  async (get, txId) => {
+    const txClient = get(transactionsClientAtom);
+    try {
+      const data = await txClient.getTransactionById({ txId });
+      return data as Transaction;
+    } catch (_e) {
+      console.log(_e);
+    }
+    return undefined;
+  },
+  { refetchInterval: 300000 }
+); // every minute

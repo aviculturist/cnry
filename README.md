@@ -182,6 +182,7 @@ The current version is very much a WIP, things are still broken or partly implem
 - Most of the app is wrapped in `NoSsr` because `Next.js` does not currently support `i18n` static `export`. The main implication is that only the English version of the page is built during `export` and translations are loaded dynamically.
 - Because of this limitation, the language pages are implemented using `react-router-dom` `HashRouter` rather than `next` router's `usePath` or domain endpoints, which is less than ideal for SEO but in my view is better than the alternative (no static export).
 - The hosting environment (IPFS) can't produce responsive headers so that limits some interaction options. For example, the app can't perform an [Accept-Language](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept-Language)/[Content-Language](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Language) negotiation or respond to [Clear-Site-Data](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Clear-Site-Data).
+- https://github.com/mui-org/material-ui/issues/29209
 
 ## Thank You
 

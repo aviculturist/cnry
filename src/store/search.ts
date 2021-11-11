@@ -76,5 +76,5 @@ export const searchResultsAtom = atomFamilyWithQuery<
     }
     return {} as SearchErrorResult | SearchSuccessResult;
   },
-  { refetchInterval: 10000 }
+  { refetchInterval: 100000 }
 ); // every minute

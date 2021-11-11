@@ -14,13 +14,12 @@ import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import SafeSuspense from '@components/safe-suspense';
 import { useQuery } from '@hooks/use-query';
-import { cnryMetadataResultAtom } from '@store/cnry';
+import { cnryGetMetadataAtom } from '@store/cnry';
 import useMetadataDialogIsOpen from '@hooks/use-metadata-dialog-is-open';
 import { CnryMetadataErrorDialog, CnryMetadataDialog } from '@components/cnry-metadata-dialog';
 import { hatchCnryDialogIsOpenAtom } from '@store/hatch-cnry-dialog-is-open';
 import HatchCnryDialog from '@components/hatch-cnry';
 import ActivityDrawer from '@components/activity-drawer';
-import HatchCnryForm from '@components/hatch-cnry-form';
 import InstallWalletDialog from '@components/install-wallet-dialog';
 import TransactionSnackbars from '@components/transaction-snackbars';
 import CnryList from '@components/cnry-list';
@@ -29,12 +28,13 @@ import { t } from '@lingui/macro';
 
 const CnryItemQueryPopup = () => {
   const id = useQuery();
-  const [metadataResult] = useAtom(cnryMetadataResultAtom(id));
+  const tokenId = id !== '' ? Number(id) : undefined;
+  const [metadataResult] = useAtom(cnryGetMetadataAtom(tokenId));
   const { metadataDialogIsOpen, setMetadataDialogIsOpen } = useMetadataDialogIsOpen();
 
   useEffect(() => {
-    id && setMetadataDialogIsOpen(true);
-  }, [id, metadataResult, setMetadataDialogIsOpen]);
+    tokenId && setMetadataDialogIsOpen(true);
+  }, [tokenId, metadataResult, setMetadataDialogIsOpen]);
 
   if (metadataResult) {
     return <CnryMetadataDialog />;

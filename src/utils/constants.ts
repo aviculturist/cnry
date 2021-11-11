@@ -52,6 +52,7 @@ export const WATCH_FUNCTION = 'watch';
 export const METADATA_FUNCTION = 'get-metadata';
 export const KEEPALIVE_FUNCTION = 'keepalive';
 export const LASTID_FUNCTION = 'get-last-token-id';
+export const ISALIVE_FUNCTION = 'is-alive';
 
 export const DEFAULT_NETWORK_LIST: Network[] = [
   {

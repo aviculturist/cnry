@@ -53,5 +53,5 @@ export const networkInfoAtom = atomWithQuery<NetworkInfo>(
     }
     return {} as NetworkInfo;
   },
-  { refetchInterval: 10000 } // onSuccess: () => handleSuccess() TODO
+  { refetchInterval: 300000 } // onSuccess: () => handleSuccess() TODO
 ); // every minute

@@ -20,7 +20,7 @@ import ChangeCircleOutlinedIcon from '@mui/icons-material/ChangeCircleOutlined';
 import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 import LaunchIcon from '@mui/icons-material/Launch';
-import { cnryTransactionIdsAtom, cnryTransactionIdAtom } from '@store/cnry';
+import { cnryContractTransactionIdsAtom, cnryContractTransactionAtom } from '@store/cnry';
 import { currentStacksExplorerState, currentChainState } from '@store/current-network-state';
 import { toRelativeTime } from '@utils/time';
 import { t } from '@lingui/macro';
@@ -122,7 +122,7 @@ const ContractCallTransactionItem = ({ tx }: { tx: ContractCallTransaction }) =>
 };
 
 const TxItem = ({ txid }: { txid: string }) => {
-  const tx = useAtomValue(cnryTransactionIdAtom(txid));
+  const tx = useAtomValue(cnryContractTransactionAtom(txid));
   return tx ? (
     <ListItem button key={tx.tx_id}>
       <ListItemIcon>
