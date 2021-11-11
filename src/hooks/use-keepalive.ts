@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import { useAtom } from 'jotai';
 import { useTransactionPopup } from '@micro-stacks/react';
-import { currentCnryContractState } from '@store/current-network-state';
+import { currentCnryContractState } from '@store/helpers';
 import { KEEPALIVE_FUNCTION } from '@utils/constants';
 import { userPendingTxIdsAtom, userPendingTxAtom } from '@store/user-pending-transactions';
 import { uintCV } from 'micro-stacks/clarity';

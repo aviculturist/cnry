@@ -46,7 +46,7 @@ import ListItemText from '@mui/material/ListItemText';
 import ListSubheader from '@mui/material/ListSubheader';
 
 import { userPendingTxIdsAtom, userPendingTxAtom } from '@store/user-pending-transactions';
-import { currentStacksExplorerState, currentChainState } from '@store/current-network-state';
+import { currentStacksExplorerState, currentChainState } from '@store/helpers';
 import { t } from '@lingui/macro';
 import CircularProgress from '@mui/material/CircularProgress';
 

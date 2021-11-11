@@ -6,7 +6,7 @@ import AlertTitle from '@mui/material/AlertTitle';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import LaunchIcon from '@mui/icons-material/Launch';
-import { currentStacksExplorerState, currentChainState } from '@store/current-network-state';
+import { currentStacksExplorerState, currentChainState } from '@store/helpers';
 import { userPendingTxIdsAtom, userPendingTxAtom } from '@store/user-pending-transactions';
 import { truncateMiddle } from '@utils/common';
 import { t } from '@lingui/macro';

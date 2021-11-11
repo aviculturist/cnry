@@ -1,10 +1,8 @@
 import { smartContractsClientAtom, accountsClientAtom, transactionsClientAtom } from '@store/api';
-import {
-  currentCnryContractState,
-  currentWatcherContractState,
-} from '@store/current-network-state';
+import { currentCnryContractState, currentWatcherContractState } from '@store/helpers';
 import {
   HATCH_FUNCTION,
+  WATCH_FUNCTION,
   LASTID_FUNCTION,
   METADATA_FUNCTION,
   ISALIVE_FUNCTION,
@@ -28,6 +26,9 @@ import {
 import { atom } from 'jotai';
 
 export const queryAtom = atom('');
+
+// a simple array of pending transaction ids
+export const cnryUserPendingTxIdsAtom = atom(Array<string>());
 
 // TODO: convert this to an infinite query? Will need to enable pagination, etc.
 export const cnryContractTransactionIdsAtom = atomWithQuery<string[]>(
@@ -56,7 +57,7 @@ export const cnryContractTransactionIdsAtom = atomWithQuery<string[]>(
     }
     return [];
   },
-  { refetchInterval: 300000 }
+  { refetchInterval: 300000 } // five minutes in milliseconds (5000 = 5 seconds)
 );
 
 // TODO: convert to infinite query with pagination, etc.
@@ -85,13 +86,13 @@ export const cnryTokenIdsAtom = atomWithQuery<string[]>(
     }
     return [];
   },
-  { refetchInterval: 300000 }
+  { refetchInterval: 300000 } // five minutes in milliseconds (5000 = 5 seconds)
 );
 
 // TODO: only grabs 50, convert to infinitequery
-export const userCnryTokenIdsAtom = atomFamilyWithQuery<string, string[]>(
+export const cnryUserTokenIdsAtom = atomFamilyWithQuery<string, string[]>(
   'user-cnry-token-ids',
-  async (get, txId) => {
+  async (get, principal) => {
     const accountsClient = get(accountsClientAtom);
     const cnryContract = get(currentCnryContractState);
 
@@ -103,13 +104,72 @@ export const userCnryTokenIdsAtom = atomFamilyWithQuery<string, string[]>(
       const txids = (txs as TransactionResults).results
         .filter(
           tx =>
-            tx.sender_address === txId &&
+            tx.sender_address === principal &&
             tx.tx_type === 'contract_call' &&
             tx.contract_call.function_name === HATCH_FUNCTION &&
             tx.tx_status === 'success'
         )
         .map(tx => tx.tx_id);
       return txids;
+    } catch (_e) {
+      console.log(_e);
+    }
+    return [];
+  },
+  { refetchInterval: 300000 } // five minutes in milliseconds (5000 = 5 seconds)
+); // every minute
+
+// TODO: only grabs 50, convert to infinitequery // TODO: array of strings isn't right
+//
+//
+//
+// const tokenIdString =
+//     tx &&
+//     tx.tx_type === 'contract_call' &&
+//     tx.contract_call.function_name === 'hatch' &&
+//     (tx as ContractCallTransaction).tx_result?.repr
+//       ? (tx as ContractCallTransaction).tx_result?.repr
+//       : undefined;
+//   const tokenId =
+//     tokenIdString !== undefined
+//       ? Number(tokenIdString.replace('(ok u', '').replace(')', ''))
+//       : undefined;
+export const cnryUserWatcherTokenIdsAtom = atomFamilyWithQuery<string, number[]>(
+  'cnry-user-watcher-token-ids',
+  async (get, principal) => {
+    const accountsClient = get(accountsClientAtom);
+    const txClient = get(transactionsClientAtom);
+    const cnryContract = get(currentCnryContractState);
+    const watcherContract = get(currentWatcherContractState);
+
+    try {
+      const txs = await accountsClient.getAccountTransactions({
+        limit: 50,
+        principal: cnryContract,
+      });
+      // const feed = (txs as TransactionResults).results.map(tx => {
+      //   const content = tx.contract_call.function_args?.[0].repr.replace(`u"`, '').slice(0, -1);
+      //   return {
+      //     content,
+      //   };
+      // });
+      console.log(txs);
+      const userWatchedCnryTokenIds = (txs as TransactionResults).results
+        .filter(
+          tx =>
+            tx.sender_address === principal &&
+            tx.tx_type === 'contract_call' &&
+            tx.contract_call.function_name === WATCH_FUNCTION &&
+            tx.tx_status === 'success'
+        )
+        .map(tx => {
+          const content = (
+            tx as ContractCallTransaction
+          ).contract_call.function_args?.[0].repr.replace(`u`, '');
+          return Number(content);
+        });
+      //console.log(userWatchedCnryTokenIds);
+      return userWatchedCnryTokenIds;
     } catch (_e) {
       console.log(_e);
     }
@@ -131,10 +191,11 @@ export const cnryContractTransactionAtom = atomFamilyWithQuery<string, Transacti
     }
     return undefined;
   },
-  { refetchInterval: 300000 }
+  { refetchInterval: 300000 } // five minutes in milliseconds (5000 = 5 seconds)
 ); // every minute
 
 // TODO: switch to micro-stacks !!
+//
 // export const cnryGetMetadataAtom = atomFamilyWithQuery<string, any>(
 //   'ms-metadata-search-results',
 //   async (get, query) => {
@@ -170,7 +231,6 @@ export const cnryGetMetadataAtom = atomFamilyWithQuery<number | undefined, any |
     const userStxAddress = userStxAddresses?.[chain] || contractAddress; // bcuz when user is not logged in, queries fail
     const client = get(smartContractsClientAtom);
 
-    //const id = BigInt(query);
     try {
       const data = await client.callReadOnlyFunction({
         contractAddress,
@@ -225,7 +285,7 @@ export const cnryLastIdAtom = atomWithQuery<number>(
     }
     return 0;
   },
-  { refetchInterval: 300000 }
+  { refetchInterval: 300000 } // five minutes in milliseconds (5000 = 5 seconds)
 );
 
 /*
@@ -257,7 +317,7 @@ export const watcherLastIdAtom = atomWithQuery<number>(
     }
     return 0;
   },
-  { refetchInterval: 300000 }
+  { refetchInterval: 300000 } // five minutes in milliseconds (5000 = 5 seconds)
 );
 
 /*
@@ -294,18 +354,3 @@ export const cnryIsAliveAtom = atomFamilyWithQuery<number, boolean>(
   },
   { refetchInterval: 86400000 } // one day in milliseconds (5000 = 5 seconds)
 );
-
-export const acnryContractTransactionAtom = atomFamilyWithQuery<string, Transaction | undefined>(
-  'contract-transaction-id',
-  async (get, txId) => {
-    const txClient = get(transactionsClientAtom);
-    try {
-      const data = await txClient.getTransactionById({ txId });
-      return data as Transaction;
-    } catch (_e) {
-      console.log(_e);
-    }
-    return undefined;
-  },
-  { refetchInterval: 300000 }
-); // every minute

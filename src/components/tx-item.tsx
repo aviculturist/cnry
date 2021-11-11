@@ -21,7 +21,7 @@ import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 import LaunchIcon from '@mui/icons-material/Launch';
 import { cnryContractTransactionIdsAtom, cnryContractTransactionAtom } from '@store/cnry';
-import { currentStacksExplorerState, currentChainState } from '@store/current-network-state';
+import { currentStacksExplorerState, currentChainState } from '@store/helpers';
 import { toRelativeTime } from '@utils/time';
 import { t } from '@lingui/macro';
 

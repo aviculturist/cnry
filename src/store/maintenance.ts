@@ -1,5 +1,5 @@
 import { smartContractsClientAtom, accountsClientAtom, transactionsClientAtom } from '@store/api';
-import { currentMaintenanceContractState } from '@store/current-network-state';
+import { currentMaintenanceContractState } from '@store/helpers';
 import { GET_MAINTENANCE_FUNCTION } from '@utils/constants';
 import { atomWithQuery, atomFamilyWithQuery } from 'jotai-query-toolkit';
 // TODO: this returns something differently

@@ -8,9 +8,10 @@ import ImageListItem from '@mui/material/ImageListItem';
 import CircularProgress from '@mui/material/CircularProgress';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-import { userPendingTxIdsAtom } from '@store/user-pending-transactions';
-import { cnryTokenIdsAtom, userCnryTokenIdsAtom } from '@store/cnry';
+import { cnryUserPendingTxIdsAtom } from '@store/cnry';
+import { cnryTokenIdsAtom, cnryUserTokenIdsAtom, cnryUserWatcherTokenIdsAtom } from '@store/cnry';
 import { PendingCnryCardFromTxId, CnryCardFromTxId } from '@components/cnry-card';
+import CnryCard from '@components/cnry-card';
 import HatchCnryForm from '@components/hatch-cnry-form';
 import SafeSuspense from '@components/safe-suspense';
 import cnryListTabStateAtom from '@store/cnry-list-tab-state';
@@ -50,9 +51,10 @@ const CnryList = () => {
   const chain = network?.chainId === ChainID.Mainnet ? 'mainnet' : 'testnet';
   const [userStxAddresses] = useAtom(userStxAddressesAtom);
   const userStxAddress = userStxAddresses?.[chain] || '';
-  const [userPendingTxIds] = useAtom(userPendingTxIdsAtom);
-  const [cnryTransactionIds] = useAtom(cnryTokenIdsAtom);
-  const [userCnryTokenIds] = useAtom(userCnryTokenIdsAtom(userStxAddress));
+  const [userPendingTxids] = useAtom(cnryUserPendingTxIdsAtom);
+  const [cnryAllTokenIds] = useAtom(cnryTokenIdsAtom);
+  const [watcherUserTokenIds] = useAtom(cnryUserWatcherTokenIdsAtom(userStxAddress));
+  const [cnryUserTokenIds] = useAtom(cnryUserTokenIdsAtom(userStxAddress));
   const [value, setValue] = useAtom(cnryListTabStateAtom);
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
@@ -65,13 +67,13 @@ const CnryList = () => {
         sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
         //subheader={<ListSubheader>{t`Transactions`}</ListSubheader>}
       >
-        {userPendingTxIds.map(txid => (
+        {userPendingTxids.map(txid => (
           <PendingCnryCardFromTxId key={txid} txid={txid} />
         ))}
       </List>
     </Box>
   );
-  const userWatchingCnrysList = () => (
+  const verticalUserWatcherCnrysList = () => (
     <ImageList
       sx={{
         gridAutoFlow: 'column',
@@ -80,16 +82,16 @@ const CnryList = () => {
       }}
     >
       <Stack component="div" direction="row" spacing={2}>
-        {cnryTransactionIds.map(txid => (
-          <ImageListItem key={txid}>
-            <CnryCardFromTxId key={txid} txid={txid} />
+        {watcherUserTokenIds.map(tokenId => (
+          <ImageListItem key={tokenId}>
+            <CnryCard key={tokenId} tokenId={tokenId} />
           </ImageListItem>
         ))}
       </Stack>
     </ImageList>
   );
 
-  const horizontalBrowseUserPendingCnrysList = () => (
+  const horizontalUserPendingCnrysList = () => (
     <ImageList
       sx={{
         gridAutoFlow: 'column',
@@ -98,7 +100,7 @@ const CnryList = () => {
       }}
     >
       <Stack component="div" direction="row" spacing={2}>
-        {userPendingTxIds.map(txid => (
+        {userPendingTxids.map(txid => (
           <ImageListItem key={txid}>
             <PendingCnryCardFromTxId key={txid} txid={txid} />
           </ImageListItem>
@@ -106,10 +108,9 @@ const CnryList = () => {
       </Stack>
     </ImageList>
   );
-  const verticalBrowseCnrysList = () => (
+  const verticalAllCnrysList = () => (
     <ImageList cols={2} sx={{ mt: 0 }}>
-      {/* <Stack  sx={{justifyContent: 'center'}} component="div" direction="column" spacing={2}> */}
-      {cnryTransactionIds.map(txid => (
+      {cnryAllTokenIds.map(txid => (
         <ImageListItem sx={{ width: '100%', m: 'auto' }} key={txid}>
           <CnryCardFromTxId key={txid} txid={txid} />
         </ImageListItem>
@@ -118,10 +119,10 @@ const CnryList = () => {
     </ImageList>
   );
 
-  const verticalBrowseUserCnrysList = () => (
+  const verticalUserCnrysList = () => (
     <ImageList cols={2} sx={{ mt: 0 }}>
       {/* <Stack  sx={{justifyContent: 'center'}} component="div" direction="column" spacing={2}> */}
-      {userCnryTokenIds.map(txid => (
+      {cnryUserTokenIds.map(txid => (
         <ImageListItem sx={{ width: '100%', m: 'auto' }} key={txid}>
           <CnryCardFromTxId key={txid} txid={txid} />
         </ImageListItem>
@@ -129,23 +130,7 @@ const CnryList = () => {
       {/* </Stack> */}
     </ImageList>
   );
-  const cnryList = () => (
-    <ImageList
-      sx={{
-        gridAutoFlow: 'column',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(292px,1fr)) !important',
-        gridAutoColumns: 'minmax(292px, 1fr)',
-      }}
-    >
-      <Stack maxWidth="sm" component="div" direction="row" spacing={2}>
-        {cnryTransactionIds.map(txid => (
-          <ImageListItem key={txid}>
-            <CnryCardFromTxId key={txid} txid={txid} />
-          </ImageListItem>
-        ))}
-      </Stack>
-    </ImageList>
-  );
+
   const userHasCnrys = true;
   const userHasWatching = true;
 
@@ -168,24 +153,26 @@ const CnryList = () => {
           <HatchCnryForm />
           <Stack maxWidth="sm" sx={{ m: 'auto' }}>
             <SafeSuspense fallback={<CircularProgress />}>
-              {horizontalBrowseUserPendingCnrysList()}
+              {horizontalUserPendingCnrysList()}
             </SafeSuspense>
           </Stack>
         </SafeSuspense>
       </TabPanel>
       <TabPanel value={value} index="two">
         <Stack maxWidth="sm" sx={{ m: 'auto' }}>
-          <SafeSuspense fallback={<CircularProgress />}>{verticalBrowseUserCnrysList()}</SafeSuspense>
+          <SafeSuspense fallback={<CircularProgress />}>{verticalUserCnrysList()}</SafeSuspense>
         </Stack>
       </TabPanel>
       <TabPanel value={value} index="three">
         <Stack maxWidth="sm" sx={{ m: 'auto' }}>
-          <SafeSuspense fallback={<CircularProgress />}>{verticalBrowseCnrysList()}</SafeSuspense>{' '}
+          <SafeSuspense fallback={<CircularProgress />}>
+            {verticalUserWatcherCnrysList()}
+          </SafeSuspense>{' '}
         </Stack>
       </TabPanel>
       <TabPanel value={value} index="four">
         <Stack maxWidth="sm" sx={{ m: 'auto' }}>
-          <SafeSuspense fallback={<CircularProgress />}>{verticalBrowseCnrysList()}</SafeSuspense>{' '}
+          <SafeSuspense fallback={<CircularProgress />}>{verticalAllCnrysList()}</SafeSuspense>{' '}
         </Stack>
       </TabPanel>
     </div>

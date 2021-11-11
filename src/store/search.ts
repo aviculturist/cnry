@@ -12,7 +12,7 @@ import {
 import { atomWithQuery, atomFamilyWithQuery } from 'jotai-query-toolkit';
 import { atom, useAtom } from 'jotai';
 import { atomWithStorage } from 'jotai/utils';
-import { currentCnryContractState } from '@store/current-network-state';
+import { currentCnryContractState } from '@store/helpers';
 import { METADATA_FUNCTION } from '@utils/constants';
 import { ChainID } from 'micro-stacks/common';
 
