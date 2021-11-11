@@ -147,13 +147,6 @@ export const cnryUserWatcherTokenIdsAtom = atomFamilyWithQuery<string, number[]>
         limit: 50,
         principal: cnryContract,
       });
-      // const feed = (txs as TransactionResults).results.map(tx => {
-      //   const content = tx.contract_call.function_args?.[0].repr.replace(`u"`, '').slice(0, -1);
-      //   return {
-      //     content,
-      //   };
-      // });
-      console.log(txs);
       const userWatchedCnryTokenIds = (txs as TransactionResults).results
         .filter(
           tx =>
@@ -168,8 +161,9 @@ export const cnryUserWatcherTokenIdsAtom = atomFamilyWithQuery<string, number[]>
           ).contract_call.function_args?.[0].repr.replace(`u`, '');
           return Number(content);
         });
-      //console.log(userWatchedCnryTokenIds);
-      return userWatchedCnryTokenIds;
+      const deduplicatedUserWatchedCnryTokenIds = [...new Set(userWatchedCnryTokenIds)];
+
+      return deduplicatedUserWatchedCnryTokenIds;
     } catch (_e) {
       console.log(_e);
     }

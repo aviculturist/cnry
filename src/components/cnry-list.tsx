@@ -1,5 +1,7 @@
 import * as React from 'react';
 import { useAtom } from 'jotai';
+import { ChainID } from 'micro-stacks/common';
+import { networkAtom, userStxAddressesAtom } from '@micro-stacks/react';
 import Box from '@mui/material/Box';
 import List from '@mui/material/List';
 import Stack from '@mui/material/Stack';
@@ -8,17 +10,15 @@ import ImageListItem from '@mui/material/ImageListItem';
 import CircularProgress from '@mui/material/CircularProgress';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
+import Skeleton from '@mui/material/Skeleton';
 import { cnryUserPendingTxIdsAtom } from '@store/cnry';
 import { cnryTokenIdsAtom, cnryUserTokenIdsAtom, cnryUserWatcherTokenIdsAtom } from '@store/cnry';
+import cnryListTabStateAtom from '@store/cnry-list-tab-state';
 import { PendingCnryCardFromTxId, CnryCardFromTxId } from '@components/cnry-card';
 import CnryCard from '@components/cnry-card';
 import HatchCnryForm from '@components/hatch-cnry-form';
 import SafeSuspense from '@components/safe-suspense';
-import cnryListTabStateAtom from '@store/cnry-list-tab-state';
 import { t } from '@lingui/macro';
-import Skeleton from '@mui/material/Skeleton';
-import { networkAtom, userStxAddressesAtom } from '@micro-stacks/react';
-import { ChainID } from 'micro-stacks/common';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -53,9 +53,11 @@ const CnryList = () => {
   const userStxAddress = userStxAddresses?.[chain] || '';
   const [userPendingTxids] = useAtom(cnryUserPendingTxIdsAtom);
   const [cnryAllTokenIds] = useAtom(cnryTokenIdsAtom);
-  const [watcherUserTokenIds] = useAtom(cnryUserWatcherTokenIdsAtom(userStxAddress));
   const [cnryUserTokenIds] = useAtom(cnryUserTokenIdsAtom(userStxAddress));
+  const [watcherUserTokenIds] = useAtom(cnryUserWatcherTokenIdsAtom(userStxAddress));
   const [value, setValue] = useAtom(cnryListTabStateAtom);
+  const userHasCnrys = (cnryUserTokenIds === undefined || cnryUserTokenIds.length == 0) ? false: true;
+  const userHasWatching = (watcherUserTokenIds === undefined || watcherUserTokenIds.length == 0) ? false: true;
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
@@ -131,8 +133,6 @@ const CnryList = () => {
     </ImageList>
   );
 
-  const userHasCnrys = true;
-  const userHasWatching = true;
 
   return (
     <div>
@@ -167,7 +167,7 @@ const CnryList = () => {
         <Stack maxWidth="sm" sx={{ m: 'auto' }}>
           <SafeSuspense fallback={<CircularProgress />}>
             {verticalUserWatcherCnrysList()}
-          </SafeSuspense>{' '}
+          </SafeSuspense>
         </Stack>
       </TabPanel>
       <TabPanel value={value} index="four">
