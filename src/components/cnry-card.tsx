@@ -177,7 +177,7 @@ const CnryCard = ({ tokenId }: { tokenId: number }) => {
     <Card sx={{ m: 'auto', width: 292, maxWidth: 292 }}>
       <CardHeader
         avatar={
-          <Avatar sx={{ bgcolor: red[500] }} aria-label="profile">
+          <Avatar sx={{ bgcolor: isAlive ? green[500] : red[500] }} aria-label="profile">
             {isAlive ? <CheckCircleOutlineIcon /> : <CancelOutlinedIcon />}
           </Avatar>
         }
