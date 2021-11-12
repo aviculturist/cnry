@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { t } from '@lingui/macro';
 // can't use next/app router until i18n SSG is supported
 //import { useRouter } from 'next/router';
 // TODO: Currently missing any location information:
@@ -18,7 +19,6 @@ import { useActiveLocale } from '@hooks/use-active-locale';
 import { languageMenuAnchorElAtom, languageMenuIsOpenAtom } from '@store/language-menu-is-open';
 import { useLocationLinkProps } from '@hooks/use-location-link-props';
 import LanguageLink from '@components/language-link';
-import { t } from '@lingui/macro';
 
 const LanguageMenu = () => {
   const [isOpen, setIsOpen] = useAtom(languageMenuIsOpenAtom);

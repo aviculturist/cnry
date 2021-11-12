@@ -1,11 +1,11 @@
 import * as React from 'react';
+import { t } from '@lingui/macro';
 import { useAtom } from 'jotai';
 import Tooltip from '@mui/material/Tooltip';
 import Button from '@mui/material/Button';
 import { networkInfoAtom } from '@store/network-info';
 import { currentStacksExplorerState, currentChainState } from '@store/helpers';
 import ProgressIcon from '@components/progress-icon';
-import { t } from '@lingui/macro';
 
 const StacksChainTipButton = () => {
   const [networkInfo] = useAtom(networkInfoAtom);

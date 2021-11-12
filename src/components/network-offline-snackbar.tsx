@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { t } from '@lingui/macro';
 import { useAtom } from 'jotai';
 import { useNetwork } from '@micro-stacks/react';
 import Snackbar from '@mui/material/Snackbar';
@@ -8,7 +9,6 @@ import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import { networkOfflineSnackbarIsDismissedAtom } from '@store/network-offline-snackbar-is-dismissed';
 import { useNetworkIsOffline } from '@hooks/use-network-is-offline';
-import { t } from '@lingui/macro';
 
 const NetworkOfflineSnackbar = () => {
   const { networkIsOffline } = useNetworkIsOffline();
@@ -40,7 +40,7 @@ const NetworkOfflineSnackbar = () => {
     >
       <Alert action={action} severity="error">
         <AlertTitle>{t`Network Problem`}</AlertTitle>
-        {network.getCoreApiUrl()} is unreachable.
+        {t`${network.getCoreApiUrl()} is unreachable.`}
       </Alert>
     </Snackbar>
   );

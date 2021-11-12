@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { t } from '@lingui/macro';
 import { useAtom } from 'jotai';
 import { useNetwork } from '@micro-stacks/react';
 import { StacksMainnet, StacksRegtest, StacksMocknet, StacksTestnet } from 'micro-stacks/network';
@@ -199,8 +200,8 @@ const SelectNetworkDialog = () => {
                 </Avatar>
               </ListItemAvatar>
               <ListItemText
-                primary={<React.Fragment>Add a network</React.Fragment>}
-                secondary={<React.Fragment>url, port, etc.</React.Fragment>}
+                primary={<React.Fragment>{t`Add a network`}</React.Fragment>}
+                secondary={<React.Fragment> </React.Fragment>}
               />
             </ListItemButton>
           </ListItem>

@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { useEffect } from 'react';
+import { t } from '@lingui/macro';
 import { useAtom } from 'jotai';
 import { useAtomValue } from 'jotai/utils';
 import IconButton from '@mui/material/IconButton';
@@ -16,7 +17,6 @@ import LaunchIcon from '@mui/icons-material/Launch';
 import { userPendingTxIdsAtom, userPendingTxAtom } from '@store/user-pending-transactions';
 import { currentStacksExplorerState, currentChainState } from '@store/helpers';
 import { toRelativeTime } from '@utils/time';
-import { t } from '@lingui/macro';
 
 const UserPendingTxItem = ({ txid }: { txid: string }) => {
   const [explorer] = useAtom(currentStacksExplorerState);

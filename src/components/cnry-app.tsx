@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { useEffect } from 'react';
+import { t } from '@lingui/macro';
 import { useAtom } from 'jotai';
 import Box from '@mui/system/Box';
 import Stack from '@mui/material/Stack';
@@ -17,7 +18,6 @@ import InstallWalletDialog from '@components/install-wallet-dialog';
 import TransactionSnackbars from '@components/transaction-snackbars';
 import CnryList from '@components/cnry-list';
 import MaintenanceAlert from '@components/maintenance-alert';
-import { t } from '@lingui/macro';
 
 const CnryItemQueryPopup = () => {
   const id = useQuery();
@@ -60,7 +60,7 @@ const CnryApp = () => {
             <Stack maxWidth="sm" sx={{ m: 'auto' }} spacing={2}>
               <MaintenanceAlert />
               <Alert severity="info">
-                <AlertTitle>About Cnry</AlertTitle>
+                <AlertTitle>{t`About Cnry`}</AlertTitle>
                 {t`Cnry makes it easy to publish and keep track of warrant canaries.`}{' '}
                 <strong>
                   <a

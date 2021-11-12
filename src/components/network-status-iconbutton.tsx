@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { t } from '@lingui/macro';
 import { useAtom } from 'jotai';
 import Tooltip from '@mui/material/Tooltip';
 import IconButton from '@mui/material/IconButton';
@@ -7,7 +8,6 @@ import { useNetworkIsOffline } from '@hooks/use-network-is-offline';
 import ProgressIcon from '@components/progress-icon';
 import { networkInfoAtom } from '@store/network-info';
 import { networkInfoIsLoadingAtom } from '@store/network-info-is-loading';
-import { t } from '@lingui/macro';
 
 const NetworkStatusIconButton = () => {
   const { networkIsOffline } = useNetworkIsOffline();

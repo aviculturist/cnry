@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { useEffect } from 'react';
+import { t } from '@lingui/macro';
 import { useAtom } from 'jotai';
 import { useAtomValue } from 'jotai/utils';
 import {
@@ -23,7 +24,6 @@ import LaunchIcon from '@mui/icons-material/Launch';
 import { cnryContractTransactionIdsAtom, cnryContractTransactionAtom } from '@store/cnry';
 import { currentStacksExplorerState, currentChainState } from '@store/helpers';
 import { toRelativeTime } from '@utils/time';
-import { t } from '@lingui/macro';
 
 const TransactionTypeSelector = ({ tx }: { tx: Transaction }) => {
   switch (tx.tx_type) {

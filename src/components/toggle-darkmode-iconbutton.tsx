@@ -1,11 +1,11 @@
 import * as React from 'react';
+import { t } from '@lingui/macro';
 import LightModeTwoToneIcon from '@mui/icons-material/LightModeTwoTone';
 import ModeNightTwoToneIcon from '@mui/icons-material/ModeNightTwoTone';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import { yellow, grey } from '@mui/material/colors';
 import { useDarkModeContext } from '@hooks/use-darkmode-context';
-import { t } from '@lingui/macro';
 
 const ToggleDarkModeIconButton = () => {
   const { darkMode, toggleDarkMode } = useDarkModeContext();

@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { t } from '@lingui/macro';
 import { useAtom } from 'jotai';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
@@ -7,7 +8,6 @@ import ListSubheader from '@mui/material/ListSubheader';
 import useTransactionsDrawerIsOpen from '@hooks/use-transactions-drawer-is-open';
 import { userPendingTxIdsAtom, userPendingTxAtom } from '@store/user-pending-transactions';
 import { cnryContractTransactionIdsAtom } from '@store/cnry';
-import { t } from '@lingui/macro';
 import UserPendingTxItem from '@components/user-pending-tx-item';
 import TxItem from '@components/tx-item';
 

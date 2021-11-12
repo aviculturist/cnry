@@ -1,11 +1,11 @@
 import * as React from 'react';
+import { t } from '@lingui/macro';
 import { useAtomValue } from 'jotai/utils';
 import SafeSuspense from '@components/safe-suspense';
 import AlertTitle from '@mui/material/AlertTitle';
 import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
 import { maintenanceModeAtom } from '@store/maintenance';
-import { t } from '@lingui/macro';
 
 const MaintenanceAlert = () => {
   const buildHash = process.env.NEXT_PUBLIC_COMMIT_HASH || '';

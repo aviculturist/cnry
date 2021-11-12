@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { t } from '@lingui/macro';
 import { useAtom } from 'jotai';
 import { Formik, Form, Field } from 'formik';
 import { TextField } from 'formik-mui';
@@ -10,8 +11,8 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import LinearProgress from '@mui/material/LinearProgress';
 import { addNetworkDialogIsOpenAtom } from '@store/add-network-dialog-is-open';
-import { useNetworks } from '@hooks/use-networks';
 import { Network } from '@store/networks';
+import { useNetworks } from '@hooks/use-networks';
 
 const AddNetworkDialog = () => {
   const [open, setOpen] = useAtom(addNetworkDialogIsOpenAtom);
@@ -27,7 +28,7 @@ const AddNetworkDialog = () => {
         <DialogTitle>Add Network</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Add and select a new Stacks Blockchain API node using this form.
+          {t`Add and select a new Stacks Blockchain API node using this form.`}
           </DialogContentText>
           <Formik
             initialValues={{
@@ -77,7 +78,7 @@ const AddNetworkDialog = () => {
                   label="Name"
                   variant="outlined"
                   fullWidth
-                  placeholder="My Stacks Node"
+                  placeholder={t`My Stacks Node`}
                 />
                 <br />
                 <Field
@@ -92,10 +93,10 @@ const AddNetworkDialog = () => {
                 {isSubmitting && <LinearProgress />}
                 <br />
                 <Button color="primary" disabled={isSubmitting} onClick={handleClose}>
-                  Cancel
+                {t`Cancel`}
                 </Button>
                 <Button color="primary" disabled={isSubmitting} onClick={submitForm}>
-                  Add and Select
+                {t`Add and Select`}
                 </Button>
               </Form>
             )}

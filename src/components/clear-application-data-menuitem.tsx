@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { t } from '@lingui/macro';
 import MenuItem from '@mui/material/MenuItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
@@ -8,7 +9,6 @@ import Tooltip from '@mui/material/Tooltip';
 import Snackbar from '@mui/material/Snackbar';
 import CloseIcon from '@mui/icons-material/Close';
 import Alert from '@mui/material/Alert';
-import { t } from '@lingui/macro';
 
 const ClearApplicationDataMenuItem = () => {
   const [open, setOpen] = React.useState(false);
@@ -46,7 +46,7 @@ const ClearApplicationDataMenuItem = () => {
             </IconButton>
           </Tooltip>
         </ListItemIcon>
-        <ListItemText inset={false}>Clear Browser Data</ListItemText>
+        <ListItemText inset={false}>{t`Clear Browser Data`}</ListItemText>
       </MenuItem>
 
       <Snackbar open={open} autoHideDuration={6000} onClose={handleClose} action={action}>

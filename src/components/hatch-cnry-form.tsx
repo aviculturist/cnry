@@ -1,21 +1,21 @@
 import React from 'react';
+import { t } from '@lingui/macro';
 import { useAuth } from '@micro-stacks/react';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
-import useHatch from '@hooks/use-hatch';
-import useInstallWalletDialog from '@hooks/use-install-wallet-dialog';
-import { t } from '@lingui/macro';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import Box from '@mui/system/Box';
+import useHatch from '@hooks/use-hatch';
+import useInstallWalletDialog from '@hooks/use-install-wallet-dialog';
 
 const validationSchema = yup.object({
-  name: yup.string().required('A name is required'),
+  name: yup.string().required(t`A name is required`),
   statement: yup
     .string()
-    .max(280, 'A statement cannot exceed 280 characters. It should fit in a Tweet!')
-    .required('A statement is required'),
+    .max(280, t`A statement cannot exceed 280 characters. It should fit in a Tweet!`)
+    .required(t`A statement is required`),
 });
 
 const HatchCnryForm = () => {
@@ -83,7 +83,7 @@ const HatchCnryForm = () => {
             fullWidth
             id="name"
             name="name"
-            label="Name"
+            label={t`Name`}
             placeholder="Acme Corp Warrant Canary"
             value={formik.values.name}
             onChange={formik.handleChange}
@@ -97,7 +97,7 @@ const HatchCnryForm = () => {
             fullWidth
             id="statement"
             name="statement"
-            label="Statement"
+            label={t`Statement`}
             placeholder="Acme Corp has never received an order under Section 215 of the USA Patriot Act."
             type="statement"
             value={formik.values.statement}
@@ -113,7 +113,7 @@ const HatchCnryForm = () => {
             type="submit"
             disabled={formik.isSubmitting}
           >
-            Hatch a New Cnry
+            {t`Hatch a New Cnry`}
           </Button>
         </Stack>
       </Box>

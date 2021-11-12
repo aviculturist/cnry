@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { useEffect } from 'react';
+import { t } from '@lingui/macro';
 import { useAtom } from 'jotai';
 import { ChainID } from 'micro-stacks/common';
 import { networkAtom, userStxAddressesAtom } from '@micro-stacks/react';
@@ -19,7 +20,6 @@ import { PendingCnryCardFromTxId, CnryCardFromTxId } from '@components/cnry-card
 import CnryCard from '@components/cnry-card';
 import HatchCnryForm from '@components/hatch-cnry-form';
 import SafeSuspense from '@components/safe-suspense';
-import { t } from '@lingui/macro';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -143,10 +143,10 @@ const CnryList = () => {
   return (
     <div>
       <Tabs value={value} onChange={handleChange} centered>
-        <Tab value="one" label="New" />
-        <Tab value="two" label="My Cnrys" disabled={userHasCnrys ? false : true} />
-        <Tab value="three" label="Watching" disabled={userHasWatching ? false : true} />
-        <Tab value="four" label="Browse" />
+        <Tab value="one" label={t`New`} />
+        <Tab value="two" label={t`My Cnrys`} disabled={userHasCnrys ? false : true} />
+        <Tab value="three" label={t`Watching`} disabled={userHasWatching ? false : true} />
+        <Tab value="four" label={t`Browse`} />
       </Tabs>
       <TabPanel value={value} index="one">
         <SafeSuspense

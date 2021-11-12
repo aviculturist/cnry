@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { t } from '@lingui/macro';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -32,8 +33,6 @@ const CnryMetadataTable = ({ cnry }: { cnry: any }) => {
   const expiresDate = toDate(keepaliveTimestamp + keepaliveExpiry);
   const lastKeepalive = toDate(keepaliveTimestamp);
 
-    //createData('Expires', `${}`),
-
   const rows = [
     createData('cnryName', `${cnry.cnryName.value}`),
     createData('cnryUri', `${cnry.cnryUri.value}`),
@@ -50,8 +49,8 @@ const CnryMetadataTable = ({ cnry }: { cnry: any }) => {
         <caption>Cnry # {cnry.index.value} Metadata</caption>
         <TableHead>
           <TableRow>
-            <TableCell>Key</TableCell>
-            <TableCell align="right">Value</TableCell>
+            <TableCell>{t`Key`}</TableCell>
+            <TableCell align="right">{t`Value`}</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>

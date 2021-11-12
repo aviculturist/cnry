@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { t } from '@lingui/macro';
 import { useAtom } from 'jotai';
 import Button from '@mui/material/Button';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -27,7 +28,7 @@ const InstallWalletDialog = () => {
           </Grid>
           <Grid item xs={6}>
             <Typography sx={{ pb: 3 }}>
-              To get started with Cnry you need to install and connect a web wallet.
+            {t`To get started with Cnry you need to install and connect a web wallet.`}
             </Typography>
             <Button
               endIcon={<ExitToAppIcon />}

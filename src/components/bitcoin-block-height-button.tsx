@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { t } from '@lingui/macro';
 import { useAtom } from 'jotai';
 import { useNetwork } from '@micro-stacks/react';
 import Button from '@mui/material/Button';
@@ -7,7 +8,6 @@ import { networkInfoAtom } from '@store/network-info';
 import { currentBitcoinExplorerState } from '@store/helpers';
 import { DEFAULT_LOCALNET_SERVER } from '@utils/constants';
 import ProgressIcon from '@components/progress-icon';
-import { t } from '@lingui/macro';
 
 const BitcoinBlockHeightButton = () => {
   const { network } = useNetwork();

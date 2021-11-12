@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
+import { t } from '@lingui/macro';
 import Stack from '@mui/material/Stack';
-
 import Dialog from '@mui/material/Dialog';
 import { DialogTitle } from '@mui/material';
 import CnryCard from '@components/cnry-card';
@@ -18,7 +18,7 @@ export const CnryMetadataErrorDialog = () => {
   return tokenId ? (
     <>
       <Dialog fullWidth={true} maxWidth="xs" onClose={handleClose} open={metadataDialogIsOpen}>
-        <DialogTitle>Cnry #{tokenId} Not Found</DialogTitle>
+        <DialogTitle>{t`Cnry #{tokenId} Not Found`}</DialogTitle>
       </Dialog>
     </>
   ) : (

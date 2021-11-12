@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { t } from '@lingui/macro';
 import { Suspense } from 'react';
 import { useAtom } from 'jotai';
 import AppBar from '@mui/material/AppBar';
@@ -16,7 +17,6 @@ import NetworkStatusIconButton from '@components/network-status-iconbutton';
 import SafeSuspense from '@components/safe-suspense';
 import { cnryLastIdAtom, watcherLastIdAtom } from '@store/cnry';
 import { GITHUB_URL } from '@utils/constants';
-import { t } from '@lingui/macro';
 
 const CountBlurb = () => {
   const [cnryLastId] = useAtom(cnryLastIdAtom);

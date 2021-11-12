@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { t } from '@lingui/macro';
 import { useAtom } from 'jotai';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
@@ -9,7 +10,6 @@ import LaunchIcon from '@mui/icons-material/Launch';
 import { currentStacksExplorerState, currentChainState } from '@store/helpers';
 import { userPendingTxIdsAtom, userPendingTxAtom } from '@store/user-pending-transactions';
 import { truncateMiddle } from '@utils/common';
-import { t } from '@lingui/macro';
 
 const SingleTransactionSnackbar = ({ txid }: { txid: string }) => {
   const [dismissed, setDismissed] = React.useState(false);

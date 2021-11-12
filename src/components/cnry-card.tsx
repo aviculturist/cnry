@@ -1,23 +1,17 @@
 import * as React from 'react';
-import { useEffect } from 'react';
 import { t } from '@lingui/macro';
-import { string } from 'yup/lib/locale';
 import { useAtom } from 'jotai';
 import { useAtomValue } from 'jotai/utils';
 import { ChainID } from 'micro-stacks/common';
 import { networkAtom, userStxAddressesAtom } from '@micro-stacks/react';
-import { cvToJSON, cvToHex, hexToCV, intToHexString } from '@stacks/transactions';
 import { ContractCallTransaction } from '@blockstack/stacks-blockchain-api-types';
-
-import { useTheme } from '@mui/material/styles';
 import { styled } from '@mui/material/styles';
 import { red } from '@mui/material/colors';
 import { green } from '@mui/material/colors';
-import Stack from '@mui/material/Stack';
 import Card from '@mui/material/Card';
 import Chip from '@mui/material/Chip';
 import CardHeader from '@mui/material/CardHeader';
-import CardMedia from '@mui/material/CardMedia';
+//import CardMedia from '@mui/material/CardMedia';
 import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
 import RestoreIcon from '@mui/icons-material/Restore';
@@ -36,10 +30,6 @@ import ShareIcon from '@mui/icons-material/Share';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Tooltip from '@mui/material/Tooltip';
-import ListItem from '@mui/material/ListItem';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import ListSubheader from '@mui/material/ListSubheader';
 import CircularProgress from '@mui/material/CircularProgress';
 import { userPendingTxIdsAtom, userPendingTxAtom } from '@store/user-pending-transactions';
 import { currentStacksExplorerState, currentChainState } from '@store/helpers';
@@ -85,7 +75,7 @@ const PendingCnryCardFromTxId = ({ txid }: { txid: string }) => {
             <Chip color="secondary" label="#?" variant="outlined" />
           </Typography>
         }
-        title="Pending"
+        title={t`Pending`}
         subheader={`Hatching since ${toRelativeTime(tx.timestamp * 1000)}`}
       />
       {/* <CardMedia
@@ -127,7 +117,7 @@ const PendingCnryCardFromTxId = ({ txid }: { txid: string }) => {
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <CardContent>
           <Typography paragraph>
-            Your warrant canary has been submitted to the blockchain.
+          {t`Your warrant canary has been submitted to the blockchain.`}
           </Typography>
         </CardContent>
       </Collapse>
@@ -221,7 +211,7 @@ const CnryCard = ({ tokenId }: { tokenId: number }) => {
           )
         }
         title={cnry.cnryName.value}
-        subheader={`Hatched on ${hatchedDate}, expires ${daysRemainingUntilExpiry}`}
+        subheader={t`Hatched on ${hatchedDate}, expires ${daysRemainingUntilExpiry}`}
       />
       {/* <CardMedia
         component="img"
@@ -236,17 +226,17 @@ const CnryCard = ({ tokenId }: { tokenId: number }) => {
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
-        <Tooltip title="Watch Cnry">
+        <Tooltip title={t`Watch Cnry`}>
           <IconButton aria-label="watch" onClick={() => handleWatch({ tokenId: cnry.index.value })}>
             <FavoriteIcon />
           </IconButton>
         </Tooltip>
-        <Tooltip title="Open in new tab">
+        <Tooltip title={t`Open in new tab`}>
           <IconButton target="_blank" href={`./?id=${cnry.index.value}`} aria-label="share">
             <ShareIcon />
           </IconButton>
         </Tooltip>
-        <Tooltip title="Copy permalink to clipboard">
+        <Tooltip title={t`Copy permalink to clipboard`}>
           <IconButton
             aria-label="copy"
             onClick={() => handleCopyToClipboard({ link: `./?id=${cnry.index.value}` })}
@@ -255,7 +245,7 @@ const CnryCard = ({ tokenId }: { tokenId: number }) => {
           </IconButton>
         </Tooltip>
         {userStxAddress === cnry.cnryKeeper.value ? (
-          <Tooltip title="Run keepalive">
+          <Tooltip title={t`Run keepalive`}>
             <IconButton
               aria-label="keepalive"
               onClick={() => handleKeepalive({ tokenId: cnry.index.value })}

@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { t } from '@lingui/macro';
 import { useEffect } from 'react';
 import { useAtom } from 'jotai';
 import { useNetwork } from '@micro-stacks/react';

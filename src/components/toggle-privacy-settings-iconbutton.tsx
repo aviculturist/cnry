@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { t } from '@lingui/macro';
 import { useAtom } from 'jotai';
 //import { useGaia } from '@micro-stacks/react';
 import Menu from '@mui/material/Menu';
@@ -15,7 +16,6 @@ import { styled } from '@mui/material/styles';
 import { settingsMenuAnchorElAtom, settingsMenuIsOpenAtom } from '@store/settings-menu-is-open';
 import ClearApplicationDataMenuItem from '@components/clear-application-data-menuitem';
 import SafeSuspense from '@components/safe-suspense';
-import { t } from '@lingui/macro';
 
 // used for the localStorage import
 const Input = styled('input')({
@@ -105,7 +105,7 @@ const PrivacySettingsMenu = () => {
               <DownloadOutlinedIcon />
             </IconButton>
           </ListItemIcon>
-          <ListItemText inset={false}>Export localStorage</ListItemText>
+          <ListItemText inset={false}>{t`Export localStorage`}</ListItemText>
         </MenuItem>
         {/* <MenuItem onClick={handlePut}>
           <ListItemIcon>
@@ -129,7 +129,7 @@ const PrivacySettingsMenu = () => {
                   <FileUploadOutlinedIcon fontSize="small" />
                 </IconButton>
               </ListItemIcon>
-              <ListItemText inset={false}>Import localStorage</ListItemText>
+              <ListItemText inset={false}>{t`Import localStorage`}</ListItemText>
             </MenuItem>
           </label>
         </Tooltip>
