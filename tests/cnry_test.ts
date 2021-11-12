@@ -94,7 +94,7 @@ Clarinet.test({
       Tx.contractCall(
         'cnry',
         'set-base-uri',
-        [types.ascii('https://www.cnry.org?id={id}')],
+        [types.ascii('https://www.cnry.org/?id={id}')],
         account.address
       ),
     ]);
@@ -123,7 +123,7 @@ Clarinet.test({
   },
 });
 
-// This fails although it works in the scripts
+//This fails although it works in the scripts
 // Clarinet.test({
 //   name: 'it lets an account update a Cnry name',
 //   async fn(chain: Chain, accounts: Map<string, Account>) {
@@ -131,7 +131,7 @@ Clarinet.test({
 
 //     // wallet_1 calls the watch function
 //     const block = chain.mineBlock([
-//       Tx.contractCall('cnry', 'set-name', [types.uint(0), types.utf8('New Name')], account.address),
+//       Tx.contractCall('cnry', 'set-name', [types.uint(1), types.utf8('New Name')], account.address),
 //     ]);
 
 //     // contract returns (ok true)

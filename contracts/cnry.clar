@@ -28,7 +28,7 @@
 (define-constant ERR_CONTRACT_CALL (err u503)) ;; internal error
 
 ;; VARIABLES (lowercase)
-(define-data-var base-uri (string-ascii 210) "https://cnry.org?id={id}")
+(define-data-var base-uri (string-ascii 210) "https://cnry.org/?id={id}")
 (define-data-var last-id uint u0)
 
 ;; STORAGE
