@@ -10,5 +10,5 @@ export function toRelativeTime(ts: number): string {
 }
 
 export function toDate(ts: number): string {
-  return dayjs(ts).format('LL');
+  return dayjs(ts).format('ll');
 }

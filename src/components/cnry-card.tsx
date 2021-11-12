@@ -1,12 +1,15 @@
 import * as React from 'react';
 import { useEffect } from 'react';
+import { t } from '@lingui/macro';
+import { string } from 'yup/lib/locale';
 import { useAtom } from 'jotai';
 import { useAtomValue } from 'jotai/utils';
-import { useTheme } from '@mui/material/styles';
-import { cnryGetMetadataAtom, cnryContractTransactionAtom, cnryIsAliveAtom } from '@store/cnry';
+import { ChainID } from 'micro-stacks/common';
+import { networkAtom, userStxAddressesAtom } from '@micro-stacks/react';
 import { cvToJSON, cvToHex, hexToCV, intToHexString } from '@stacks/transactions';
 import { ContractCallTransaction } from '@blockstack/stacks-blockchain-api-types';
 
+import { useTheme } from '@mui/material/styles';
 import { styled } from '@mui/material/styles';
 import { red } from '@mui/material/colors';
 import { green } from '@mui/material/colors';
@@ -32,24 +35,19 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShareIcon from '@mui/icons-material/Share';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-
-import { toDate, toRelativeTime } from '@utils/time';
-import useWatch from '@hooks/use-watch';
-import useKeepalive from '@hooks/use-keepalive';
-import { networkAtom, userStxAddressesAtom } from '@micro-stacks/react';
-import { ChainID } from 'micro-stacks/common';
-
 import Tooltip from '@mui/material/Tooltip';
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import ListSubheader from '@mui/material/ListSubheader';
-
+import CircularProgress from '@mui/material/CircularProgress';
 import { userPendingTxIdsAtom, userPendingTxAtom } from '@store/user-pending-transactions';
 import { currentStacksExplorerState, currentChainState } from '@store/helpers';
-import { t } from '@lingui/macro';
-import CircularProgress from '@mui/material/CircularProgress';
-import { string } from 'yup/lib/locale';
+import { cnryGetMetadataAtom, cnryContractTransactionAtom, cnryIsAliveAtom } from '@store/cnry';
+import useWatch from '@hooks/use-watch';
+import useKeepalive from '@hooks/use-keepalive';
+import { toDate, toRelativeTime } from '@utils/time';
+import CnryMetadataTable from '@components/cnry-metadata-table';
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -129,8 +127,7 @@ const PendingCnryCardFromTxId = ({ txid }: { txid: string }) => {
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <CardContent>
           <Typography paragraph>
-            Show additional metadata, transaction history (keepalives, name/statement edits, etc.)
-            Also show watchers
+            Your warrant canary has been submitted to the blockchain.
           </Typography>
         </CardContent>
       </Collapse>
@@ -280,10 +277,7 @@ const CnryCard = ({ tokenId }: { tokenId: number }) => {
       </CardActions>
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <CardContent>
-          <Typography paragraph>
-            Show additional metadata, transaction history (keepalives, name/statement edits, etc.)
-            Also show watchers
-          </Typography>
+          <CnryMetadataTable cnry={cnry} />
         </CardContent>
       </Collapse>
     </Card>
