@@ -1,27 +1,28 @@
-import { smartContractsClientAtom, accountsClientAtom, transactionsClientAtom } from '@store/api';
+import { smartContractsClientAtom } from '@store/api';
 import { currentMaintenanceContractState } from '@store/helpers';
 import { GET_MAINTENANCE_FUNCTION } from '@utils/constants';
-import { atomWithQuery, atomFamilyWithQuery } from 'jotai-query-toolkit';
+import { atomFamilyWithQuery } from 'jotai-query-toolkit';
 // TODO: this returns something differently
 //import { cvToJSON, hexToCV } from 'micro-stacks/clarity';
 //import { cvToJSON, hexToCV } from '@stacks/transactions';
 
 import { networkAtom, userStxAddressesAtom } from '@micro-stacks/react';
-import { cvToJSON, cvToHex, hexToCV, intToHexString } from '@stacks/transactions';
-import { fetchReadOnlyFunction } from 'micro-stacks/api';
+import { cvToJSON, cvToHex, hexToCV } from '@stacks/transactions';
+import { fetchReadOnlyFunction } from 'micro-stacks/api'; // TODO
 import { ChainID } from 'micro-stacks/common';
 import { uintCV, trueCV, stringAsciiCV } from 'micro-stacks/clarity';
 
 export const maintenanceModeAtom = atomFamilyWithQuery<string, any>(
   'maintenanceModeAtom',
-  async (get, query) => {
+  async (get, shortCommitHash) => {
+    const maintenanceModeContract = get(currentMaintenanceContractState);
+    const [contractAddress, contractName] = maintenanceModeContract.split('.');
     const network = get(networkAtom);
     const chain = network?.chainId === ChainID.Mainnet ? 'mainnet' : 'testnet';
     const userStxAddresses = get(userStxAddressesAtom);
-    const userStxAddress = userStxAddresses?.[chain] || '';
+    const userStxAddress = userStxAddresses?.[chain] || contractAddress; // bcuz when user is not logged in, queries fail
     const client = get(smartContractsClientAtom);
-    const maintenanceModeContract = get(currentMaintenanceContractState);
-    const [contractAddress, contractName] = maintenanceModeContract.split('.');
+
 
     try {
       const data = await client.callReadOnlyFunction({
@@ -30,7 +31,7 @@ export const maintenanceModeAtom = atomFamilyWithQuery<string, any>(
         functionName: GET_MAINTENANCE_FUNCTION,
         readOnlyFunctionArgs: {
           sender: userStxAddress,
-          arguments: [cvToHex(stringAsciiCV(query))],
+          arguments: [cvToHex(stringAsciiCV(shortCommitHash))],
         },
       });
       if (data.okay && data.result) {

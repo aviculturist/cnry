@@ -218,10 +218,10 @@ export const cnryGetMetadataAtom = atomFamilyWithQuery<number | undefined, any |
   async (get, tokenId) => {
     if (tokenId === undefined) return undefined;
     const network = get(networkAtom);
-    const cnryContract = get(currentCnryContractState);
-    const [contractAddress, contractName] = cnryContract.split('.');
     const chain = network?.chainId === ChainID.Mainnet ? 'mainnet' : 'testnet';
     const userStxAddresses = get(userStxAddressesAtom);
+    const cnryContract = get(currentCnryContractState);
+    const [contractAddress, contractName] = cnryContract.split('.');
     const userStxAddress = userStxAddresses?.[chain] || contractAddress; // bcuz when user is not logged in, queries fail
     const client = get(smartContractsClientAtom);
 

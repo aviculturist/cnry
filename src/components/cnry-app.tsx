@@ -1,12 +1,6 @@
 import * as React from 'react';
 import { useEffect } from 'react';
 import { useAtom } from 'jotai';
-import { useAuth } from '@micro-stacks/react';
-import {
-  useCurrentAccountBalances,
-  useCurrentAccountAssetsList,
-  useCurrentAccountTransactionsList,
-} from '@micro-stacks/query';
 import Box from '@mui/system/Box';
 import Stack from '@mui/material/Stack';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -17,7 +11,6 @@ import { useQuery } from '@hooks/use-query';
 import { cnryGetMetadataAtom } from '@store/cnry';
 import useMetadataDialogIsOpen from '@hooks/use-metadata-dialog-is-open';
 import { CnryMetadataErrorDialog, CnryMetadataDialog } from '@components/cnry-metadata-dialog';
-import { hatchCnryDialogIsOpenAtom } from '@store/hatch-cnry-dialog-is-open';
 import HatchCnryDialog from '@components/hatch-cnry';
 import ActivityDrawer from '@components/activity-drawer';
 import InstallWalletDialog from '@components/install-wallet-dialog';
@@ -30,7 +23,7 @@ const CnryItemQueryPopup = () => {
   const id = useQuery();
   const tokenId = id !== '' ? Number(id) : undefined;
   const [metadataResult] = useAtom(cnryGetMetadataAtom(tokenId));
-  const { metadataDialogIsOpen, setMetadataDialogIsOpen } = useMetadataDialogIsOpen();
+  const { setMetadataDialogIsOpen } = useMetadataDialogIsOpen();
 
   useEffect(() => {
     tokenId && setMetadataDialogIsOpen(true);
@@ -53,8 +46,8 @@ const CnryApp = () => {
   //useCurrentAccountAssetsList
   //console.log(non_fungible_tokens);
   const id = useQuery();
-  const [open, setOpen] = useAtom(hatchCnryDialogIsOpenAtom);
-  const { isSignedIn, handleSignIn, handleSignOut, isLoading, session } = useAuth();
+  //const [open, setOpen] = useAtom(hatchCnryDialogIsOpenAtom);
+  //const { isSignedIn, handleSignIn, handleSignOut, isLoading, session } = useAuth();
 
   return (
     <>
@@ -65,7 +58,7 @@ const CnryApp = () => {
           </SafeSuspense>
           <Box>
             <Stack maxWidth="sm" sx={{ m: 'auto' }} spacing={2}>
-              {isSignedIn ? <MaintenanceAlert /> : <></>}
+              <MaintenanceAlert />
               <Alert severity="info">
                 <AlertTitle>About Cnry</AlertTitle>
                 {t`Cnry makes it easy to publish and keep track of warrant canaries.`}{' '}
