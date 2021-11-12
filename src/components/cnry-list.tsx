@@ -63,7 +63,7 @@ const CnryList = () => {
     watcherUserTokenIds === undefined || watcherUserTokenIds.length == 0 ? false : true;
 
   useEffect(() => {
-    userHasCnrys !== undefined && setValue('two');
+    userHasCnrys && setValue('two');
   }, []);
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
