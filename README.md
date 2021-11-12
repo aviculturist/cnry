@@ -21,9 +21,9 @@ As an open source project, Cnry contains a set of [Clarity](https://clarity-lang
 
 To access Cnry, use an IPFS gateway link from the
 [latest release](https://github.com/aviculturist/cnry/releases/latest),
-or visit [cnry.org](https://cnry.org).
+or visit [testnet.cnry.org](https://testnet.cnry.org).
 
-> NOTE: `mainnet` is the default network and `localnet`
+> NOTE: `testnet` is the default network and `localnet`
 > only works in development mode on some browsers due to
 > security limitations (CORS and mixed content). You can
 > also add your own network within the ui.
@@ -31,8 +31,8 @@ or visit [cnry.org](https://cnry.org).
 ## Running Cnry
 
 > If you prefer not using the integration environment,
-> Cnry can be run locally and pointed at `mainnet`,
-> `regtest`(with some limitations), or `testnet`. Skip
+> Cnry can be run locally and pointed at `testnet`,
+> `regtest`(with some limitations). Skip
 > ahead to Step 4 and for Steps 5 and 6 use another network.
 
 1. To run Cnry with the integration environment locally, install and run [Docker Desktop](https://www.docker.com/products/docker-desktop).
