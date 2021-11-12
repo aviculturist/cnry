@@ -158,7 +158,7 @@ const CnryList = () => {
         >
           <HatchCnryForm />
           <Stack maxWidth="sm" sx={{ m: 'auto' }}>
-            <SafeSuspense fallback={<CircularProgress />}>
+            <SafeSuspense fallback={<CircularProgress sx={{m:'auto'}} />}>
               {horizontalUserPendingCnrysList()}
             </SafeSuspense>
           </Stack>
@@ -166,19 +166,19 @@ const CnryList = () => {
       </TabPanel>
       <TabPanel value={value} index="two">
         <Stack maxWidth="sm" sx={{ m: 'auto' }}>
-          <SafeSuspense fallback={<CircularProgress />}>{verticalUserCnrysList()}</SafeSuspense>
+          <SafeSuspense fallback={<CircularProgress sx={{m:'auto'}} />}>{verticalUserCnrysList()}</SafeSuspense>
         </Stack>
       </TabPanel>
       <TabPanel value={value} index="three">
         <Stack maxWidth="sm" sx={{ m: 'auto' }}>
-          <SafeSuspense fallback={<CircularProgress />}>
+          <SafeSuspense fallback={<CircularProgress sx={{m:'auto'}} />}>
             {verticalUserWatcherCnrysList()}
           </SafeSuspense>
         </Stack>
       </TabPanel>
       <TabPanel value={value} index="four">
         <Stack maxWidth="sm" sx={{ m: 'auto' }}>
-          <SafeSuspense fallback={<CircularProgress />}>{verticalAllCnrysList()}</SafeSuspense>{' '}
+          <SafeSuspense fallback={<CircularProgress sx={{m:'auto'}} />}>{verticalAllCnrysList()}</SafeSuspense>{' '}
         </Stack>
       </TabPanel>
     </div>
