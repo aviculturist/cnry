@@ -20,7 +20,7 @@ describe('Cnry contract', () => {
     await deploy();
   });
 
-  test('Cnry token holder #2 (Alice) can hatch a Cnry and the first Cnry has tokenId 0', async () => {
+  test('Cnry token holder #1 (Alice) can hatch a Cnry and the first Cnry has tokenId 0', async () => {
     const tx = cnry.hatch(
       'Acme Corp',
       'Acme Corp has never received an order under Section 215 of the USA Patriot Act.'
