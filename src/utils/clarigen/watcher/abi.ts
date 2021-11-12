@@ -219,12 +219,12 @@ export const WatcherInterface: ClarityAbi = {
   "variables": [
     {
       "access": "constant",
-      "name": "CONTRACT_OWNER",
+      "name": "AVICULTURIST",
       "type": "principal"
     },
     {
       "access": "constant",
-      "name": "ERR-NOT_CALLED_FROM_CONTRACT",
+      "name": "ERR_NOT_CALLED_FROM_CONTRACT",
       "type": {
         "response": {
           "error": "uint128",

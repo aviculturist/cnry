@@ -372,13 +372,13 @@
   resolved "https://registry.yarnpkg.com/@blockstack/stacks-blockchain-api-types/-/stacks-blockchain-api-types-0.34.2.tgz#de65f6556f8b988784718aca0d8e14284a81d914"
   integrity sha512-VNZcattjf5+7HigJhW+tLthlDbS++7y3S0drVCL5uyqmiRvXKeaN6pF1f9yDQ5B19m7xizCQPO15ZOtHf7fFqw==
 
-"@clarigen/cli@^0.3.2":
-  version "0.3.2"
-  resolved "https://registry.yarnpkg.com/@clarigen/cli/-/cli-0.3.2.tgz#51f80b63bb400adf5d67feab3040190fdc233cdd"
-  integrity sha512-FBTHJsqUVpGIm+H+krd6bWT+1L9cWAuscWnUUr5fhFHwwYLzaiGAYj7tS6k5r6Bp71IBY13Mg6vE+UZ9uOQz+Q==
+"@clarigen/cli@0.3.3":
+  version "0.3.3"
+  resolved "https://registry.yarnpkg.com/@clarigen/cli/-/cli-0.3.3.tgz#d6ede0c9716d2171b4c1ab91935aa5338d9a8e43"
+  integrity sha512-RFu1o3rB5M85/ZLTlGdimUFIoOcai2Ml8gm2fjmtTToDOSq67i6Wg7md87GdOaOx/VTxR1xPo8R5xZU8fIjY5Q==
   dependencies:
     "@clarigen/core" "0.3.2"
-    "@clarigen/native-bin" "0.3.2"
+    "@clarigen/native-bin" "0.3.3"
     "@ltd/j-toml" "1.12.2"
     "@oclif/command" "^1.8.0"
     "@oclif/config" "^1.17.0"
@@ -388,7 +388,7 @@
     chokidar "3.5.1"
     ora "5.4.0"
 
-"@clarigen/core@0.3.2", "@clarigen/core@^0.3.1", "@clarigen/core@^0.3.2":
+"@clarigen/core@0.3.2", "@clarigen/core@^0.3.1":
   version "0.3.2"
   resolved "https://registry.yarnpkg.com/@clarigen/core/-/core-0.3.2.tgz#8679bb0939f0e5ccc979617e59d31d8a0f73f328"
   integrity sha512-rpYs3lj61k3Wejktt0R/i0zXtVqyDYKuE6rBSzatxVmiF2lrcK7mxUwuYsHLV/s5vwp4Zs7RarArJ6BCmPwnFg==
@@ -396,43 +396,44 @@
     "@stacks/transactions" "^2.0.1"
     neverthrow "4.2.1"
 
-"@clarigen/native-bin@0.3.2":
-  version "0.3.2"
-  resolved "https://registry.yarnpkg.com/@clarigen/native-bin/-/native-bin-0.3.2.tgz#552ecf8728545f49e5ce42499f3a2ef9f3abcd17"
-  integrity sha512-885mEdV3tY5uPgGc4TEOEQiYWbOuDtefnRHRnnjx3+hleNSinBIwcFrcY8vHiV0y/sAKYIHPxvrr5vZnARH9ug==
+"@clarigen/native-bin@0.3.3":
+  version "0.3.3"
+  resolved "https://registry.yarnpkg.com/@clarigen/native-bin/-/native-bin-0.3.3.tgz#477f6718b245af260fd029ea11e445f34a197504"
+  integrity sha512-duRHpaPj3kpjtthcQcWe+YNh+YYT9D5j5guC31sv+yi7SKkyhslWJYvKIGFa82n1orl2QRUdqvX+x7+55vg77A==
   dependencies:
     "@clarigen/core" "0.3.2"
     fs-extra "^10.0.0"
     node-fetch "^2.6.0"
     unzipper "^0.10.11"
 
-"@clarigen/node@^0.3.1":
-  version "0.3.1"
-  resolved "https://registry.yarnpkg.com/@clarigen/node/-/node-0.3.1.tgz#21daf2afa2480954368ab804a0a82c07a48cb662"
-  integrity sha512-6jUpD9a1PyQFqHqznyyqJqz9l3Ks1kgwJgStWoo6VRQuApgqYoPmKW5FPRq6faD/fR1jIKL7FuVUdecd1nApmw==
+"@clarigen/node@0.3.3":
+  version "0.3.3"
+  resolved "https://registry.yarnpkg.com/@clarigen/node/-/node-0.3.3.tgz#64138273225c95d114cc4fb85677bb3aec132ba4"
+  integrity sha512-PAxfnLWE5zd08Qz84GRYcTc+amMbQjzB4O0G3qmC5JCjsvqeUKtrBIuXXGTpozZa6IS1exvyd4Q+eBPl/+K5DQ==
   dependencies:
     "@clarigen/core" "^0.3.1"
     "@stacks/blockchain-api-client" "^0.55.2"
     "@stacks/transactions" "^2.0.1"
 
-"@clarigen/test@^0.3.2":
-  version "0.3.2"
-  resolved "https://registry.yarnpkg.com/@clarigen/test/-/test-0.3.2.tgz#13376c54aa71614183b8188821c3d3a51fc7f401"
-  integrity sha512-DaZKO7EEFXoYcZMIOb2cBs6SimlZNQdj8mTYURGvPMuOmErvAzVrh27QYQjC9wi1aWyWGLZNr1FwaU4om+4xMA==
+"@clarigen/test@0.3.3":
+  version "0.3.3"
+  resolved "https://registry.yarnpkg.com/@clarigen/test/-/test-0.3.3.tgz#2d4629df0f8edc2ea19eae24cbf014945c55d7c0"
+  integrity sha512-xW7hYy3pzYS8u+lE9c0KmeRHW6SNn3hc02zbchm1Tu6PY74uLBDMpm1OeLouAOjkzrgepuy5DjJdxHFextPfyg==
   dependencies:
     "@clarigen/core" "0.3.2"
-    "@clarigen/native-bin" "0.3.2"
+    "@clarigen/native-bin" "0.3.3"
     "@stacks/transactions" "^2.0.1"
 
-"@clarigen/web@^0.3.2":
-  version "0.3.2"
-  resolved "https://registry.yarnpkg.com/@clarigen/web/-/web-0.3.2.tgz#64ea76d190b76b36f8b925a18841dadbbf0ac91f"
-  integrity sha512-1CEK8oiY1ovDjHURfQ8ts36wM/sQEvW6KZV0Ck8k9YckKvKLhgZSUYp+BAin9m8Uu3zwR/MBKPjTFICzMjL5SQ==
+"@clarigen/web@0.3.3":
+  version "0.3.3"
+  resolved "https://registry.yarnpkg.com/@clarigen/web/-/web-0.3.3.tgz#f26675bd4ec99ee437701f038e0a1bd1df3db03c"
+  integrity sha512-tZitTt5JkC00WpXYKkMMin7ZOK95m2XUiifW1xf4IV5wV2IVC9N/OxuCt+eygo3yTkVqbnRZnIOPO1sGxKZeGQ==
   dependencies:
     "@clarigen/core" "0.3.2"
     "@stacks/blockchain-api-client" "^0.55.2"
     "@stacks/network" "1.2.2"
     "@stacks/transactions" "^2.0.1"
+    cross-fetch "3.2.0-alpha.2"
     stacks-crypto "1.0.0-beta.3"
 
 "@cspotcode/source-map-consumer@0.8.0":
@@ -2241,9 +2242,9 @@ bech32@^1.1.2:
   integrity sha512-s0IrSOzLlbvX7yp4WBfPITzpAU8sqQcpsmwXDiKwrG4r491vwCO/XpejasRNl0piBMe/DvP4Tz0mIS/X1DPJBQ==
 
 big-integer@^1.6.16, big-integer@^1.6.17:
-  version "1.6.50"
-  resolved "https://registry.yarnpkg.com/big-integer/-/big-integer-1.6.50.tgz#299a4be8bd441c73dcc492ed46b7169c34e92e70"
-  integrity sha512-+O2uoQWFRo8ysZNo/rjtri2jIwjr3XfeAgRjAUADRqGG+ZITvyn8J1kvXLTaKVr3hhGXk+f23tKfdzmklVM9vQ==
+  version "1.6.51"
+  resolved "https://registry.yarnpkg.com/big-integer/-/big-integer-1.6.51.tgz#0df92a5d9880560d3ff2d5fd20245c889d130686"
+  integrity sha512-GPEid2Y9QU1Exl1rpO9B2IPJGHPSupF5GnVIP0blYvNOMer2bTvSWs1jGOUg04hTmu67nmLsQ9TBo1puaotBHg==
 
 big.js@^5.2.2:
   version "5.2.2"
@@ -2612,9 +2613,9 @@ camelize@^1.0.0:
   integrity sha1-FkpUg+Yw+kMh5a8HAg5TGDGyYJs=
 
 caniuse-lite@^1.0.30001202, caniuse-lite@^1.0.30001219, caniuse-lite@^1.0.30001228, caniuse-lite@^1.0.30001274:
-  version "1.0.30001279"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001279.tgz#eb06818da481ef5096a3b3760f43e5382ed6b0ce"
-  integrity sha512-VfEHpzHEXj6/CxggTwSFoZBBYGQfQv9Cf42KPlO79sWXCD1QNKWKsKzFeWL7QpZHJQYAvocqV6Rty1yJMkqWLQ==
+  version "1.0.30001280"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001280.tgz#066a506046ba4be34cde5f74a08db7a396718fb7"
+  integrity sha512-kFXwYvHe5rix25uwueBxC569o53J6TpnGu0BEEn+6Lhl2vsnAumRFWEBhDft1fwyo6m1r4i+RqA4+163FpeFcA==
 
 chainsaw@~0.1.0:
   version "0.1.0"
@@ -2924,6 +2925,13 @@ create-require@^1.1.0:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/create-require/-/create-require-1.1.1.tgz#c1d7e8f1e5f6cfc9ff65f9cd352d37348756c333"
   integrity sha512-dcKFX3jn0MpIaXjisoRvexIJVEKzaq7z2rZKxf+MSr9TkdmHmsU4m2lcLojrj/FHl8mk5VxMmYA+ftRkP/3oKQ==
+
+cross-fetch@3.2.0-alpha.2:
+  version "3.2.0-alpha.2"
+  resolved "https://registry.yarnpkg.com/cross-fetch/-/cross-fetch-3.2.0-alpha.2.tgz#51b70796f44b68cdc1e86fdc3220c1d17dbb86a8"
+  integrity sha512-drGPjxxGKIsZN52uPUX929wCGLxd6lXkfhUlB8Zso+wWw5LXiJy+3iQQ1iqCB0O0SittVCWk1ZPD07wYvM19pQ==
+  dependencies:
+    node-fetch "2.6.5"
 
 cross-fetch@^3.0.5, cross-fetch@^3.0.6, cross-fetch@^3.1.4:
   version "3.1.4"
@@ -3236,9 +3244,9 @@ ecdsa-sig-formatter@1.0.11, ecdsa-sig-formatter@^1.0.11:
     safe-buffer "^5.0.1"
 
 electron-to-chromium@^1.3.723, electron-to-chromium@^1.3.886:
-  version "1.3.894"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.894.tgz#54554ecb40d40ddac7241c4a42887e86180015d8"
-  integrity sha512-WY8pA4irAZ4cm/Pr7YFPtPLVqj3nU6d0SbfoHF6M7HZNONfPdAnYAarumqQ75go2LuN72uO9wGuCEqnfya/ytg==
+  version "1.3.895"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.895.tgz#9b0f8f2e32d8283bbb200156fd5d8dfd775f31ed"
+  integrity sha512-9Ww3fB8CWctjqHwkOt7DQbMZMpal2x2reod+/lU4b9axO1XJEDUpPMBxs7YnjLhhqpKXIIB5SRYN/B4K0QpvyQ==
 
 elliptic@^6.4.0, elliptic@^6.4.1, elliptic@^6.5.2, elliptic@^6.5.3, elliptic@^6.5.4:
   version "6.5.4"
@@ -5635,6 +5643,13 @@ node-fetch@2.6.1:
   version "2.6.1"
   resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.1.tgz#045bd323631f76ed2e2b55573394416b639a0052"
   integrity sha512-V4aYg89jEoVRxRb2fJdAg8FHvI7cEyYdVAh94HH0UIK8oJxUfkjlDQN9RbMx+bEjP7+ggMiFRprSti032Oipxw==
+
+node-fetch@2.6.5:
+  version "2.6.5"
+  resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.5.tgz#42735537d7f080a7e5f78b6c549b7146be1742fd"
+  integrity sha512-mmlIVHJEu5rnIxgEgez6b9GgWXbkZj5YZ7fx+2r94a2E+Uirsp6HsPTPlomfdHtpt/B0cdKviwkoaM6pyvUOpQ==
+  dependencies:
+    whatwg-url "^5.0.0"
 
 node-fetch@^2.6.0, node-fetch@^2.6.1:
   version "2.6.6"

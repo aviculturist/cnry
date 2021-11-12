@@ -18,8 +18,8 @@
   },
   "dependencies": {
     "@babel/core": "^7.15.5",
-    "@clarigen/core": "^0.3.2",
-    "@clarigen/web": "^0.3.2",
+    "@clarigen/core": "0.3.2",
+    "@clarigen/web": "0.3.3",
     "@micro-stacks/nextjs": "0.0.8",
     "@micro-stacks/query": "0.0.7",
     "@micro-stacks/react": "0.0.7",
@@ -65,9 +65,9 @@
   "prettier": "@stacks/prettier-config",
   "devDependencies": {
     "@babel/plugin-transform-react-jsx-source": "^7.14.5",
-    "@clarigen/cli": "^0.3.2",
-    "@clarigen/node": "^0.3.1",
-    "@clarigen/test": "^0.3.2",
+    "@clarigen/cli": "0.3.3",
+    "@clarigen/node": "0.3.3",
+    "@clarigen/test": "0.3.3",
     "@lingui/cli": "^3.12.1",
     "@lingui/core": "^3.12.1",
     "@lingui/loader": "^3.12.1",

@@ -181,7 +181,7 @@ export const MaintenanceInterface: ClarityAbi = {
   "variables": [
     {
       "access": "constant",
-      "name": "CONTRACT_OWNER",
+      "name": "AVICULTURIST",
       "type": "principal"
     },
     {

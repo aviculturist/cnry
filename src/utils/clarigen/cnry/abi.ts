@@ -655,11 +655,6 @@ export const CnryInterface: ClarityAbi = {
     },
     {
       "access": "constant",
-      "name": "CONTRACT_OWNER",
-      "type": "principal"
-    },
-    {
-      "access": "constant",
       "name": "DEFAULT_KEEPALIVE_EXPIRY",
       "type": "uint128"
     },
@@ -722,11 +717,6 @@ export const CnryInterface: ClarityAbi = {
           "ok": "none"
         }
       }
-    },
-    {
-      "access": "constant",
-      "name": "PROOF_VERIFIER",
-      "type": "principal"
     },
     {
       "access": "variable",
