@@ -94,7 +94,7 @@ const CnryList = () => {
   );
 
   const verticalUserWatcherCnrysList = () => (
-    <ImageList cols={2} sx={{ mt: 0 }}>
+    <ImageList variant="masonry" cols={2} sx={{ mt: 0 }}>
       {watcherUserTokenIds.map(tokenId => (
         <ImageListItem sx={{ width: '100%', m: 'auto' }} key={tokenId}>
           <CnryCard key={tokenId} tokenId={tokenId} />
@@ -103,7 +103,7 @@ const CnryList = () => {
     </ImageList>
   );
   const verticalAllCnrysList = () => (
-    <ImageList cols={2} sx={{ mt: 0 }}>
+    <ImageList variant="masonry" cols={2} sx={{ mt: 0 }}>
       {cnryAllTokenIds.map(txid => (
         <ImageListItem sx={{ width: '100%', m: 'auto' }} key={txid}>
           <CnryCardFromTxId key={txid} txid={txid} />
@@ -113,7 +113,7 @@ const CnryList = () => {
   );
 
   const verticalUserCnrysList = () => (
-    <ImageList cols={2} sx={{ mt: 0 }}>
+    <ImageList variant="masonry" cols={2} sx={{ mt: 0 }}>
       {cnryUserTokenIds.map(txid => (
         <ImageListItem sx={{ width: '100%', m: 'auto' }} key={txid}>
           <CnryCardFromTxId key={txid} txid={txid} />

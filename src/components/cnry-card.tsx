@@ -12,6 +12,7 @@ import { green } from '@mui/material/colors';
 import Card from '@mui/material/Card';
 import Chip from '@mui/material/Chip';
 import CardHeader from '@mui/material/CardHeader';
+import Badge, { BadgeProps } from '@mui/material/Badge';
 //import CardMedia from '@mui/material/CardMedia';
 import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
@@ -33,12 +34,28 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Tooltip from '@mui/material/Tooltip';
 import CircularProgress from '@mui/material/CircularProgress';
 import { currentStacksExplorerState, currentChainState } from '@store/helpers';
-import { cnryGetMetadataAtom, cnryContractTransactionAtom, cnryIsAliveAtom, cnryUserPendingTxIdsAtom, userPendingTxAtom } from '@store/cnry';
+import {
+  cnryGetMetadataAtom,
+  cnryContractTransactionAtom,
+  cnryIsAliveAtom,
+  cnryUserPendingTxIdsAtom,
+  userPendingTxAtom,
+  cnryWatchCountAtom,
+} from '@store/cnry';
 import cnryListTabStateAtom from '@store/ui/cnry-list-tab-state';
 import useWatch from '@hooks/use-watch';
 import useKeepalive from '@hooks/use-keepalive';
 import { toDate, toRelativeTime } from '@utils/time';
 import CnryMetadataTable from '@components/cnry-metadata-table';
+
+const StyledBadge = styled(Badge)<BadgeProps>(({ theme }: { theme: any }) => ({
+  '& .MuiBadge-badge': {
+    right: -3,
+    top: 13,
+    border: `2px solid ${theme.palette.background.paper}`,
+    padding: '0 4px',
+  },
+}));
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -70,7 +87,7 @@ const PendingCnryCardFromTxId = ({ txid }: { txid: string }) => {
       setPendingTxIds(txs); // remove from array
       userPendingTxAtom.remove(txid); // remove from queries
       //console.log('Removing within cnry-card: ' + txid);
-      setValue("two");
+      setValue('two');
     }
   }, [tx]);
 
@@ -132,7 +149,7 @@ const PendingCnryCardFromTxId = ({ txid }: { txid: string }) => {
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <CardContent>
           <Typography paragraph>
-          {t`Your warrant canary has been submitted to the blockchain.`}
+            {t`Your warrant canary has been submitted to the blockchain.`}
           </Typography>
         </CardContent>
       </Collapse>
@@ -169,6 +186,7 @@ const CnryCard = ({ tokenId }: { tokenId: number }) => {
   const userStxAddress = userStxAddresses?.[chain] || '';
   const [isAlive] = useAtom(cnryIsAliveAtom(tokenId));
   const [cnry] = useAtom(cnryGetMetadataAtom(tokenId));
+  const [cnryWatchCount] = useAtom(cnryWatchCountAtom(tokenId));
   const hatchedDate = toDate(cnry.hatchedTimestamp.value * 1000);
   const keepaliveTimestamp = cnry.keepaliveTimestamp.value * 1000;
   const keepaliveExpiry = cnry.keepaliveExpiry.value * 1000;
@@ -243,7 +261,9 @@ const CnryCard = ({ tokenId }: { tokenId: number }) => {
       <CardActions disableSpacing>
         <Tooltip title={t`Watch Cnry`}>
           <IconButton aria-label="watch" onClick={() => handleWatch({ tokenId: cnry.index.value })}>
-            <FavoriteIcon />
+            <StyledBadge showZero={false} color="secondary" badgeContent={cnryWatchCount && cnryWatchCount > 0 ? cnryWatchCount : 0}>
+              <FavoriteIcon />
+            </StyledBadge>
           </IconButton>
         </Tooltip>
         <Tooltip title={t`Open in new tab`}>
