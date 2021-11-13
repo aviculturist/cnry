@@ -1,10 +1,10 @@
-import { Locale } from '@store/user-locale';
+import { Locale } from '@store/ui/user-locale';
 import { LocationDescriptor } from 'history';
 import useParsedQueryString from '@hooks/use-parsed-query-string';
 import { stringify } from 'qs';
 import { useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
-import { userLocaleAtom } from '@store/user-locale';
+import { userLocaleAtom } from '@store/ui/user-locale';
 import { useAtom } from 'jotai';
 import { useActiveLocale } from '@hooks/use-active-locale';
 import { languageMenuIsOpenAtom } from '@store/ui/language-menu-is-open';

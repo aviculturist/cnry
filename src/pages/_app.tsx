@@ -12,7 +12,7 @@ import { i18n } from '@lingui/core';
 import { useEffect } from 'react';
 import * as plurals from 'make-plural/plurals';
 import { useAtom } from 'jotai';
-import { userLocaleAtom, DEFAULT_MESSAGES, DEFAULT_LOCALE, Locale } from '@store/user-locale';
+import { userLocaleAtom, DEFAULT_MESSAGES, DEFAULT_LOCALE, Locale } from '@store/ui/user-locale';
 import { useActiveLocale, queryLocale, navigatorLocale } from '@hooks/use-active-locale';
 import { NoSsr } from '@mui/core';
 import { StyleSheetManager } from 'styled-components';

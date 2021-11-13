@@ -14,7 +14,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Check from '@mui/icons-material/Check';
 import LanguageTwoToneIcon from '@mui/icons-material/LanguageTwoTone';
-import { SUPPORTED_LOCALES, Locale, CODE_TO_NAME } from '@store/user-locale';
+import { SUPPORTED_LOCALES, Locale, CODE_TO_NAME } from '@store/ui/user-locale';
 import { useActiveLocale } from '@hooks/use-active-locale';
 import { languageMenuAnchorElAtom, languageMenuIsOpenAtom } from '@store/ui/language-menu-is-open';
 import { useLocationLinkProps } from '@hooks/use-location-link-props';

@@ -1,4 +1,4 @@
-import { DEFAULT_LOCALE, SUPPORTED_LOCALES, userLocaleAtom, Locale } from '@store/user-locale';
+import { DEFAULT_LOCALE, SUPPORTED_LOCALES, userLocaleAtom, Locale } from '@store/ui/user-locale';
 import { useAtom } from 'jotai';
 import { useAtomValue } from 'jotai/utils';
 import { useMemo } from 'react';
