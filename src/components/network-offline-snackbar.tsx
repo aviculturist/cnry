@@ -7,7 +7,7 @@ import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
-import { networkOfflineSnackbarIsDismissedAtom } from '@store/network-offline-snackbar-is-dismissed';
+import { networkOfflineSnackbarIsDismissedAtom } from '@store/ui/network-offline-snackbar-is-dismissed';
 import { useNetworkIsOffline } from '@hooks/use-network-is-offline';
 
 const NetworkOfflineSnackbar = () => {

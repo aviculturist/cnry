@@ -3,7 +3,7 @@ import { useAtom } from 'jotai';
 import Tooltip from '@mui/material/Tooltip';
 import BlurOnTwoToneIcon from '@mui/icons-material/BlurOnTwoTone';
 import Button from '@mui/material/Button';
-import { networkDialogIsOpenAtom } from '@store/network-dialog-is-open';
+import { networkDialogIsOpenAtom } from '@store/ui/network-dialog-is-open';
 import SelectNetworkDialog from '@components/select-network-dialog';
 import { useNetworks } from '@hooks/use-networks';
 

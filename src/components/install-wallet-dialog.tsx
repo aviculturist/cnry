@@ -8,7 +8,7 @@ import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import Card from '@mui/material/Card';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
-import { installWalletDialogIsOpenAtom } from '@store/install-wallet-dialog-is-open';
+import { installWalletDialogIsOpenAtom } from '@store/ui/install-wallet-dialog-is-open';
 import WalletImage from '@assets/wallet-image';
 
 const InstallWalletDialog = () => {

@@ -123,7 +123,7 @@ export const userPendingTxAtom = atomFamilyWithQuery<string, UserTransaction>(
       txstatus: 'submitted',
     } as UserTransaction;
   },
-  { refetchInterval: 300000 } // five minutes in milliseconds (5000 = 5 seconds)
+  { refetchInterval: 30000 } // thirty seconds in milliseconds (5000 = 5 seconds)
 ); // every minute
 
 export const queryAtom = atom('');
@@ -164,7 +164,7 @@ export const cnryContractTransactionIdsAtom = atomWithQuery<string[]>(
     }
     return [];
   },
-  { refetchInterval: 30000 } // five minutes in milliseconds (5000 = 5 seconds)
+  { refetchInterval: 30000 } // thirty seconds in milliseconds (5000 = 5 seconds)
 );
 
 // TODO: convert to infinite query with pagination, etc.

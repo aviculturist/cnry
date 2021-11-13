@@ -4,7 +4,7 @@ import { useAtom } from 'jotai';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { arEG, enUS, itIT, Localization, ruRU } from '@mui/material/locale';
 import { Direction, PaletteMode } from '@mui/material';
-import { darkModeAtom } from '@store/darkmode';
+import { darkModeAtom } from '@store/ui/darkmode';
 import { useActiveLocale } from '@hooks/use-active-locale';
 
 const CODE_TO_LOCALE: { [char: string]: Localization } = {

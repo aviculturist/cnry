@@ -13,7 +13,7 @@ import DownloadOutlinedIcon from '@mui/icons-material/DownloadOutlined';
 import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
 import PrivacyTipOutlinedIcon from '@mui/icons-material/PrivacyTipOutlined';
 import { styled } from '@mui/material/styles';
-import { settingsMenuAnchorElAtom, settingsMenuIsOpenAtom } from '@store/settings-menu-is-open';
+import { settingsMenuAnchorElAtom, settingsMenuIsOpenAtom } from '@store/ui/settings-menu-is-open';
 import ClearApplicationDataMenuItem from '@components/clear-application-data-menuitem';
 import SafeSuspense from '@components/safe-suspense';
 

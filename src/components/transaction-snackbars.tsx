@@ -9,7 +9,7 @@ import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import LaunchIcon from '@mui/icons-material/Launch';
 import { currentStacksExplorerState, currentChainState } from '@store/helpers';
-import { userPendingTxIdsAtom, userPendingTxAtom, userPendingTxsCountAtom } from '@store/user-pending-transactions';
+import { userPendingTxIdsAtom, userPendingTxAtom, userPendingTxsCountAtom } from '@store/cnry';
 import { truncateMiddle } from '@utils/common';
 
 const SingleTransactionSnackbar = ({ txid }: { txid: string }) => {

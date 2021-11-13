@@ -10,7 +10,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import LinearProgress from '@mui/material/LinearProgress';
-import { addNetworkDialogIsOpenAtom } from '@store/add-network-dialog-is-open';
+import { addNetworkDialogIsOpenAtom } from '@store/ui/add-network-dialog-is-open';
 import { Network } from '@store/networks';
 import { useNetworks } from '@hooks/use-networks';
 

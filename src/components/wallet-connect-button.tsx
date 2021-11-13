@@ -4,7 +4,7 @@ import { t } from '@lingui/macro';
 import { useAtom } from 'jotai';
 import { useAuth } from '@micro-stacks/react';
 import Button from '@mui/material/Button';
-import { installWalletDialogIsOpenAtom } from '@store/install-wallet-dialog-is-open';
+import { installWalletDialogIsOpenAtom } from '@store/ui/install-wallet-dialog-is-open';
 
 const WalletConnectButton = () => {
   const { isSignedIn, handleSignIn, handleSignOut, isLoading, session } = useAuth();

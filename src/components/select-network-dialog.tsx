@@ -32,8 +32,8 @@ import {
   anyNetworkIsLoadingFamily,
   currentNetworkIndexAtom,
 } from '@store/networks';
-import { networkDialogIsOpenAtom } from '@store/network-dialog-is-open';
-import { addNetworkDialogIsOpenAtom } from '@store/add-network-dialog-is-open';
+import { networkDialogIsOpenAtom } from '@store/ui/network-dialog-is-open';
+import { addNetworkDialogIsOpenAtom } from '@store/ui/add-network-dialog-is-open';
 import SafeSuspense from '@components/safe-suspense';
 import Chip from '@mui/material/Chip';
 

@@ -10,7 +10,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import LinearProgress from '@mui/material/LinearProgress';
-import { hatchCnryDialogIsOpenAtom } from '@store/hatch-cnry-dialog-is-open';
+import { hatchCnryDialogIsOpenAtom } from '@store/ui/hatch-cnry-dialog-is-open';
 import useHatch from '@hooks/use-hatch';
 import { Network } from '@store/networks';
 

@@ -1,5 +1,5 @@
 import { useAtom } from 'jotai';
-import { networkIsOfflineAtom } from '@store/network-is-offline';
+import { networkIsOfflineAtom } from '@store/networks';
 
 interface NetworkIsOfflineType {
   networkIsOffline: boolean;

@@ -1,5 +1,5 @@
 import { useAtom } from 'jotai';
-import { metadataDialogIsOpenAtom } from '@store/metadata-dialog-is-open';
+import { metadataDialogIsOpenAtom } from '@store/ui/metadata-dialog-is-open';
 
 interface MetadataDialogProps {
   metadataDialogIsOpen: boolean;

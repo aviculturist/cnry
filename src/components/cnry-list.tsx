@@ -15,7 +15,7 @@ import Tab from '@mui/material/Tab';
 import Skeleton from '@mui/material/Skeleton';
 import { cnryUserPendingTxIdsAtom } from '@store/cnry';
 import { cnryTokenIdsAtom, cnryUserTokenIdsAtom, cnryUserWatcherTokenIdsAtom } from '@store/cnry';
-import cnryListTabStateAtom from '@store/cnry-list-tab-state';
+import cnryListTabStateAtom from '@store/ui/cnry-list-tab-state';
 import { PendingCnryCardFromTxId, CnryCardFromTxId } from '@components/cnry-card';
 import CnryCard from '@components/cnry-card';
 import HatchCnryForm from '@components/hatch-cnry-form';

@@ -16,7 +16,7 @@ import Check from '@mui/icons-material/Check';
 import LanguageTwoToneIcon from '@mui/icons-material/LanguageTwoTone';
 import { SUPPORTED_LOCALES, Locale, CODE_TO_NAME } from '@store/user-locale';
 import { useActiveLocale } from '@hooks/use-active-locale';
-import { languageMenuAnchorElAtom, languageMenuIsOpenAtom } from '@store/language-menu-is-open';
+import { languageMenuAnchorElAtom, languageMenuIsOpenAtom } from '@store/ui/language-menu-is-open';
 import { useLocationLinkProps } from '@hooks/use-location-link-props';
 import LanguageLink from '@components/language-link';
 

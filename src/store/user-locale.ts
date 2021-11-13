@@ -1,4 +1,3 @@
-import { atom } from 'jotai';
 import { atomWithStorage } from 'jotai/utils';
 
 export const SUPPORTED_LOCALES = ['ar', 'en', 'it', 'ru'] as const;

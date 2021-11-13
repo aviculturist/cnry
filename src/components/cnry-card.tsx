@@ -34,7 +34,7 @@ import Tooltip from '@mui/material/Tooltip';
 import CircularProgress from '@mui/material/CircularProgress';
 import { currentStacksExplorerState, currentChainState } from '@store/helpers';
 import { cnryGetMetadataAtom, cnryContractTransactionAtom, cnryIsAliveAtom, cnryUserPendingTxIdsAtom, userPendingTxAtom } from '@store/cnry';
-import cnryListTabStateAtom from '@store/cnry-list-tab-state';
+import cnryListTabStateAtom from '@store/ui/cnry-list-tab-state';
 import useWatch from '@hooks/use-watch';
 import useKeepalive from '@hooks/use-keepalive';
 import { toDate, toRelativeTime } from '@utils/time';

@@ -1,5 +1,5 @@
 import { useAtom } from 'jotai';
-import { installWalletDialogIsOpenAtom } from '@store/install-wallet-dialog-is-open';
+import { installWalletDialogIsOpenAtom } from '@store/ui/install-wallet-dialog-is-open';
 
 interface InstallWalletDialogIsOpenType {
   installWalletDialogIsOpen: boolean;

@@ -6,7 +6,7 @@ import Dialog from '@mui/material/Dialog';
 import AutocompleteSearch from '@components/search/autocomplete-search';
 import SearchHistory from '@components/search/search-history';
 import SearchFavorites from '@components/search/search-favorites';
-import { searchDialogIsOpenAtom } from '@store/search-dialog-is-open';
+import { searchDialogIsOpenAtom } from '@store/ui/search-dialog-is-open';
 
 const SearchDialog = () => {
   const [open, setOpen] = useAtom(searchDialogIsOpenAtom);

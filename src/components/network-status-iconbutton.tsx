@@ -3,11 +3,11 @@ import { t } from '@lingui/macro';
 import { useAtom } from 'jotai';
 import Tooltip from '@mui/material/Tooltip';
 import IconButton from '@mui/material/IconButton';
-import { networkOfflineSnackbarIsDismissedAtom } from '@store/network-offline-snackbar-is-dismissed';
+import { networkOfflineSnackbarIsDismissedAtom } from '@store/ui/network-offline-snackbar-is-dismissed';
 import { useNetworkIsOffline } from '@hooks/use-network-is-offline';
 import ProgressIcon from '@components/progress-icon';
-import { networkInfoAtom } from '@store/network-info';
-import { networkInfoIsLoadingAtom } from '@store/network-info-is-loading';
+import { networkInfoAtom } from '@store/networks';
+import { networkInfoIsLoadingAtom } from '@store/ui/network-info-is-loading';
 
 const NetworkStatusIconButton = () => {
   const { networkIsOffline } = useNetworkIsOffline();

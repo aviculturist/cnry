@@ -6,9 +6,9 @@ import { useNetwork } from '@micro-stacks/react';
 import FiberManualRecordTwoToneIcon from '@mui/icons-material/FiberManualRecordTwoTone';
 import CircularProgress from '@mui/material/CircularProgress';
 import { green, red } from '@mui/material/colors';
-import { networkInfoAtom } from '@store/network-info';
+import { networkInfoAtom } from '@store/networks';
 import { useNetworkIsOffline } from '@hooks/use-network-is-offline';
-import { networkInfoIsLoadingAtom } from '@store/network-info-is-loading';
+import { networkInfoIsLoadingAtom } from '@store/ui/network-info-is-loading';
 import BitcoinIcon from '@assets/bitcoin-icon';
 import StacksIcon from '@assets/stacks-icon';
 

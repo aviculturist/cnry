@@ -1,5 +1,5 @@
 import { useAtom } from 'jotai';
-import { transactionsDrawerIsOpenAtom } from '@store/transactions-drawer-is-open';
+import { transactionsDrawerIsOpenAtom } from '@store/ui/transactions-drawer-is-open';
 
 interface TransactionsDrawer {
   transactionsDrawerIsOpen: boolean;
