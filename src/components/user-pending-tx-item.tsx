@@ -14,7 +14,7 @@ import ChangeCircleOutlinedIcon from '@mui/icons-material/ChangeCircleOutlined';
 import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 import LaunchIcon from '@mui/icons-material/Launch';
-import { userPendingTxIdsAtom, userPendingTxAtom } from '@store/user-pending-transactions';
+import { userPendingTxIdsAtom, userPendingTxAtom } from '@store/cnry';
 import { currentStacksExplorerState, currentChainState } from '@store/helpers';
 import { toRelativeTime } from '@utils/time';
 

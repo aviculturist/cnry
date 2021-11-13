@@ -3,7 +3,7 @@ import { useAtom } from 'jotai';
 import { useTransactionPopup } from '@micro-stacks/react';
 import { currentCnryContractState } from '@store/helpers';
 import { WATCH_FUNCTION } from '@utils/constants';
-import { userPendingTxIdsAtom, userPendingTxAtom } from '@store/user-pending-transactions';
+import { userPendingTxIdsAtom, userPendingTxAtom } from '@store/cnry';
 import { uintCV } from 'micro-stacks/clarity';
 import { intCV } from '@stacks/transactions';
 

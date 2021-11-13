@@ -4,7 +4,7 @@ import Badge from '@mui/material/Badge';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import NotificationsNoneTwoToneIcon from '@mui/icons-material/NotificationsNoneTwoTone';
-import { userPendingTxsCountAtom } from '@store/user-pending-transactions';
+import { userPendingTxsCountAtom } from '@store/cnry';
 import useTransactionsDrawerIsOpen from '@hooks/use-transactions-drawer-is-open';
 import { t } from '@lingui/macro';
 
