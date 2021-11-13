@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useEffect } from 'react';
 import { t } from '@lingui/macro';
 import { useAtom } from 'jotai';
 import { useAtomValue } from 'jotai/utils';
@@ -31,9 +32,10 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Tooltip from '@mui/material/Tooltip';
 import CircularProgress from '@mui/material/CircularProgress';
-import { userPendingTxIdsAtom, userPendingTxAtom } from '@store/user-pending-transactions';
+import { userPendingTxAtom } from '@store/user-pending-transactions';
 import { currentStacksExplorerState, currentChainState } from '@store/helpers';
-import { cnryGetMetadataAtom, cnryContractTransactionAtom, cnryIsAliveAtom } from '@store/cnry';
+import { cnryGetMetadataAtom, cnryContractTransactionAtom, cnryIsAliveAtom, cnryUserPendingTxIdsAtom } from '@store/cnry';
+import cnryListTabStateAtom from '@store/cnry-list-tab-state';
 import useWatch from '@hooks/use-watch';
 import useKeepalive from '@hooks/use-keepalive';
 import { toDate, toRelativeTime } from '@utils/time';
@@ -58,7 +60,21 @@ const PendingCnryCardFromTxId = ({ txid }: { txid: string }) => {
   const [explorer] = useAtom(currentStacksExplorerState);
   const [chain] = useAtom(currentChainState);
   const tx = useAtomValue(userPendingTxAtom(txid));
+  const [pendingTxIds, setPendingTxIds] = useAtom(cnryUserPendingTxIdsAtom);
   const [expanded, setExpanded] = React.useState(false);
+  const [value, setValue] = useAtom(cnryListTabStateAtom);
+
+  // Remove transactions from the pending list
+  useEffect(() => {
+    if (tx.txstatus === 'success') {
+      const txs = pendingTxIds.filter(item => item !== txid);
+      setPendingTxIds(txs); // remove from array
+      userPendingTxAtom.remove(txid); // remove from queries
+      //console.log('Removing within cnry-card: ' + txid);
+      setValue("two");
+    }
+  }, [tx]);
+
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };

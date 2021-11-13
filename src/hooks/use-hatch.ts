@@ -14,6 +14,7 @@ const useHatch = () => {
   const { handleContractCall } = useTransactionPopup();
   const [cnryUserPendingTxIds, setCnryUserPendingTxIds] = useAtom(cnryUserPendingTxIdsAtom);
   const [pendingTxIds, setPendingTxIds] = useAtom(userPendingTxIdsAtom);
+
   const onFinish = useCallback(
     data => {
       setPendingTxIds([...pendingTxIds, data.txId]); // adds this txid to the array of pending transactions

@@ -8,20 +8,21 @@ import { userPendingTxsCountAtom } from '@store/user-pending-transactions';
 import useTransactionsDrawerIsOpen from '@hooks/use-transactions-drawer-is-open';
 import { t } from '@lingui/macro';
 
-const ToggleTransactionsDrawerIconButton = () => {
+const ToggleActivityDrawerIconButton = () => {
   const { transactionsDrawerIsOpen, setTransactionsDrawerIsOpen } = useTransactionsDrawerIsOpen();
   const handleToggleDrawer = (event: React.MouseEvent<HTMLElement>) => {
     void setTransactionsDrawerIsOpen(true);
   };
   const [pendingTxsCount] = useAtom(userPendingTxsCountAtom);
+
   return (
     <IconButton onClick={handleToggleDrawer} color="primary" size="small">
       <Badge badgeContent={pendingTxsCount} color="secondary">
-        <Tooltip title={t`Pending Transactions`}>
+        <Tooltip title={t`Activity`}>
           <NotificationsNoneTwoToneIcon fontSize="small" />
         </Tooltip>
       </Badge>
     </IconButton>
   );
 };
-export default ToggleTransactionsDrawerIconButton;
+export default ToggleActivityDrawerIconButton;

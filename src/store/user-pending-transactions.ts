@@ -104,5 +104,5 @@ export const userPendingTxAtom = atomFamilyWithQuery<string, UserTransaction>(
       txstatus: 'submitted',
     } as UserTransaction;
   },
-  { refetchInterval: 300000 }
+  { refetchInterval: 300000 } // five minutes in milliseconds (5000 = 5 seconds)
 ); // every minute

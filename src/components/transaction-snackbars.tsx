@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useEffect } from 'react';
 import { t } from '@lingui/macro';
 import { useAtom } from 'jotai';
 import Snackbar from '@mui/material/Snackbar';
@@ -8,7 +9,7 @@ import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import LaunchIcon from '@mui/icons-material/Launch';
 import { currentStacksExplorerState, currentChainState } from '@store/helpers';
-import { userPendingTxIdsAtom, userPendingTxAtom } from '@store/user-pending-transactions';
+import { userPendingTxIdsAtom, userPendingTxAtom, userPendingTxsCountAtom } from '@store/user-pending-transactions';
 import { truncateMiddle } from '@utils/common';
 
 const SingleTransactionSnackbar = ({ txid }: { txid: string }) => {
@@ -16,6 +17,8 @@ const SingleTransactionSnackbar = ({ txid }: { txid: string }) => {
   const [tx, setTx] = useAtom(userPendingTxAtom(txid));
   const [explorer] = useAtom(currentStacksExplorerState);
   const [chain] = useAtom(currentChainState);
+  const [pendingTxIds, setPendingTxIds] = useAtom(userPendingTxIdsAtom);
+  const [userPendingTxsCount] = useAtom(userPendingTxsCountAtom);
 
   const handleClose = (event: React.SyntheticEvent | React.MouseEvent, reason?: string) => {
     if (reason === 'clickaway') {

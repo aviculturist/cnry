@@ -3,7 +3,7 @@ import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import ToggleDarkModeIconButton from '@components/toggle-darkmode-iconbutton';
-import ToggleTransactionsDrawerIconButton from '@components/toggle-transactions-drawer-iconbutton';
+import ToggleTransactionsDrawerIconButton from '@components/toggle-activity-drawer-iconbutton';
 import ToggleSelectNetworkDialogButton from '@components/toggle-select-network-dialog-button';
 import WalletConnectButton from '@components/wallet-connect-button';
 import ChooseLanguageButton from '@components/choose-language-button';

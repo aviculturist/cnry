@@ -82,14 +82,6 @@
 (define-public (watch-token (contract-name (string-ascii 80)) (tokenId uint) (watcherAddress principal))
     (let ((next-id (+ u1 (var-get lastId))))
       (asserts! (called-from-watched) ERR_NOT_CALLED_FROM_CONTRACT)
-
-      ;; Only transfer STX if it's a non promo mint
-      ;; (if (is-eq promo true)
-      ;;   true
-      ;;   (unwrap! (stx-transfer? (var-get mint-price) tx-sender AVICULTURIST) err-failed-to-transfer)
-      ;; )
-      ;; contract: contract-caller,
-
       (match (nft-mint? WATCHER tokenId watcherAddress)
         success
           (begin

@@ -30,6 +30,12 @@ export const queryAtom = atom('');
 // a simple array of pending transaction ids
 export const cnryUserPendingTxIdsAtom = atom(Array<string>());
 
+// a derived atom that returns the number of pending transaction ids in the array
+export const cnryUserPendingTxsCountAtom = atom(get => {
+  const uptxa = get(cnryUserPendingTxIdsAtom);
+  return uptxa.length;
+});
+
 // TODO: convert this to an infinite query? Will need to enable pagination, etc.
 export const cnryContractTransactionIdsAtom = atomWithQuery<string[]>(
   'contract-transactions',
@@ -57,7 +63,7 @@ export const cnryContractTransactionIdsAtom = atomWithQuery<string[]>(
     }
     return [];
   },
-  { refetchInterval: 300000 } // five minutes in milliseconds (5000 = 5 seconds)
+  { refetchInterval: 30000 } // five minutes in milliseconds (5000 = 5 seconds)
 );
 
 // TODO: convert to infinite query with pagination, etc.
@@ -169,7 +175,7 @@ export const cnryUserWatcherTokenIdsAtom = atomFamilyWithQuery<string, number[]>
     }
     return [];
   },
-  { refetchInterval: 300000 }
+  { refetchInterval: 300000 } // five minutes in milliseconds (5000 = 5 seconds)
 ); // every minute
 
 // TODO: double check it always returns Transaction, may be other scenarios
@@ -279,7 +285,7 @@ export const cnryLastIdAtom = atomWithQuery<number>(
     }
     return 0;
   },
-  { refetchInterval: 300000 } // five minutes in milliseconds (5000 = 5 seconds)
+  { refetchInterval: 120000 } // two minutes in milliseconds (5000 = 5 seconds)
 );
 
 /*

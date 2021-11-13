@@ -30,7 +30,7 @@ const UserPendingTxItem = ({ txid }: { txid: string }) => {
       const txs = pendingTxIds.filter(item => item !== txid);
       setPendingTxIds(txs); // remove from array
       userPendingTxAtom.remove(txid); // remove from queries
-      console.log('Removing: ' + txid);
+      //console.log('Removing: ' + txid);
     }
   });
 
