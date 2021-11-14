@@ -123,20 +123,26 @@ const ContractCallTransactionItem = ({ tx }: { tx: ContractCallTransaction }) =>
 
 const TxItem = ({ txid }: { txid: string }) => {
   const tx = useAtomValue(cnryContractTransactionAtom(txid));
+
+  // Remove query
+  useEffect(() => {
+    if (tx?.tx_status === 'success') {
+      cnryContractTransactionAtom.remove(txid); // remove from queries
+    }
+  });
+
   return tx ? (
     <ListItem button key={tx.tx_id}>
       <ListItemIcon>
-        {/* <Tooltip key={tx.tx_id} title={tx.tx_status}> */}
         {tx.tx_status === 'success' ? (
           <CheckCircleOutlineIcon color="success" />
-        ) : tx.tx_status === 'pending' ? (
-          <ChangeCircleOutlinedIcon color="info" />
-        ) : tx.tx_status === 'abort_by_response' || tx.tx_status === 'abort_by_post_condition' ? (
+        ) : tx.tx_status === 'abort_by_response' ? (
+          <CancelOutlinedIcon color="error" />
+        ) : tx.tx_status === 'abort_by_post_condition' ? (
           <CancelOutlinedIcon color="error" />
         ) : (
           <HelpOutlineOutlinedIcon color="error" />
         )}
-        {/* </Tooltip> */}
       </ListItemIcon>
       <TransactionTypeSelector key={tx.tx_id} tx={tx} />
     </ListItem>
