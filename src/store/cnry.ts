@@ -179,15 +179,20 @@ export const cnryTokenIdsAtom = atomWithQuery<number[]>(
         limit: 50,
         principal: cnryContract,
       });
-      const txids = (txs as TransactionResults).results
+      const tokenIds = (txs as TransactionResults).results
         .filter(
           tx =>
             tx.tx_type === 'contract_call' &&
             tx.contract_call.function_name === HATCH_FUNCTION &&
             tx.tx_status === 'success'
         )
-        .map(tx => Number(tx.tx_id));
-      return txids;
+        .map(tx => {
+          const content = (tx as ContractCallTransaction).tx_result.repr
+            .replace(`(ok u`, '')
+            .replace(`)`, '');
+          return Number(content);
+        });
+      return tokenIds;
     } catch (_e) {
       console.log(_e);
     }
