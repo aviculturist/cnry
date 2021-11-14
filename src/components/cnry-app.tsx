@@ -10,8 +10,8 @@ import AlertTitle from '@mui/material/AlertTitle';
 import SafeSuspense from '@components/safe-suspense';
 import { useQuery } from '@hooks/use-query';
 import { cnryGetMetadataAtom } from '@store/cnry';
-import useMetadataDialogIsOpen from '@hooks/use-metadata-dialog-is-open';
-import { CnryMetadataErrorDialog, CnryMetadataDialog } from '@components/cnry-metadata-dialog';
+import useSingleCnryDialogIsOpen from '@hooks/use-metadata-dialog-is-open';
+import { SingleCnryErrorDialog, SingleCnryDialog } from '@components/single-cnry-dialog';
 import HatchCnryDialog from '@components/hatch-cnry';
 import ActivityDrawer from '@components/activity-drawer';
 import InstallWalletDialog from '@components/install-wallet-dialog';
@@ -23,16 +23,16 @@ const CnryItemQueryPopup = () => {
   const id = useQuery();
   const tokenId = id !== '' ? Number(id) : undefined;
   const [metadataResult] = useAtom(cnryGetMetadataAtom(tokenId));
-  const { setMetadataDialogIsOpen } = useMetadataDialogIsOpen();
+  const { setSingleCnryDialogIsOpen: setMetadataDialogIsOpen } = useSingleCnryDialogIsOpen();
 
   useEffect(() => {
     tokenId && setMetadataDialogIsOpen(true);
   }, [tokenId, metadataResult, setMetadataDialogIsOpen]);
 
   if (metadataResult) {
-    return <CnryMetadataDialog />;
+    return <SingleCnryDialog />;
   } else {
-    return <CnryMetadataErrorDialog />;
+    return <SingleCnryErrorDialog />;
   }
 };
 

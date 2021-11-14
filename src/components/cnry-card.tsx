@@ -17,10 +17,7 @@ import Badge, { BadgeProps } from '@mui/material/Badge';
 import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
 import RestoreIcon from '@mui/icons-material/Restore';
-import LaunchIcon from '@mui/icons-material/Launch';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
-import ChangeCircleOutlinedIcon from '@mui/icons-material/ChangeCircleOutlined';
-import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 import ContentCopyOutlinedIcon from '@mui/icons-material/ContentCopyOutlined';
 import Collapse from '@mui/material/Collapse';
@@ -30,7 +27,6 @@ import Typography from '@mui/material/Typography';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShareIcon from '@mui/icons-material/Share';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Tooltip from '@mui/material/Tooltip';
 import CircularProgress from '@mui/material/CircularProgress';
 import { currentStacksExplorerState, currentChainState } from '@store/helpers';
@@ -47,6 +43,7 @@ import useWatch from '@hooks/use-watch';
 import useKeepalive from '@hooks/use-keepalive';
 import { toDate, toRelativeTime } from '@utils/time';
 import CnryMetadataTable from '@components/cnry-metadata-table';
+import EditCnryIconButton from '@components/edit-cnry-iconbutton';
 
 const StyledBadge = styled(Badge)<BadgeProps>(({ theme }: { theme: any }) => ({
   '& .MuiBadge-badge': {
@@ -128,10 +125,10 @@ const PendingCnryCardFromTxId = ({ txid }: { txid: string }) => {
           <FavoriteIcon />
         </IconButton>
         <IconButton disabled aria-label="share">
-          <ShareIcon />
+          <ShareIcon fontSize="small" />
         </IconButton>
-        <IconButton disabled aria-label="share">
-          <ContentCopyOutlinedIcon />
+        <IconButton disabled aria-label="copy">
+          <ContentCopyOutlinedIcon fontSize="small" />
         </IconButton>
         <IconButton disabled aria-label="keepalive">
           <RestoreIcon />
@@ -172,7 +169,7 @@ const CnryCardFromTxId = ({ txid }: { txid: string }) => {
     tokenIdString !== undefined
       ? Number(tokenIdString.replace('(ok u', '').replace(')', ''))
       : undefined;
-  return tokenId === undefined ? <></> : <CnryCard tokenId={tokenId} />;
+  return tokenId === undefined ? <></> : <CnryCard key={tokenId} tokenId={tokenId} />;
 };
 export { CnryCardFromTxId };
 
@@ -223,9 +220,11 @@ const CnryCard = ({ tokenId }: { tokenId: number }) => {
                   variant="outlined"
                 />
               </Typography>
-              <IconButton aria-label="settings">
-                <MoreVertIcon />
-              </IconButton>
+              <EditCnryIconButton
+                key={tokenId}
+                tokenId={cnry.index.value}
+                cnryName={cnry.cnryName.value}
+              />
             </>
           ) : (
             <>
@@ -261,22 +260,32 @@ const CnryCard = ({ tokenId }: { tokenId: number }) => {
       <CardActions disableSpacing>
         <Tooltip title={t`Watch Cnry`}>
           <IconButton aria-label="watch" onClick={() => handleWatch({ tokenId: cnry.index.value })}>
-            <StyledBadge showZero={false} color="secondary" badgeContent={cnryWatchCount && cnryWatchCount > 0 ? cnryWatchCount : 0}>
+            <StyledBadge
+              showZero={false}
+              color="secondary"
+              badgeContent={cnryWatchCount && cnryWatchCount > 0 ? cnryWatchCount : 0}
+            >
               <FavoriteIcon />
             </StyledBadge>
           </IconButton>
         </Tooltip>
         <Tooltip title={t`Open in new tab`}>
-          <IconButton target="_blank" href={`./?id=${cnry.index.value}`} aria-label="share">
-            <ShareIcon />
+          <IconButton
+            size="small"
+            target="_blank"
+            href={`./?id=${cnry.index.value}`}
+            aria-label="share"
+          >
+            <ShareIcon fontSize="small" />
           </IconButton>
         </Tooltip>
         <Tooltip title={t`Copy permalink to clipboard`}>
           <IconButton
+            size="small"
             aria-label="copy"
             onClick={() => handleCopyToClipboard({ link: `./?id=${cnry.index.value}` })}
           >
-            <ContentCopyOutlinedIcon />
+            <ContentCopyOutlinedIcon fontSize="small" />
           </IconButton>
         </Tooltip>
         {userStxAddress === cnry.cnryKeeper.value ? (

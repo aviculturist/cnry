@@ -1,16 +1,16 @@
 import { useAtom } from 'jotai';
-import { metadataDialogIsOpenAtom } from '@store/ui/metadata-dialog-is-open';
+import { singleCnryDialogIsOpenAtom } from '@store/ui/single-cnry-dialog-is-open';
 
-interface MetadataDialogProps {
-  metadataDialogIsOpen: boolean;
-  setMetadataDialogIsOpen: (update: any) => void;
+interface SingleCnryDialogProps {
+  singleCnryDialogIsOpen: boolean;
+  setSingleCnryDialogIsOpen: (update: any) => void;
 }
 
-const useMetadataDialogIsOpen = (): MetadataDialogProps => {
-  const [metadataDialogIsOpen, setMetadataDialogIsOpen] = useAtom(metadataDialogIsOpenAtom);
+const useSingleCnryDialogIsOpen = (): SingleCnryDialogProps => {
+  const [singleCnryDialogIsOpen, setSingleCnryDialogIsOpen] = useAtom(singleCnryDialogIsOpenAtom);
   return {
-    metadataDialogIsOpen: metadataDialogIsOpen,
-    setMetadataDialogIsOpen: setMetadataDialogIsOpen,
+    singleCnryDialogIsOpen: singleCnryDialogIsOpen,
+    setSingleCnryDialogIsOpen: setSingleCnryDialogIsOpen,
   };
 };
-export default useMetadataDialogIsOpen;
+export default useSingleCnryDialogIsOpen;

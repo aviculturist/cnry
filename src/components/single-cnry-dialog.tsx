@@ -5,12 +5,12 @@ import Dialog from '@mui/material/Dialog';
 import { DialogTitle } from '@mui/material';
 import CnryCard from '@components/cnry-card';
 import { useQuery } from '@hooks/use-query';
-import useMetadataDialogIsOpen from '@hooks/use-metadata-dialog-is-open';
+import useSingleCnryDialogIsOpen from '@hooks/use-metadata-dialog-is-open';
 
-export const CnryMetadataErrorDialog = () => {
+export const SingleCnryErrorDialog = () => {
   const id = useQuery();
   const tokenId = id !== '' ? Number(id) : undefined;
-  const { metadataDialogIsOpen, setMetadataDialogIsOpen } = useMetadataDialogIsOpen();
+  const { singleCnryDialogIsOpen: metadataDialogIsOpen, setSingleCnryDialogIsOpen: setMetadataDialogIsOpen } = useSingleCnryDialogIsOpen();
   const router = useRouter();
   const handleClose = () => {
     router.replace('./id={id}', './', { shallow: true });
@@ -26,10 +26,10 @@ export const CnryMetadataErrorDialog = () => {
   );
 };
 
-export const CnryMetadataDialog = () => {
+export const SingleCnryDialog = () => {
   const id = useQuery();
   const tokenId = id !== '' ? Number(id) : undefined;
-  const { metadataDialogIsOpen, setMetadataDialogIsOpen } = useMetadataDialogIsOpen();
+  const { singleCnryDialogIsOpen: metadataDialogIsOpen, setSingleCnryDialogIsOpen: setMetadataDialogIsOpen } = useSingleCnryDialogIsOpen();
   const router = useRouter();
   const handleClose = () => {
     // TODO: this is clumsy

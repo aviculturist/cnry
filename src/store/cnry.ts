@@ -168,7 +168,7 @@ export const cnryContractTransactionIdsAtom = atomWithQuery<string[]>(
 );
 
 // TODO: convert to infinite query with pagination, etc.
-export const cnryTokenIdsAtom = atomWithQuery<string[]>(
+export const cnryTokenIdsAtom = atomWithQuery<number[]>(
   'cnry-token-ids',
   async get => {
     const accountsClient = get(accountsClientAtom);
@@ -186,7 +186,7 @@ export const cnryTokenIdsAtom = atomWithQuery<string[]>(
             tx.contract_call.function_name === HATCH_FUNCTION &&
             tx.tx_status === 'success'
         )
-        .map(tx => tx.tx_id);
+        .map(tx => Number(tx.tx_id));
       return txids;
     } catch (_e) {
       console.log(_e);
@@ -197,7 +197,7 @@ export const cnryTokenIdsAtom = atomWithQuery<string[]>(
 );
 
 // TODO: only grabs 50, convert to infinitequery
-export const cnryUserTokenIdsAtom = atomFamilyWithQuery<string, string[]>(
+export const cnryUserTokenIdsAtom = atomFamilyWithQuery<string, number[]>(
   'user-cnry-token-ids',
   async (get, principal) => {
     const accountsClient = get(accountsClientAtom);
@@ -208,7 +208,7 @@ export const cnryUserTokenIdsAtom = atomFamilyWithQuery<string, string[]>(
         limit: 50,
         principal: cnryContract,
       });
-      const txids = (txs as TransactionResults).results
+      const tokenIds = (txs as TransactionResults).results
         .filter(
           tx =>
             tx.sender_address === principal &&
@@ -216,8 +216,13 @@ export const cnryUserTokenIdsAtom = atomFamilyWithQuery<string, string[]>(
             tx.contract_call.function_name === HATCH_FUNCTION &&
             tx.tx_status === 'success'
         )
-        .map(tx => tx.tx_id);
-      return txids;
+        .map(tx => {
+          const content = (tx as ContractCallTransaction).tx_result.repr
+            .replace(`(ok u`, '')
+            .replace(`)`, '');
+          return Number(content);
+        });
+      return tokenIds;
     } catch (_e) {
       console.log(_e);
     }

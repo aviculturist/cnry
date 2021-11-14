@@ -18,7 +18,7 @@ import { cnryTokenIdsAtom, cnryUserTokenIdsAtom, cnryUserWatcherTokenIdsAtom } f
 import cnryListTabStateAtom from '@store/ui/cnry-list-tab-state';
 import { PendingCnryCardFromTxId, CnryCardFromTxId } from '@components/cnry-card';
 import CnryCard from '@components/cnry-card';
-import HatchCnryForm from '@components/hatch-cnry-form';
+import HatchCnryForm from '@components/forms/hatch-cnry-form';
 import SafeSuspense from '@components/safe-suspense';
 
 interface TabPanelProps {
@@ -104,9 +104,9 @@ const CnryList = () => {
   );
   const verticalAllCnrysList = () => (
     <ImageList variant="masonry" cols={2} sx={{ mt: 0 }}>
-      {cnryAllTokenIds.map(txid => (
-        <ImageListItem sx={{ width: '100%', m: 'auto' }} key={txid}>
-          <CnryCardFromTxId key={txid} txid={txid} />
+      {cnryAllTokenIds.map(tokenId => (
+        <ImageListItem sx={{ width: '100%', m: 'auto' }} key={tokenId}>
+          <CnryCard key={tokenId} tokenId={tokenId} />
         </ImageListItem>
       ))}
     </ImageList>
@@ -114,9 +114,9 @@ const CnryList = () => {
 
   const verticalUserCnrysList = () => (
     <ImageList variant="masonry" cols={2} sx={{ mt: 0 }}>
-      {cnryUserTokenIds.map(txid => (
-        <ImageListItem sx={{ width: '100%', m: 'auto' }} key={txid}>
-          <CnryCardFromTxId key={txid} txid={txid} />
+      {cnryUserTokenIds.map(tokenId => (
+        <ImageListItem sx={{ width: '100%', m: 'auto' }} key={tokenId}>
+          <CnryCard key={tokenId} tokenId={tokenId} />
         </ImageListItem>
       ))}
     </ImageList>
@@ -171,23 +171,3 @@ const CnryList = () => {
   );
 };
 export default CnryList;
-
-
-
-  // const verticalUserWatcherCnrysList = () => (
-  //   <ImageList
-  //     sx={{
-  //       gridAutoFlow: 'column',
-  //       gridTemplateColumns: 'repeat(auto-fit, minmax(292px,1fr)) !important',
-  //       gridAutoColumns: 'minmax(292px, 1fr)',
-  //     }}
-  //   >
-  //     <Stack component="div" direction="row" spacing={2}>
-  //       {watcherUserTokenIds.map(tokenId => (
-  //         <ImageListItem key={tokenId}>
-  //           <CnryCard key={tokenId} tokenId={tokenId} />
-  //         </ImageListItem>
-  //       ))}
-  //     </Stack>
-  //   </ImageList>
-  // );
