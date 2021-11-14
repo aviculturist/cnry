@@ -4,7 +4,7 @@ import { t } from '@lingui/macro';
 import { useAtom } from 'jotai';
 import { useAtomValue } from 'jotai/utils';
 import { ChainID } from 'micro-stacks/common';
-import { networkAtom, userStxAddressesAtom } from '@micro-stacks/react';
+import { useAuth, networkAtom, userStxAddressesAtom } from '@micro-stacks/react';
 import { ContractCallTransaction } from '@blockstack/stacks-blockchain-api-types';
 import { styled } from '@mui/material/styles';
 import { red } from '@mui/material/colors';
@@ -44,6 +44,7 @@ import useKeepalive from '@hooks/use-keepalive';
 import { toDate, toRelativeTime } from '@utils/time';
 import CnryMetadataTable from '@components/cnry-metadata-table';
 import EditCnryIconButton from '@components/edit-cnry-iconbutton';
+import useInstallWalletDialog from '@hooks/use-install-wallet-dialog';
 
 const StyledBadge = styled(Badge)<BadgeProps>(({ theme }: { theme: any }) => ({
   '& .MuiBadge-badge': {
@@ -188,6 +189,8 @@ const CnryCard = ({ tokenId }: { tokenId: number }) => {
   const keepaliveTimestamp = cnry.keepaliveTimestamp.value * 1000;
   const keepaliveExpiry = cnry.keepaliveExpiry.value * 1000;
   const daysRemainingUntilExpiry = toRelativeTime(keepaliveTimestamp + keepaliveExpiry);
+  const { isSignedIn, handleSignIn, handleSignOut, isLoading, session } = useAuth();
+  const { installWalletDialogIsOpen, setInstallWalletDialogIsOpen } = useInstallWalletDialog();
 
   const handleCopyToClipboard = ({ link }: { link: string }) => {
     const uri = `${typeof window !== 'undefined' ? window.location.href.split('#')[0] : ''}${link}`;
@@ -259,7 +262,13 @@ const CnryCard = ({ tokenId }: { tokenId: number }) => {
       </CardContent>
       <CardActions disableSpacing>
         <Tooltip title={t`Watch Cnry`}>
-          <IconButton aria-label="watch" onClick={() => handleWatch({ tokenId: cnry.index.value })}>
+          <IconButton
+            aria-label="watch"
+            onClick={() => {
+              isSignedIn ? void handleWatch({ tokenId: cnry.index.value }) : handleSignIn({});
+              !session && setInstallWalletDialogIsOpen(true);
+            }}
+          >
             <StyledBadge
               showZero={false}
               color="secondary"
