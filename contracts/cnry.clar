@@ -18,7 +18,7 @@
 
 ;; CONSTANTS (UPPERCASE)
 (define-constant AVICULTURIST tx-sender)
-(define-constant DEFAULT_KEEPALIVE_EXPIRY u7889238) ;; 3 months in seconds, see eff.org recommendations
+(define-constant DEFAULT_KEEPALIVE_EXPIRY u86400) ;; 1 day in seconds, see eff.org recommendations
 ;; errors
 (define-constant ERR_NOT_AUTHORIZED (err u401)) ;; unauthorized
 (define-constant ERR_NOT_FOUND (err u404)) ;; not found
@@ -29,7 +29,7 @@
 
 ;; VARIABLES (lowercase)
 (define-data-var base-uri (string-ascii 210) "https://cnry.org/?id={id}")
-(define-data-var last-id uint u0)
+(define-data-var lastId uint u0)
 
 ;; STORAGE
 (define-map cnrys
@@ -57,7 +57,7 @@
 ;;
 ;; SIP009: Get the last token ID
 (define-read-only (get-last-token-id)
-  (ok (var-get last-id)))
+  (ok (var-get lastId)))
 
 ;; SIP009: Get the token URI
 (define-read-only (get-token-uri (tokenId uint))
@@ -107,7 +107,7 @@
   (ok (default-to { count: u0 } (map-get? watcher-count { tokenId: tokenId })))
 )
 
-;; TODO: wrap in ok()
+;; TODO: wrap in ok()?
 (define-read-only (get-metadata (tokenId uint))
     (map-get? cnrys {tokenId: tokenId}))
 
@@ -143,13 +143,13 @@
 
 ;; Hatch a Cnry
 (define-public (hatch (cnryName (string-utf8 32) ) (cnryStatement (string-utf8 280)))
-    (let ((tokenId (var-get last-id)))
-      (if (is-ok (nft-mint? CNRY tokenId tx-sender))
+    (let ((nextId (+ u1 (var-get lastId)))) ;; There is no #0 CNRY token
+      (if (is-ok (nft-mint? CNRY nextId tx-sender))
         (begin
-          (var-set last-id (+ tokenId u1))
-          (map-set cnrys {tokenId: tokenId}
+          (var-set lastId nextId)
+          (map-set cnrys {tokenId: nextId}
           {
-            index: tokenId,
+            index: nextId,
             cnryName: cnryName,
             cnryStatement: cnryStatement,
             cnryUri: none,
@@ -159,8 +159,8 @@
             keepaliveTimestamp: (get-time),
             hatchedTimestamp: (get-time)
           })
-          (print { index: tokenId, cnryName: cnryName, cnryStatement: cnryStatement, cnryKeeper: tx-sender, keepaliveExpiry: DEFAULT_KEEPALIVE_EXPIRY, keepaliveTimestamp: (get-time), hatchedTimestamp: (get-time) })
-          (ok tokenId))
+          (print { index: nextId, cnryName: cnryName, cnryStatement: cnryStatement, cnryKeeper: tx-sender, keepaliveExpiry: DEFAULT_KEEPALIVE_EXPIRY, keepaliveTimestamp: (get-time), hatchedTimestamp: (get-time) })
+          (ok nextId))
         ERR_CNRY_EXISTS)))
 
 ;; Keep the Cnry alive
@@ -275,7 +275,7 @@
 ;; Watch a Cnry; mints a WATCHER token
 (define-public (watch (tokenId uint))
   (begin
-    (asserts! (>= (var-get last-id) tokenId) (err ERR_NOT_FOUND))
+    (asserts! (>= (var-get lastId) tokenId) (err ERR_NOT_FOUND))
     (map-set watcher-count { tokenId: tokenId } {
       count: (+ u1 (get count (unwrap! (get-watcher-count tokenId) (err ERR_COUNT))))
     })

@@ -1,4 +1,3 @@
-
 ;; watcher
 ;; SIP009 INTERFACE
 (impl-trait .nft-trait.nft-trait)
@@ -80,17 +79,17 @@
 ;; mint new watcher token
 ;; Can only be called by watched contract
 (define-public (watch-token (contract-name (string-ascii 80)) (tokenId uint) (watcherAddress principal))
-    (let ((next-id (+ u1 (var-get lastId))))
+    (let ((nextId (+ u1 (var-get lastId)))) ;; There is no #0 WATCHER token
       (asserts! (called-from-watched) ERR_NOT_CALLED_FROM_CONTRACT)
-      (match (nft-mint? WATCHER tokenId watcherAddress)
+      (match (nft-mint? WATCHER nextId watcherAddress)
         success
           (begin
-            (var-set lastId next-id)
-            (map-set watchers {tokenId: next-id}
+            (var-set lastId nextId)
+            (map-set watchers {tokenId: nextId}
             {
               contractTokenId: tokenId,
               watcherAddress: watcherAddress
             })
             (print { index: tokenId, contract: contract-caller, contractTokenId: tokenId, watcherAddress: watcherAddress })
-            (ok next-id))
+            (ok nextId))
         error (err error))))
