@@ -106,20 +106,49 @@ Clarinet.test({
   },
 });
 
-Clarinet.test({
-  name: 'it lets an account watch a Cnry',
-  async fn(chain: Chain, accounts: Map<string, Account>) {
-    const account = accounts.get('wallet_1')!;
+// Clarinet.test({
+//   name: 'it lets an account watch a Cnry',
+//   async fn(chain: Chain, accounts: Map<string, Account>) {
+//     const account = accounts.get('wallet_1')!;
 
-    // wallet_1 calls the watch function
-    const block = chain.mineBlock([
-      Tx.contractCall('cnry', 'watch', [types.uint(0)], account.address),
+//     // wallet_1 calls the watch function
+//     const block = chain.mineBlock([
+//       Tx.contractCall('cnry', 'watch', [types.uint(0)], account.address),
+//     ]);
+
+//     // contract returns (ok true)
+//     const result = block.receipts[0].result;
+
+//     result.expectOk().expectUint(1);
+//   },
+// });
+
+Clarinet.test({
+  name: 'it lets another account watch the same Cnry',
+  async fn(chain: Chain, accounts: Map<string, Account>) {
+    const wallet_1 = accounts.get('wallet_1')!;
+
+    // wallet_2 calls the watch function
+    const block_1 = chain.mineBlock([
+      Tx.contractCall('cnry', 'watch', [types.uint(0)], wallet_1.address),
     ]);
 
     // contract returns (ok true)
-    const result = block.receipts[0].result;
+    const result_1 = block_1.receipts[0].result;
 
-    result.expectOk().expectUint(1);
+    result_1.expectOk().expectUint(1);
+
+    const wallet_2 = accounts.get('wallet_2')!;
+
+    // wallet_2 calls the watch function
+    const block_2 = chain.mineBlock([
+      Tx.contractCall('cnry', 'watch', [types.uint(0)], wallet_2.address),
+    ]);
+
+    // contract returns (ok true)
+    const result_2 = block_2.receipts[0].result;
+    console.log(result_2);
+    result_2.expectOk().expectUint(2);
   },
 });
 

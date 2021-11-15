@@ -14,7 +14,11 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Skeleton from '@mui/material/Skeleton';
 import { cnryUserPendingTxIdsAtom } from '@store/cnry';
-import { cnryTokenIdsAtom, cnryUserTokenIdsAtom, cnryUserWatcherTokenIdsAtom } from '@store/cnry';
+import {
+  myCnryTokenIdsAtom,
+  watchingTokenIdsAtom,
+  browseCurrentPageAllCnryTokenIdsAtom,
+} from '@store/cnry';
 import cnryListTabStateAtom from '@store/ui/cnry-list-tab-state';
 import { PendingCnryCardFromTxId, CnryCardFromTxId } from '@components/cnry-card';
 import CnryCard from '@components/cnry-card';
@@ -53,16 +57,16 @@ const CnryList = () => {
   const [userStxAddresses] = useAtom(userStxAddressesAtom);
   const userStxAddress = userStxAddresses?.[chain] || '';
   const [userPendingTxids] = useAtom(cnryUserPendingTxIdsAtom);
-  const [cnryAllTokenIds] = useAtom(cnryTokenIdsAtom);
-  const [cnryUserTokenIds] = useAtom(cnryUserTokenIdsAtom(userStxAddress));
-  const [watcherUserTokenIds] = useAtom(cnryUserWatcherTokenIdsAtom(userStxAddress));
+  const [myCnrysIds] = useAtom(myCnryTokenIdsAtom);
+  const [cnryAllTokenIds] = useAtom(browseCurrentPageAllCnryTokenIdsAtom);
+  const [watcherUserTokenIds] = useAtom(watchingTokenIdsAtom(userStxAddress));
   const [value, setValue] = useAtom(cnryListTabStateAtom);
-  const userHasCnrys =
-    cnryUserTokenIds === undefined || cnryUserTokenIds.length == 0 ? false : true;
+
+  const userHasCnrys = myCnrysIds === undefined || myCnrysIds.length == 0 ? false : true;
   const userHasWatching =
     watcherUserTokenIds === undefined || watcherUserTokenIds.length == 0 ? false : true;
 
-  // TODO: what happens if the user is not signed in?
+  // on first page render
   useEffect(() => {
     if (userHasCnrys) {
       setValue('two');
@@ -71,11 +75,16 @@ const CnryList = () => {
     }
   }, []);
 
+  // dispatch query when tx succeeds?
+  useEffect(() => {
+    //
+  }, []);
+
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
   };
 
-  const horizontalUserPendingCnrysList = () => (
+  const horizontalMyPendingCnrysList = () => (
     <ImageList
       sx={{
         gridAutoFlow: 'column',
@@ -93,7 +102,17 @@ const CnryList = () => {
     </ImageList>
   );
 
-  const verticalUserWatcherCnrysList = () => (
+  const verticalMyCnrysList = () => (
+    <ImageList variant="masonry" cols={2} sx={{ mt: 0 }}>
+      {myCnrysIds.map(tokenId => (
+        <ImageListItem sx={{ width: '100%', m: 'auto' }} key={tokenId}>
+          <CnryCard key={tokenId} tokenId={tokenId} />
+        </ImageListItem>
+      ))}
+    </ImageList>
+  );
+
+  const verticalWatchingCnrysList = () => (
     <ImageList variant="masonry" cols={2} sx={{ mt: 0 }}>
       {watcherUserTokenIds.map(tokenId => (
         <ImageListItem sx={{ width: '100%', m: 'auto' }} key={tokenId}>
@@ -105,16 +124,6 @@ const CnryList = () => {
   const verticalAllCnrysList = () => (
     <ImageList variant="masonry" cols={2} sx={{ mt: 0 }}>
       {cnryAllTokenIds.map(tokenId => (
-        <ImageListItem sx={{ width: '100%', m: 'auto' }} key={tokenId}>
-          <CnryCard key={tokenId} tokenId={tokenId} />
-        </ImageListItem>
-      ))}
-    </ImageList>
-  );
-
-  const verticalUserCnrysList = () => (
-    <ImageList variant="masonry" cols={2} sx={{ mt: 0 }}>
-      {cnryUserTokenIds.map(tokenId => (
         <ImageListItem sx={{ width: '100%', m: 'auto' }} key={tokenId}>
           <CnryCard key={tokenId} tokenId={tokenId} />
         </ImageListItem>
@@ -141,7 +150,7 @@ const CnryList = () => {
           <HatchCnryForm />
           <Stack maxWidth="sm" sx={{ m: 'auto' }}>
             <SafeSuspense fallback={<CircularProgress sx={{ m: 'auto' }} />}>
-              {horizontalUserPendingCnrysList()}
+              {horizontalMyPendingCnrysList()}
             </SafeSuspense>
           </Stack>
         </SafeSuspense>
@@ -149,14 +158,14 @@ const CnryList = () => {
       <TabPanel value={value} index="two">
         <Stack maxWidth="sm" sx={{ m: 'auto' }}>
           <SafeSuspense fallback={<CircularProgress sx={{ m: 'auto' }} />}>
-            {verticalUserCnrysList()}
+            {verticalMyCnrysList()}
           </SafeSuspense>
         </Stack>
       </TabPanel>
       <TabPanel value={value} index="three">
         <Stack maxWidth="sm" sx={{ m: 'auto' }}>
           <SafeSuspense fallback={<CircularProgress sx={{ m: 'auto' }} />}>
-            {verticalUserWatcherCnrysList()}
+            {verticalWatchingCnrysList()}
           </SafeSuspense>
         </Stack>
       </TabPanel>

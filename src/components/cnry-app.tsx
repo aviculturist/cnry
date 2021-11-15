@@ -8,7 +8,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import SafeSuspense from '@components/safe-suspense';
-import { useQuery } from '@hooks/use-query';
+import { useIdQuery } from '@hooks/use-queries';
 import { cnryGetMetadataAtom } from '@store/cnry';
 import useSingleCnryDialogIsOpen from '@hooks/use-metadata-dialog-is-open';
 import { SingleCnryErrorDialog, SingleCnryDialog } from '@components/single-cnry-dialog';
@@ -20,8 +20,7 @@ import CnryList from '@components/cnry-list';
 import MaintenanceAlert from '@components/maintenance-alert';
 
 const CnryItemQueryPopup = () => {
-  const id = useQuery();
-  const tokenId = id !== '' ? Number(id) : undefined;
+  const tokenId = useIdQuery();
   const [metadataResult] = useAtom(cnryGetMetadataAtom(tokenId));
   const { setSingleCnryDialogIsOpen: setMetadataDialogIsOpen } = useSingleCnryDialogIsOpen();
 
@@ -37,17 +36,7 @@ const CnryItemQueryPopup = () => {
 };
 
 const CnryApp = () => {
-  //const [{ stx, non_fungible_tokens }] = useCurrentAccountBalances();
-  //const accountTransactions = useCurrentAccountTransactionsList();
-
-  //const [{ stx, non_fungible_tokens }] = useCurrentAccountAssetsList();
-  //useCurrentAccountTransactionsList()
-  //useCurrentAccountMempoolTransactionsList
-  //useCurrentAccountAssetsList
-  //console.log(non_fungible_tokens);
-  const id = useQuery();
-  //const [open, setOpen] = useAtom(hatchCnryDialogIsOpenAtom);
-  //const { isSignedIn, handleSignIn, handleSignOut, isLoading, session } = useAuth();
+  const tokenId = useIdQuery();
 
   return (
     <>
@@ -80,7 +69,7 @@ const CnryApp = () => {
       <SafeSuspense fallback={<CircularProgress />}>
         <ActivityDrawer />
       </SafeSuspense>
-      {id && id !== undefined ? (
+      {tokenId !== undefined ? (
         <SafeSuspense fallback={<CircularProgress />}>
           <CnryItemQueryPopup />
         </SafeSuspense>

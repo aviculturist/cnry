@@ -1,11 +1,8 @@
-import { useRouter } from 'next/router';
 import { useAtom } from 'jotai';
 import { t } from '@lingui/macro';
 import Stack from '@mui/material/Stack';
 import Dialog from '@mui/material/Dialog';
 import { DialogTitle } from '@mui/material';
-import CnryCard from '@components/cnry-card';
-import { useQuery } from '@hooks/use-query';
 import { anyCnryNameDialogIsOpenAtomFamily } from '@store/ui/set-cnry-name-dialog-is-open';
 import SetCnryNameForm from '@components/forms/set-cnry-name-form';
 

@@ -184,7 +184,7 @@ const CnryCard = ({ tokenId }: { tokenId: number }) => {
   const userStxAddress = userStxAddresses?.[chain] || '';
   const [isAlive] = useAtom(cnryIsAliveAtom(tokenId));
   const [cnry] = useAtom(cnryGetMetadataAtom(tokenId));
-  const [cnryWatchCount] = useAtom(cnryWatchCountAtom(tokenId));
+  const [cnryWatchCount, dispatchCnryWatchCount] = useAtom(cnryWatchCountAtom(tokenId));
   const hatchedDate = toDate(cnry.hatchedTimestamp.value * 1000);
   const keepaliveTimestamp = cnry.keepaliveTimestamp.value * 1000;
   const keepaliveExpiry = cnry.keepaliveExpiry.value * 1000;
@@ -265,7 +265,7 @@ const CnryCard = ({ tokenId }: { tokenId: number }) => {
           <IconButton
             aria-label="watch"
             onClick={() => {
-              isSignedIn ? void handleWatch({ tokenId: cnry.index.value }) : handleSignIn({});
+              isSignedIn ? void handleWatch(tokenId) : handleSignIn({});
               !session && setInstallWalletDialogIsOpen(true);
             }}
           >

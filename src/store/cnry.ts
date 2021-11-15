@@ -2,6 +2,8 @@ import { atom } from 'jotai';
 import { atomWithQuery, atomFamilyWithQuery } from 'jotai-query-toolkit';
 import { networkAtom, userStxAddressesAtom } from '@micro-stacks/react';
 import { fetchReadOnlyFunction } from 'micro-stacks/api'; // TODO: seemingly broken
+import { accountBalancesClientAtom, accountTransactionsListClientAtom } from '@micro-stacks/query';
+
 import { ChainID } from 'micro-stacks/common';
 import { uintCV } from 'micro-stacks/clarity';
 // TODO: these return differently
@@ -16,6 +18,8 @@ import type {
   Transaction,
   MempoolTransaction,
   TokenTransferTransaction,
+  AddressNftListResponse,
+  AddressBalanceResponse,
 } from '@stacks/stacks-blockchain-api-types';
 import { smartContractsClientAtom, accountsClientAtom, transactionsClientAtom } from '@store/api';
 import { currentCnryContractState, currentWatcherContractState } from '@store/helpers';
@@ -26,6 +30,7 @@ import {
   METADATA_FUNCTION,
   ISALIVE_FUNCTION,
 } from '@utils/constants';
+import { paginate, range } from '@utils/paginate';
 
 // a simple array of pending transaction ids
 export const userPendingTxIdsAtom = atom(Array<string>());
@@ -126,6 +131,7 @@ export const userPendingTxAtom = atomFamilyWithQuery<string, UserTransaction>(
   { refetchInterval: 30000 } // thirty seconds in milliseconds (5000 = 5 seconds)
 ); // every minute
 
+// search queries
 export const queryAtom = atom('');
 
 // a simple array of pending transaction ids
@@ -137,121 +143,43 @@ export const cnryUserPendingTxsCountAtom = atom(get => {
   return uptxa.length;
 });
 
-// TODO: convert this to an infinite query? Will need to enable pagination, etc.
-export const cnryContractTransactionIdsAtom = atomWithQuery<string[]>(
-  'contract-transactions',
-  async get => {
-    const accountsClient = get(accountsClientAtom);
-    const cnryContract = get(currentCnryContractState);
+// TODO: this hard codes a 50 item limit to the query
+export const myCnryTokenIdsAtom = atom(get => {
+  const network = get(networkAtom);
+  const chain = network?.chainId === ChainID.Mainnet ? 'mainnet' : 'testnet';
+  const userStxAddresses = get(userStxAddressesAtom);
+  const cnryContract = get(currentCnryContractState);
+  const [contractAddress, contractName] = cnryContract.split('.');
+  const principal = userStxAddresses?.[chain] || contractAddress; // bcuz when user is not logged in, queries fail
+  const client = get(smartContractsClientAtom);
+  const networkUrl = network.getCoreApiUrl();
 
-    try {
-      const txs = await accountsClient.getAccountTransactions({
-        limit: 50,
-        principal: cnryContract,
+  const txs = get(accountTransactionsListClientAtom([principal, { limit: 50 }, networkUrl]));
+  try {
+    const tokenIds = txs?.pages[0].results
+      .filter(
+        tx =>
+          tx?.tx_type === 'contract_call' &&
+          tx?.contract_call.contract_id === cnryContract &&
+          tx?.contract_call.function_name === 'hatch' &&
+          tx?.tx_status === 'success'
+      )
+      .map(tx => {
+        const content = (tx as ContractCallTransaction).tx_result.repr
+          .replace(`(ok u`, '')
+          .replace(`)`, '');
+        return Number(content);
       });
-      const txids = (txs as TransactionResults).results
-        .filter(
-          tx =>
-            tx.tx_type === 'contract_call' &&
-            // TODO filter by the list of functions we care about in activity
-            //tx.contract_call.function_name === HATCH_FUNCTION &&
-            tx.tx_status === 'success'
-        )
-        .map(tx => tx.tx_id);
-      return txids;
-    } catch (_e) {
-      console.log(_e);
-    }
-    return [];
-  },
-  { refetchInterval: 30000 } // thirty seconds in milliseconds (5000 = 5 seconds)
-);
+    return tokenIds === undefined ? [] : tokenIds;
+  } catch (_e) {
+    console.log(_e);
+  }
+  return [];
+});
 
-// TODO: convert to infinite query with pagination, etc.
-export const cnryTokenIdsAtom = atomWithQuery<number[]>(
-  'cnry-token-ids',
-  async get => {
-    const accountsClient = get(accountsClientAtom);
-    const cnryContract = get(currentCnryContractState);
-
-    try {
-      const txs = await accountsClient.getAccountTransactions({
-        limit: 50,
-        principal: cnryContract,
-      });
-      const tokenIds = (txs as TransactionResults).results
-        .filter(
-          tx =>
-            tx.tx_type === 'contract_call' &&
-            tx.contract_call.function_name === HATCH_FUNCTION &&
-            tx.tx_status === 'success'
-        )
-        .map(tx => {
-          const content = (tx as ContractCallTransaction).tx_result.repr
-            .replace(`(ok u`, '')
-            .replace(`)`, '');
-          return Number(content);
-        });
-      return tokenIds;
-    } catch (_e) {
-      console.log(_e);
-    }
-    return [];
-  },
-  { refetchInterval: 300000 } // five minutes in milliseconds (5000 = 5 seconds)
-);
-
-// TODO: only grabs 50, convert to infinitequery
-export const cnryUserTokenIdsAtom = atomFamilyWithQuery<string, number[]>(
-  'user-cnry-token-ids',
-  async (get, principal) => {
-    const accountsClient = get(accountsClientAtom);
-    const cnryContract = get(currentCnryContractState);
-
-    try {
-      const txs = await accountsClient.getAccountTransactions({
-        limit: 50,
-        principal: cnryContract,
-      });
-      const tokenIds = (txs as TransactionResults).results
-        .filter(
-          tx =>
-            tx.sender_address === principal &&
-            tx.tx_type === 'contract_call' &&
-            tx.contract_call.function_name === HATCH_FUNCTION &&
-            tx.tx_status === 'success'
-        )
-        .map(tx => {
-          const content = (tx as ContractCallTransaction).tx_result.repr
-            .replace(`(ok u`, '')
-            .replace(`)`, '');
-          return Number(content);
-        });
-      return tokenIds;
-    } catch (_e) {
-      console.log(_e);
-    }
-    return [];
-  },
-  { refetchInterval: 300000 } // five minutes in milliseconds (5000 = 5 seconds)
-); // every minute
-
-// TODO: only grabs 50, convert to infinitequery // TODO: array of strings isn't right
-//
-//
-//
-// const tokenIdString =
-//     tx &&
-//     tx.tx_type === 'contract_call' &&
-//     tx.contract_call.function_name === 'hatch' &&
-//     (tx as ContractCallTransaction).tx_result?.repr
-//       ? (tx as ContractCallTransaction).tx_result?.repr
-//       : undefined;
-//   const tokenId =
-//     tokenIdString !== undefined
-//       ? Number(tokenIdString.replace('(ok u', '').replace(')', ''))
-//       : undefined;
-export const cnryUserWatcherTokenIdsAtom = atomFamilyWithQuery<string, number[]>(
+// The token ids a user has watched
+// TODO: this only works for the last 50 total transactions
+export const watchingTokenIdsAtom = atomFamilyWithQuery<string, number[]>(
   'cnry-user-watcher-token-ids',
   async (get, principal) => {
     const accountsClient = get(accountsClientAtom);
@@ -289,6 +217,117 @@ export const cnryUserWatcherTokenIdsAtom = atomFamilyWithQuery<string, number[]>
   { refetchInterval: 300000 } // five minutes in milliseconds (5000 = 5 seconds)
 ); // every minute
 
+// TODO: WIP
+export const browseCurrentPageAtom = atom(1);
+export const browseCurrentPageAllCnryTokenIdsAtom = atom(get => {
+  const totalItems = get(cnryLastIdAtom);
+  const currentPage = get(browseCurrentPageAtom);
+  const { totalPages, startPage, endPage, startIndex, endIndex, pages } = paginate({
+    totalItems,
+    currentPage,
+    pageSize: 10,
+    maxPages: 10,
+  });
+  const currentPageTokenIds = Array.from(range(1, totalItems));
+  return currentPageTokenIds;
+});
+
+// All transactions for the activity drawer
+// Convert to infinite query with pagination, etc.
+export const cnryContractTransactionIdsAtom = atomWithQuery<string[]>(
+  'contract-transactions',
+  async get => {
+    const accountsClient = get(accountsClientAtom);
+    const cnryContract = get(currentCnryContractState);
+
+    try {
+      const txs = await accountsClient.getAccountTransactions({
+        limit: 50,
+        principal: cnryContract,
+      });
+      const txids = (txs as TransactionResults).results
+        .filter(
+          tx =>
+            tx.tx_type === 'contract_call' &&
+            // TODO filter by the list of functions we care about in activity
+            //tx.contract_call.function_name === HATCH_FUNCTION &&
+            tx.tx_status === 'success'
+        )
+        .map(tx => tx.tx_id);
+      return txids;
+    } catch (_e) {
+      console.log(_e);
+    }
+    return [];
+  },
+  { refetchInterval: 30000 } // thirty seconds in milliseconds (5000 = 5 seconds)
+);
+
+// export const cnryUserTokenIdsAtom = atomFamilyWithQuery<string, number[]>(
+//   'user-cnry-txs',
+//   async (get, principal) => {
+//     const accountsClient = get(accountsClientAtom);
+//     const cnryContract = get(currentCnryContractState);
+//     const [contractAddress, contractName] = cnryContract.split('.');
+//     try {
+//       const txs = await accountsClient.getAccountNft({
+//         limit: 50,
+//         principal: principal,
+//       });
+//       const tokenIds = txs.nft_events
+//         .filter(
+//           tx =>
+//             tx.asset_identifier === `${cnryContract}::CNRY` ||
+//             tx.asset_identifier === `${contractAddress}.cnry::CNRY`
+//         )
+//         .map(tx => {
+//           const content = tx.value.repr.replace(`u`, '');
+//           return Number(content);
+//         });
+//       return tokenIds;
+//     } catch (_e) {
+//       console.log(_e);
+//     }
+//     return [];
+//   },
+//   { refetchInterval: 300000 } // five minutes in milliseconds (5000 = 5 seconds)
+// );
+
+// // TODO: only grabs 50, convert to infinitequery
+// export const oldcnryUserTokenIdsAtom = atomFamilyWithQuery<string, number[]>(
+//   'user-cnry-token-ids',
+//   async (get, principal) => {
+//     const accountsClient = get(accountsClientAtom);
+//     const cnryContract = get(currentCnryContractState);
+
+//     try {
+//       const txs = await accountsClient.getAccountTransactions({
+//         limit: 50,
+//         principal: cnryContract,
+//       });
+//       const tokenIds = (txs as TransactionResults).results
+//         .filter(
+//           tx =>
+//             tx.sender_address === principal &&
+//             tx.tx_type === 'contract_call' &&
+//             tx.contract_call.function_name === HATCH_FUNCTION &&
+//             tx.tx_status === 'success'
+//         )
+//         .map(tx => {
+//           const content = (tx as ContractCallTransaction).tx_result.repr
+//             .replace(`(ok u`, '')
+//             .replace(`)`, '');
+//           return Number(content);
+//         });
+//       return tokenIds;
+//     } catch (_e) {
+//       console.log(_e);
+//     }
+//     return [];
+//   },
+//   { refetchInterval: 300000 } // five minutes in milliseconds (5000 = 5 seconds)
+// ); // every minute
+
 // TODO: double check it always returns Transaction, may be other scenarios
 export const cnryContractTransactionAtom = atomFamilyWithQuery<string, Transaction | undefined>(
   'contract-transaction-id',
@@ -316,7 +355,6 @@ export const cnryWatchCountAtom = atomFamilyWithQuery<number, number | undefined
     const senderAddress = userStxAddresses?.[chain] || contractAddress; // bcuz when user is not logged in, queries fail
     const client = get(smartContractsClientAtom);
     const networkUrl = network.getCoreApiUrl();
-    // TODO: broken
     // try {
     //   const response = await fetchReadOnlyFunction({
     //     url: networkUrl,

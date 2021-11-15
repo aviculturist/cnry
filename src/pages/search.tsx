@@ -18,6 +18,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { t } from '@lingui/macro';
 import Header from '@components/header';
 import Footer from '@components/footer';
+import { useSearchQuery } from '@hooks/use-queries';
 
 import {
   SearchErrorResult,
@@ -34,15 +35,15 @@ import { queryAtom, searchResultsAtom } from '@store/search';
 import SafeSuspense from '@components/safe-suspense';
 import Skeleton from '@mui/material/Skeleton';
 
-// TODO: break into components, refactor, etc.
-function useQuery() {
-  const router = useRouter();
-  const q = router.asPath.split(/\?/)[1].split(/=/)[1];
-  return typeof q === 'string' ? q : '';
-}
+// // TODO: break into components, refactor, etc.
+// function useSearchQuery() {
+//   const router = useRouter();
+//   const q = router.asPath.split(/\?/)[1].split(/=/)[1];
+//   return typeof q === 'string' ? q : '';
+// }
 
 const SearchResults = () => {
-  const q = useQuery();
+  const q = useSearchQuery();
   const [searchResults] = useAtom(searchResultsAtom(q));
   // SearchErrorResult
   if (searchResults && searchResults?.found === false) {
@@ -75,7 +76,7 @@ const SearchResults = () => {
 };
 
 const SearchErrorDisplay = () => {
-  const q = useQuery();
+  const q = useSearchQuery();
   const [searchResults] = useAtom(searchResultsAtom(q));
   const err = searchResults as SearchErrorResult;
   return (
@@ -92,7 +93,7 @@ const SearchErrorDisplay = () => {
 };
 
 const AddressSearchResultDisplay = () => {
-  const q = useQuery();
+  const q = useSearchQuery();
   const [searchResults] = useAtom(searchResultsAtom(q));
   const add = searchResults as AddressSearchResult;
   return (
@@ -110,7 +111,7 @@ const AddressSearchResultDisplay = () => {
 };
 
 const BlockSearchResultDisplay = () => {
-  const q = useQuery();
+  const q = useSearchQuery();
   const [searchResults] = useAtom(searchResultsAtom(q));
   const bl = searchResults as BlockSearchResult;
   return (
@@ -138,7 +139,7 @@ const BlockSearchResultDisplay = () => {
 };
 
 const ContractSearchResultDisplay = () => {
-  const q = useQuery();
+  const q = useSearchQuery();
   const [searchResults] = useAtom(searchResultsAtom(q));
   const c = searchResults as ContractSearchResult;
   return (
@@ -166,7 +167,7 @@ const ContractSearchResultDisplay = () => {
 };
 
 const MempoolTxSearchResultDisplay = () => {
-  const q = useQuery();
+  const q = useSearchQuery();
   const [searchResults] = useAtom(searchResultsAtom(q));
   const mem = searchResults as MempoolTxSearchResult;
   return (
@@ -190,7 +191,7 @@ const MempoolTxSearchResultDisplay = () => {
 const TxSearchResultDisplay = () => {
   // const [getQuery, setQuery] = useAtom(queryAtom);
   // const [searchResults] = useAtom(searchResultsAtom);
-  const q = useQuery();
+  const q = useSearchQuery();
   const [searchResults] = useAtom(searchResultsAtom(q));
   const tx = searchResults as TxSearchResult;
   return (
@@ -218,7 +219,7 @@ const TxSearchResultDisplay = () => {
 };
 
 // const Search = () => {
-//const q = useQuery();
+//const q = useSearchQuery();
 //const [searchResults] = useAtom(searchResultsAtom(q));
 
 //https://stackoverflow.com/questions/66133814/how-to-get-url-query-string-on-next-js-static-site-generation/67877443#67877443

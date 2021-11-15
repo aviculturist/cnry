@@ -5,7 +5,6 @@ import { currentCnryContractState } from '@store/helpers';
 import { WATCH_FUNCTION } from '@utils/constants';
 import { userPendingTxIdsAtom, userPendingTxAtom } from '@store/cnry';
 import { uintCV } from 'micro-stacks/clarity';
-import { intCV } from '@stacks/transactions';
 
 const useWatch = () => {
   const [cnryContract] = useAtom(currentCnryContractState);
@@ -32,7 +31,7 @@ const useWatch = () => {
         contractAddress,
         contractName,
         functionName: WATCH_FUNCTION,
-        functionArgs: [uintCV(Number(cnryTokenId.tokenId))],
+        functionArgs: [uintCV(Number(cnryTokenId))],
         postConditions: [],
         onFinish,
         onCancel,

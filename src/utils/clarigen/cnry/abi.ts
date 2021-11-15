@@ -729,7 +729,7 @@ export const CnryInterface: ClarityAbi = {
     },
     {
       "access": "variable",
-      "name": "last-id",
+      "name": "lastId",
       "type": "uint128"
     }
   ]

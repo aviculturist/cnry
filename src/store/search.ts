@@ -49,13 +49,15 @@ async function fetchPrivate(input: RequestInfo, init: RequestInit = {}): Promise
 }
 
 export const searchResultsAtom = atomFamilyWithQuery<
-  string,
+  string | undefined,
   SearchErrorResult | SearchSuccessResult
 >(
   'search-results',
   async (get, query) => {
+    if (query === undefined) {
+      return {} as SearchErrorResult;
+    }
     const networkUrl = get(networkAtom).getCoreApiUrl();
-    //const query = get(queryAtom); //'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM';
 
     const requestHeaders = {
       Accept: 'application/json',

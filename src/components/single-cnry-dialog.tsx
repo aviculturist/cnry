@@ -4,12 +4,11 @@ import Stack from '@mui/material/Stack';
 import Dialog from '@mui/material/Dialog';
 import { DialogTitle } from '@mui/material';
 import CnryCard from '@components/cnry-card';
-import { useQuery } from '@hooks/use-query';
+import { useIdQuery } from '@hooks/use-queries';
 import useSingleCnryDialogIsOpen from '@hooks/use-metadata-dialog-is-open';
 
 export const SingleCnryErrorDialog = () => {
-  const id = useQuery();
-  const tokenId = id !== '' ? Number(id) : undefined;
+  const tokenId = useIdQuery();
   const { singleCnryDialogIsOpen: metadataDialogIsOpen, setSingleCnryDialogIsOpen: setMetadataDialogIsOpen } = useSingleCnryDialogIsOpen();
   const router = useRouter();
   const handleClose = () => {
@@ -27,8 +26,7 @@ export const SingleCnryErrorDialog = () => {
 };
 
 export const SingleCnryDialog = () => {
-  const id = useQuery();
-  const tokenId = id !== '' ? Number(id) : undefined;
+  const tokenId = useIdQuery();
   const { singleCnryDialogIsOpen: metadataDialogIsOpen, setSingleCnryDialogIsOpen: setMetadataDialogIsOpen } = useSingleCnryDialogIsOpen();
   const router = useRouter();
   const handleClose = () => {
@@ -40,7 +38,7 @@ export const SingleCnryDialog = () => {
   return tokenId !== undefined ? (
     <>
       <Dialog fullWidth={true} maxWidth="sm" onClose={handleClose} open={metadataDialogIsOpen}>
-        <DialogTitle>Cnry #{id}</DialogTitle>
+        <DialogTitle>Cnry #{tokenId}</DialogTitle>
         <Stack maxWidth="sm" sx={{ m: 'auto', p: 6 }}>
           <CnryCard tokenId={tokenId} />
         </Stack>
