@@ -50,7 +50,7 @@ const EditCnryMenu = ({ tokenId, cnryName }: { tokenId: number; cnryName: string
       >
         <MenuList dense>
           <MenuItem key={tokenId} onClick={handleOpenSetNameDialog}>
-            <ListItemText>Edit {tokenId} Cnry Name</ListItemText>
+            <ListItemText>Edit Cnry Name</ListItemText>
           </MenuItem>
         </MenuList>
       </Menu>
