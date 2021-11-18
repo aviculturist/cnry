@@ -26,6 +26,9 @@ import CnryCard from '@components/cnry-card';
 import HatchCnryForm from '@components/forms/hatch-cnry-form';
 import SafeSuspense from '@components/safe-suspense';
 import { userPendingTxIdsAtom } from '@store/cnry';
+import MaintenanceAlert from '@components/maintenance-alert';
+import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
 import BasicPagination from '@components/pagination';
 import { browseCurrentPageAtom, cnryLastIdAtom } from '@store/cnry';
 import { paginate, range } from '@utils/paginate';
@@ -169,6 +172,26 @@ const CnryList = () => {
             </SafeSuspense>
           </Stack>
         </SafeSuspense>
+        <Stack sx={{ mt: 3 }} spacing={2}>
+          <Box>
+            <Stack maxWidth="sm" sx={{ m: 'auto' }} spacing={2}>
+              <MaintenanceAlert />
+              <Alert severity="info">
+                <AlertTitle>{t`About Cnry`}</AlertTitle>
+                {t`Cnry makes it easy to publish and keep track of warrant canaries. Transactions settle on Bitcoin via Stacks.`}
+                <strong>
+                  <a
+                    rel="noreferrer"
+                    target="_blank"
+                    href="https://github.com/aviculturist/cnry#-cnry"
+                  >
+                    Learn more.
+                  </a>
+                </strong>
+              </Alert>
+            </Stack>
+          </Box>
+        </Stack>
       </TabPanel>
       <TabPanel value={value} index="two">
         <Stack maxWidth="sm" sx={{ m: 'auto' }}>

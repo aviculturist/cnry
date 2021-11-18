@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useEffect } from 'react';
-import { t } from '@lingui/macro';
+import { t, Trans } from '@lingui/macro';
 import { useAtom } from 'jotai';
 import { useAtomValue } from 'jotai/utils';
 import { ChainID } from 'micro-stacks/common';
@@ -233,11 +233,7 @@ const CnryCard = ({ tokenId }: { tokenId: number }) => {
                   variant="outlined"
                 />
               </Typography>
-              <EditCnryIconButton
-                key={tokenId}
-                tokenId={cnry.index.value}
-                cnryName={cnry.cnryName.value}
-              />
+              <EditCnryIconButton tokenId={cnry.index.value} cnryName={cnry.cnryName.value} />
             </>
           ) : (
             <>
@@ -256,7 +252,7 @@ const CnryCard = ({ tokenId }: { tokenId: number }) => {
           )
         }
         title={cnry.cnryName.value}
-        subheader={t`Hatched on ${hatchedDate}, expiry ${daysRemainingUntilExpiry}`}
+        subheader={`Hatched on ${hatchedDate}, expiry ${daysRemainingUntilExpiry}`}
       />
       {/* <CardMedia
         component="img"

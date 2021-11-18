@@ -12,6 +12,7 @@ import ListItemText from '@mui/material/ListItemText';
 import DownloadOutlinedIcon from '@mui/icons-material/DownloadOutlined';
 import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
 import PrivacyTipOutlinedIcon from '@mui/icons-material/PrivacyTipOutlined';
+import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import { styled } from '@mui/material/styles';
 import { settingsMenuAnchorElAtom, settingsMenuIsOpenAtom } from '@store/ui/settings-menu-is-open';
 import ClearApplicationDataMenuItem from '@components/clear-application-data-menuitem';
@@ -167,7 +168,7 @@ const TogglePrivacySettingsIconbutton = () => {
         aria-expanded={isOpen ? 'true' : undefined}
       >
         <Tooltip title={t`Settings`}>
-          <PrivacyTipOutlinedIcon fontSize="small" />
+          <SettingsOutlinedIcon fontSize="small" />
         </Tooltip>
       </IconButton>
       <PrivacySettingsMenu />

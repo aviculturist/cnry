@@ -52,24 +52,7 @@ const CnryApp = () => {
           >
             <CnryList />
           </SafeSuspense>
-          <Box>
-            <Stack maxWidth="sm" sx={{ m: 'auto' }} spacing={2}>
-              <MaintenanceAlert />
-              <Alert severity="info">
-                <AlertTitle>{t`About Cnry`}</AlertTitle>
-                {t`Cnry makes it easy to publish and keep track of warrant canaries. Transactions settle on Bitcoin via Stacks.`}
-                <strong>
-                  <a
-                    rel="noreferrer"
-                    target="_blank"
-                    href="https://github.com/aviculturist/cnry#-cnry"
-                  >
-                    Learn more.
-                  </a>
-                </strong>
-              </Alert>
-            </Stack>
-          </Box>
+
         </Stack>
       </main>
 

@@ -129,7 +129,7 @@ It was bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/t
 
 The interface is currently built with components from [MUI v5](https://mui.com/) and the [styled-components](https://styled-components.com/) library but that could change in the future if more flexible options become apparent (suggestions welcome!).
 
-Implementing a `fully static` `SSG` build using `Next.js` `export`, "no compromises" `DarkMode`, `i18n/l10n` (including RTL support) are core principles of the project. There's no server and you keep custody of your private keys at all times using the app. You also keep custody of all your session data which you can download using the links in the privacy shield menu icon.
+Implementing a `fully static` `SSG` build using `Next.js` `export`, "no compromises" `DarkMode`, `i18n/l10n` (including RTL support) are core principles of the project. There's no server and you keep custody of your private keys at all times using the app. You also keep custody of all your session data which you can download using the links in the settings gearbox menu icon.
 
 ### Deploying
 

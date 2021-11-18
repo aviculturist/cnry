@@ -84,7 +84,7 @@ const HatchCnryForm = () => {
             id="name"
             name="name"
             label={t`Name`}
-            placeholder="Acme Corp Warrant Canary"
+            placeholder={t`Acme Corp Warrant Canary`}
             value={formik.values.name}
             onChange={formik.handleChange}
             error={formik.touched.name && Boolean(formik.errors.name)}
@@ -98,7 +98,7 @@ const HatchCnryForm = () => {
             id="statement"
             name="statement"
             label={t`Statement`}
-            placeholder="Acme Corp has never received an order under Section 215 of the USA Patriot Act."
+            placeholder={t`Acme Corp has never received an order under Section 215 of the USA Patriot Act.`}
             type="statement"
             value={formik.values.statement}
             onChange={formik.handleChange}
