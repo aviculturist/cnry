@@ -256,7 +256,7 @@ const CnryCard = ({ tokenId }: { tokenId: number }) => {
           )
         }
         title={cnry.cnryName.value}
-        subheader={t`Hatched on ${hatchedDate}, expires ${daysRemainingUntilExpiry}`}
+        subheader={t`Hatched on ${hatchedDate}, expiry ${daysRemainingUntilExpiry}`}
       />
       {/* <CardMedia
         component="img"

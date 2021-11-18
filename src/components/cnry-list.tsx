@@ -26,6 +26,9 @@ import CnryCard from '@components/cnry-card';
 import HatchCnryForm from '@components/forms/hatch-cnry-form';
 import SafeSuspense from '@components/safe-suspense';
 import { userPendingTxIdsAtom } from '@store/cnry';
+import BasicPagination from '@components/pagination';
+import { browseCurrentPageAtom, cnryLastIdAtom } from '@store/cnry';
+import { paginate, range } from '@utils/paginate';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -125,13 +128,16 @@ const CnryList = () => {
     </ImageList>
   );
   const verticalAllCnrysList = () => (
-    <ImageList variant="masonry" cols={2} sx={{ mt: 0 }}>
-      {cnryAllTokenIds.map(tokenId => (
-        <ImageListItem sx={{ width: '100%', m: 'auto' }} key={tokenId}>
-          <CnryCard key={tokenId} tokenId={tokenId} />
-        </ImageListItem>
-      ))}
-    </ImageList>
+    <>
+      <ImageList variant="masonry" cols={2} sx={{ mt: 0 }}>
+        {cnryAllTokenIds.map(tokenId => (
+          <ImageListItem sx={{ width: '100%', m: 'auto' }} key={tokenId}>
+            <CnryCard key={tokenId} tokenId={tokenId} />
+          </ImageListItem>
+        ))}
+      </ImageList>
+      <BasicPagination />
+    </>
   );
 
   return (

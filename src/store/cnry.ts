@@ -283,7 +283,7 @@ export const browseCurrentPageAllCnryTokenIdsAtom = atom(get => {
     maxPages: 10,
   });
   // TODO: testnet indexes from 0
-  const currentPageTokenIds = Array.from(range(1, totalItems));
+  const currentPageTokenIds = Array.from(range(startIndex + 1, endIndex + 1));
   return currentPageTokenIds;
 });
 

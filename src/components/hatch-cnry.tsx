@@ -83,10 +83,10 @@ const HatchCnryDialog = () => {
                 {isSubmitting && <LinearProgress />}
                 <br />
                 <Button color="primary" disabled={isSubmitting} onClick={handleClose}>
-                {t`Cancel`}
+                  {t`Cancel`}
                 </Button>
                 <Button color="primary" disabled={isSubmitting} onClick={submitForm}>
-                {t`Hatch Cnry`}
+                  {t`Hatch Cnry`}
                 </Button>
               </Form>
             )}
