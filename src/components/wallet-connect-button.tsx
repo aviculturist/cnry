@@ -8,7 +8,7 @@ import { installWalletDialogIsOpenAtom } from '@store/ui/install-wallet-dialog-i
 
 const WalletConnectButton = () => {
   const { isSignedIn, handleSignIn, handleSignOut, isLoading, session } = useAuth();
-  const [open, setOpen] = useAtom(installWalletDialogIsOpenAtom);
+  const [, setOpen] = useAtom(installWalletDialogIsOpenAtom);
 
   useEffect(() => {
     session && setOpen(false);

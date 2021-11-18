@@ -7,10 +7,9 @@ import IconButton from '@mui/material/IconButton';
 import { searchDialogIsOpenAtom } from '@store/ui/search-dialog-is-open';
 import SearchDialog from '@components/search/search-dialog';
 import SafeSuspense from '@components/safe-suspense';
-import SearchIcon from '@mui/icons-material/Search';
 
 const ToggleSearchDialogIconButton = () => {
-  const [open, setOpen] = useAtom(searchDialogIsOpenAtom);
+  const [, setOpen] = useAtom(searchDialogIsOpenAtom);
 
   const handleClickOpen = () => {
     setOpen(true);

@@ -8,7 +8,7 @@ import SetCnryStatementForm from '@components/forms/set-cnry-statement-form';
 import { cnryGetMetadataAtom } from '@store/cnry';
 
 export const SetCnryStatementDialog = ({ tokenId }: { tokenId: number }) => {
-  const [cnryMetadata, dispatchCnryMetadata] = useAtom(cnryGetMetadataAtom(tokenId));
+  const [cnryMetadata] = useAtom(cnryGetMetadataAtom(tokenId));
   const [setCnryStatementDialogIsOpen, setSetCnryStatementDialogisOpen] = useAtom(
     anyCnryStatementDialogIsOpenAtomFamily(tokenId)
   );

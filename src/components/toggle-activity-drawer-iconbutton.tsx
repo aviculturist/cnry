@@ -9,7 +9,7 @@ import useTransactionsDrawerIsOpen from '@hooks/use-transactions-drawer-is-open'
 import { t } from '@lingui/macro';
 
 const ToggleActivityDrawerIconButton = () => {
-  const { transactionsDrawerIsOpen, setTransactionsDrawerIsOpen } = useTransactionsDrawerIsOpen();
+  const { setTransactionsDrawerIsOpen } = useTransactionsDrawerIsOpen();
   const handleToggleDrawer = (event: React.MouseEvent<HTMLElement>) => {
     void setTransactionsDrawerIsOpen(true);
   };

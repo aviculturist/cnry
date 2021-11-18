@@ -1,6 +1,4 @@
 import * as React from 'react';
-import { useEffect } from 'react';
-import { t } from '@lingui/macro';
 import { useAtom } from 'jotai';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
@@ -9,7 +7,7 @@ import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import LaunchIcon from '@mui/icons-material/Launch';
 import { currentStacksExplorerState, currentChainState } from '@store/helpers';
-import { userPendingTxIdsAtom, userPendingTxAtom, userPendingTxsCountAtom } from '@store/cnry';
+import { userPendingTxIdsAtom, userPendingTxAtom } from '@store/cnry';
 import { truncateMiddle } from '@utils/common';
 
 const SingleTransactionSnackbar = ({ txid }: { txid: string }) => {
@@ -68,7 +66,7 @@ const SingleTransactionSnackbar = ({ txid }: { txid: string }) => {
 
 // TODO: not entirely sure if looping through all pending transactions is the best pattern
 const TransactionSnackbars = () => {
-  const [pendingTxIds, setPendingTxIds] = useAtom(userPendingTxIdsAtom);
+  const [pendingTxIds] = useAtom(userPendingTxIdsAtom);
   return (
     <div>
       {pendingTxIds.map(item => (
