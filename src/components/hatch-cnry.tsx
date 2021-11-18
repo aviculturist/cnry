@@ -5,14 +5,13 @@ import { Formik, Form, Field } from 'formik';
 import { TextField } from 'formik-mui';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
+//import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import LinearProgress from '@mui/material/LinearProgress';
 import { hatchCnryDialogIsOpenAtom } from '@store/ui/hatch-cnry-dialog-is-open';
 import useHatch from '@hooks/use-hatch';
-import { Network } from '@store/networks';
 
 const HatchCnryDialog = () => {
   const [open, setOpen] = useAtom(hatchCnryDialogIsOpenAtom);
@@ -28,9 +27,9 @@ const HatchCnryDialog = () => {
   return (
     <>
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Hatch Cnry</DialogTitle>
+        <DialogTitle>{t`Hatch Cnry`}</DialogTitle>
         <DialogContent>
-          <DialogContentText>Hatch a warrant canary using this form.</DialogContentText>
+          <DialogContentText>{t`Hatch a warrant canary using this form.`}</DialogContentText>
           <Formik
             initialValues={{
               name: '',
@@ -39,10 +38,10 @@ const HatchCnryDialog = () => {
             validate={values => {
               const errors: Partial<{ name: string; statement: string }> = {};
               if (!values.name) {
-                errors.name = 'Required';
+                errors.name = t`Required`;
               }
               if (!values.statement) {
-                errors.statement = 'Required';
+                errors.statement = t`Required`;
               }
 
               return errors;
@@ -69,7 +68,7 @@ const HatchCnryDialog = () => {
                   label="Name"
                   variant="outlined"
                   fullWidth
-                  placeholder="My Stacks Node"
+                  placeholder={t`My Stacks Node`}
                 />
                 <br />
                 <Field
@@ -79,15 +78,15 @@ const HatchCnryDialog = () => {
                   name="statement"
                   variant="outlined"
                   fullWidth
-                  placeholder="We have not been approached by the FBI"
+                  placeholder={t`We have not been approached by the FBI`}
                 />
                 {isSubmitting && <LinearProgress />}
                 <br />
                 <Button color="primary" disabled={isSubmitting} onClick={handleClose}>
-                  Cancel
+                {t`Cancel`}
                 </Button>
                 <Button color="primary" disabled={isSubmitting} onClick={submitForm}>
-                  Hatch Cnry
+                {t`Hatch Cnry`}
                 </Button>
               </Form>
             )}

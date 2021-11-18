@@ -1,5 +1,4 @@
 import React from 'react';
-import { useAtom } from 'jotai';
 import { t } from '@lingui/macro';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
@@ -8,7 +7,6 @@ import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import Box from '@mui/system/Box';
 import useSetCnryName from '@hooks/use-set-cnry-name';
-import { anyCnryNameDialogIsOpenAtomFamily } from '@store/ui/set-cnry-name-dialog-is-open';
 const validationSchema = yup.object({
   name: yup.string().required(t`A name is required`),
 });

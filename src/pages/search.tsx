@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { NextPage } from 'next';
 import { GetStaticPropsContext } from 'next';
-import { useRouter } from 'next/router';
 import { GetQueries, getStaticQueryProps } from 'jotai-query-toolkit/nextjs';
 import { wrapWithMicroStacks } from '@micro-stacks/nextjs';
 import { StacksMainnet, StacksTestnet, StacksMocknet } from 'micro-stacks/network';
@@ -31,7 +30,7 @@ import {
 } from '@stacks/stacks-blockchain-api-types';
 
 import { useAtom } from 'jotai';
-import { queryAtom, searchResultsAtom } from '@store/search';
+import { searchResultsAtom } from '@store/search';
 import SafeSuspense from '@components/safe-suspense';
 import Skeleton from '@mui/material/Skeleton';
 

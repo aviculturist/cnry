@@ -19,8 +19,8 @@ const validationSchema = yup.object({
 });
 
 const HatchCnryForm = () => {
-  const { isSignedIn, handleSignIn, handleSignOut, isLoading, session } = useAuth();
-  const { installWalletDialogIsOpen, setInstallWalletDialogIsOpen } = useInstallWalletDialog();
+  const { isSignedIn, handleSignIn, session } = useAuth();
+  const { setInstallWalletDialogIsOpen } = useInstallWalletDialog();
   const handleHatch = useHatch();
   const formik = useFormik({
     initialValues: {

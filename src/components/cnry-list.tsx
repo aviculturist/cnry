@@ -25,7 +25,7 @@ import { PendingCnryCardFromTxId } from '@components/cnry-card';
 import CnryCard from '@components/cnry-card';
 import HatchCnryForm from '@components/forms/hatch-cnry-form';
 import SafeSuspense from '@components/safe-suspense';
-import { userPendingTxIdsAtom, userPendingTxsCountAtom } from '@store/cnry';
+import { userPendingTxIdsAtom } from '@store/cnry';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -54,8 +54,8 @@ const TabPanel = (props: TabPanelProps) => {
 };
 
 const CnryList = () => {
-  const { isSignedIn, handleSignIn, handleSignOut, isLoading, session } = useAuth();
-  const [myNftTransactions, dispatchMyNftTransactions] = useAtom(myNftTransactionsAtom);
+  const { session } = useAuth();
+  const [, dispatchMyNftTransactions] = useAtom(myNftTransactionsAtom);
   const [myWatchingTokenIds, dispatchMyWatchingTokenIds] = useAtom(myWatchingTokenIdsAtom);
   const [userPendingTxids] = useAtom(cnryUserPendingTxIdsAtom);
   const [cnryAllTokenIds] = useAtom(browseCurrentPageAllCnryTokenIdsAtom);
@@ -63,7 +63,7 @@ const CnryList = () => {
   const [userHasCnrys] = useAtom(userHasCnrysAtom);
   const [userIsWatchingCnrys] = useAtom(userIsWatchingCnrysAtom);
   const [myCnryIds] = useAtom(myCnryTokenIdsAtom);
-  const [pendingTxIds, setPendingTxIds] = useAtom(userPendingTxIdsAtom);
+  const [pendingTxIds] = useAtom(userPendingTxIdsAtom);
 
   // immediately refetch user queries upon signin/signout/transaction
   useEffect(() => {

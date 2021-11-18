@@ -8,7 +8,6 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { truncateMiddle } from '@utils/common';
-import { noneCV } from '@stacks/transactions';
 import { toDate, toRelativeTime, humanizeDuration } from '@utils/time';
 
 function createData(name: string, value: string) {
@@ -29,7 +28,7 @@ const CnryMetadataTable = ({ cnry }: { cnry: any }) => {
   const hatchedDate = toDate(cnry.hatchedTimestamp.value * 1000);
   const keepaliveTimestamp = cnry.keepaliveTimestamp.value * 1000;
   const keepaliveExpiry = cnry.keepaliveExpiry.value * 1000;
-  const daysRemainingUntilExpiry = toRelativeTime(keepaliveTimestamp + keepaliveExpiry);
+  //const daysRemainingUntilExpiry = toRelativeTime(keepaliveTimestamp + keepaliveExpiry);
   const expiresDate = toDate(keepaliveTimestamp + keepaliveExpiry);
   const lastKeepalive = toDate(keepaliveTimestamp);
 
@@ -38,7 +37,7 @@ const CnryMetadataTable = ({ cnry }: { cnry: any }) => {
     createData('Uri', `${cnry.cnryUri.value}`),
     createData('Proof', `${cnry.cnryProof.value}`),
     createData('Keeper', `${truncateMiddle(cnry.cnryKeeper.value)}`),
-    createData('Expires', `${expiresDate}`),
+    createData('Expires', `${expiresDate}`), // TODO: after expired
     createData('Updated', `${lastKeepalive}`),
     createData('Frequency', `${humanizeDuration(keepaliveExpiry)}`),
     createData('Hatched', `${hatchedDate}`),

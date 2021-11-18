@@ -26,7 +26,7 @@
     "@mui/icons-material": "^5.1.1",
     "@mui/lab": "^5.0.0-alpha.55",
     "@mui/material": "^5.1.1",
-    "@mui/styled-engine": "npm:@mui/styled-engine-sc@latest",
+    "@mui/styled-engine": "npm:@mui/styled-engine-sc@next",
     "@mui/styled-engine-sc": "^5.0.4",
     "@mui/system": "^5.1.1",
     "dayjs": "^1.10.7",
@@ -49,7 +49,7 @@
     "yup": "^0.32.11"
   },
   "resolutions": {
-    "@mui/styled-engine": "npm:@mui/styled-engine-sc@latest"
+    "@mui/styled-engine": "npm:@mui/styled-engine-sc@next"
   },
   "eslintConfig": {
     "extends": [

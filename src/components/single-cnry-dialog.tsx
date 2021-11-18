@@ -11,17 +11,14 @@ import useSingleCnryDialogIsOpen from '@hooks/use-metadata-dialog-is-open';
 
 export const SingleCnryErrorDialog = () => {
   const tokenId = useIdQuery();
-  const {
-    singleCnryDialogIsOpen: metadataDialogIsOpen,
-    setSingleCnryDialogIsOpen: setMetadataDialogIsOpen,
-  } = useSingleCnryDialogIsOpen();
+  const { singleCnryDialogIsOpen } = useSingleCnryDialogIsOpen();
   const router = useRouter();
   const handleClose = () => {
     router.replace('./id={id}', './', { shallow: true });
   };
   return tokenId ? (
     <>
-      <Dialog fullWidth={true} maxWidth="xs" onClose={handleClose} open={metadataDialogIsOpen}>
+      <Dialog fullWidth={true} maxWidth="xs" onClose={handleClose} open={singleCnryDialogIsOpen}>
         <DialogTitle>{t`Cnry #{tokenId} Not Found`}</DialogTitle>
       </Dialog>
     </>
@@ -32,10 +29,7 @@ export const SingleCnryErrorDialog = () => {
 
 export const SingleCnryDialog = () => {
   const tokenId = useIdQuery();
-  const {
-    singleCnryDialogIsOpen: metadataDialogIsOpen,
-    setSingleCnryDialogIsOpen: setMetadataDialogIsOpen,
-  } = useSingleCnryDialogIsOpen();
+  const { singleCnryDialogIsOpen } = useSingleCnryDialogIsOpen();
   const router = useRouter();
   const handleClose = () => {
     // TODO: this is clumsy
@@ -45,7 +39,7 @@ export const SingleCnryDialog = () => {
   // TODO: add scrolling feature
   return tokenId !== undefined ? (
     <>
-      <Dialog fullWidth={true} maxWidth="sm" onClose={handleClose} open={metadataDialogIsOpen}>
+      <Dialog fullWidth={true} maxWidth="sm" onClose={handleClose} open={singleCnryDialogIsOpen}>
         <DialogTitle>Cnry #{tokenId}</DialogTitle>
         <Stack maxWidth="sm" sx={{ m: 'auto', p: 6 }}>
           <CnryCard tokenId={tokenId} />

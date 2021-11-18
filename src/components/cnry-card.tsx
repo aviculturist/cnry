@@ -25,7 +25,6 @@ import Avatar from '@mui/material/Avatar';
 import IconButton, { IconButtonProps } from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
-import OpenInNewOutlinedIcon from '@mui/icons-material/OpenInNewOutlined';
 import ShareIcon from '@mui/icons-material/Share';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Tooltip from '@mui/material/Tooltip';
@@ -46,7 +45,7 @@ import { toDate, toRelativeTime } from '@utils/time';
 import CnryMetadataTable from '@components/cnry-metadata-table';
 import EditCnryIconButton from '@components/edit-cnry-iconbutton';
 import useInstallWalletDialog from '@hooks/use-install-wallet-dialog';
-import { userPendingTxIdsAtom, userPendingTxsCountAtom } from '@store/cnry';
+import { userPendingTxIdsAtom } from '@store/cnry';
 
 const StyledBadge = styled(Badge)<BadgeProps>(({ theme }: { theme: any }) => ({
   '& .MuiBadge-badge': {
@@ -73,14 +72,13 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
 }));
 
 const PendingCnryCardFromTxId = ({ txid }: { txid: string }) => {
-  const [explorer] = useAtom(currentStacksExplorerState);
-  const [chain] = useAtom(currentChainState);
   const tx = useAtomValue(userPendingTxAtom(txid));
   const [pendingTxIds, setPendingTxIds] = useAtom(cnryUserPendingTxIdsAtom);
   const [expanded, setExpanded] = React.useState(false);
-  const [value, setValue] = useAtom(cnryListTabStateAtom);
+  const [, setValue] = useAtom(cnryListTabStateAtom);
 
   // Remove transactions from the pending list
+  // TODO: missing dependencies
   useEffect(() => {
     if (tx.txstatus === 'success') {
       const txs = pendingTxIds.filter(item => item !== txid);
@@ -191,9 +189,9 @@ const CnryCard = ({ tokenId }: { tokenId: number }) => {
   const keepaliveTimestamp = cnry.keepaliveTimestamp.value * 1000;
   const keepaliveExpiry = cnry.keepaliveExpiry.value * 1000;
   const daysRemainingUntilExpiry = toRelativeTime(keepaliveTimestamp + keepaliveExpiry);
-  const { isSignedIn, handleSignIn, handleSignOut, isLoading, session } = useAuth();
-  const { installWalletDialogIsOpen, setInstallWalletDialogIsOpen } = useInstallWalletDialog();
-  const [pendingTxIds, setPendingTxIds] = useAtom(userPendingTxIdsAtom);
+  const { isSignedIn, handleSignIn, session } = useAuth();
+  const { setInstallWalletDialogIsOpen } = useInstallWalletDialog();
+  const [pendingTxIds] = useAtom(userPendingTxIdsAtom);
 
   useEffect(() => {
     // fetch latest data

@@ -9,7 +9,6 @@ import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import Typography from '@mui/material/Typography';
 import BitcoinBlockHeightButton from '@components/bitcoin-block-height-button';
 import StacksChainTipButton from '@components/stacks-chain-tip-button';
 import NetworkOfflineSnackbar from '@components/network-offline-snackbar';

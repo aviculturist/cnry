@@ -6,7 +6,7 @@ import { StacksMainnet, StacksRegtest, StacksMocknet, StacksTestnet } from 'micr
 
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
-import DialogContent from '@mui/material/DialogContent';
+//import DialogContent from '@mui/material/DialogContent';
 import Avatar from '@mui/material/Avatar';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -27,11 +27,7 @@ import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import AddNetworkDialog from '@components/add-network-dialog';
 import { useNetworks } from '@hooks/use-networks';
 import { Network } from '@store/networks';
-import {
-  anyNetworkStatusAtom,
-  anyNetworkIsLoadingFamily,
-  currentNetworkIndexAtom,
-} from '@store/networks';
+import { anyNetworkStatusAtom, anyNetworkIsLoadingFamily } from '@store/networks';
 import { networkDialogIsOpenAtom } from '@store/ui/network-dialog-is-open';
 import { addNetworkDialogIsOpenAtom } from '@store/ui/add-network-dialog-is-open';
 import SafeSuspense from '@components/safe-suspense';
@@ -67,7 +63,7 @@ const NetworkListItem = ({ network, index }: { network: any; index: number }) =>
     handleRemoveNetwork,
   } = useNetworks();
   const { handleSetNetwork } = useNetwork();
-  const [open, setOpen] = useAtom(networkDialogIsOpenAtom);
+  const [, setOpen] = useAtom(networkDialogIsOpenAtom);
   const [anyStatus, dispatchAnyStatus] = useAtom(anyNetworkStatusAtom(network.name));
   const color = anyStatus.status === 'ready' ? 'success' : 'warning';
   const isLoadingFamily = anyNetworkIsLoadingFamily(network);
@@ -164,17 +160,8 @@ const NetworkListItem = ({ network, index }: { network: any; index: number }) =>
 };
 const SelectNetworkDialog = () => {
   const [networkDialogIsOpen, setNetworkDialogIsOpen] = useAtom(networkDialogIsOpenAtom);
-  const [addNetworkDialogIsOpen, setAddNetworkDialogIsOpen] = useAtom(addNetworkDialogIsOpenAtom);
-  const {
-    networks,
-    setCustomNetworks,
-    currentNetworkIndex,
-    setCurrentNetworkIndex,
-    //isSwitching,
-    handleUpdateNetworkIndex,
-    handleAddNetwork,
-    handleRemoveNetwork,
-  } = useNetworks();
+  const [, setAddNetworkDialogIsOpen] = useAtom(addNetworkDialogIsOpenAtom);
+  const { networks } = useNetworks();
 
   const handleClose = () => {
     setNetworkDialogIsOpen(false);
