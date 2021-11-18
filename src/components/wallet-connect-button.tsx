@@ -14,13 +14,35 @@ const WalletConnectButton = () => {
     session && setOpen(false);
   }, [session, setOpen]);
 
+  // prevents wipeout of localStorage upon signout (by @micro-stacks/react)
+  const handleHandleSignOut = () => {
+    const darkMode = localStorage.getItem('darkMode') || '';
+    const customNetworks = localStorage.getItem('customNetworks') || '';
+    const currentNetworkIndex = localStorage.getItem('currentNetworkIndex') || '';
+    const locale = localStorage.getItem('locale') || '';
+
+    handleSignOut();
+
+    if (darkMode !== '') {
+      localStorage.setItem('darkMode', darkMode);
+    }
+    if (customNetworks !== '') {
+      localStorage.setItem('customNetworks', customNetworks);
+    }
+    if (currentNetworkIndex !== '') {
+      localStorage.setItem('currentNetworkIndex', currentNetworkIndex);
+    }
+    if (locale !== '') {
+      localStorage.setItem('locale', locale);
+    }
+  };
   return (
     <Button
       variant="contained"
       color="primary"
       onClick={
         isSignedIn
-          ? () => handleSignOut()
+          ? () => handleHandleSignOut()
           : () => {
               try {
                 // TODO: fix coming upstream
