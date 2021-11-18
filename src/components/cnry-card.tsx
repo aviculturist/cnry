@@ -24,7 +24,8 @@ import Collapse from '@mui/material/Collapse';
 import Avatar from '@mui/material/Avatar';
 import IconButton, { IconButtonProps } from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import FavoriteIcon from '@mui/icons-material/Favorite';
+import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
+import OpenInNewOutlinedIcon from '@mui/icons-material/OpenInNewOutlined';
 import ShareIcon from '@mui/icons-material/Share';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Tooltip from '@mui/material/Tooltip';
@@ -45,6 +46,7 @@ import { toDate, toRelativeTime } from '@utils/time';
 import CnryMetadataTable from '@components/cnry-metadata-table';
 import EditCnryIconButton from '@components/edit-cnry-iconbutton';
 import useInstallWalletDialog from '@hooks/use-install-wallet-dialog';
+import { userPendingTxIdsAtom, userPendingTxsCountAtom } from '@store/cnry';
 
 const StyledBadge = styled(Badge)<BadgeProps>(({ theme }: { theme: any }) => ({
   '& .MuiBadge-badge': {
@@ -123,7 +125,7 @@ const PendingCnryCardFromTxId = ({ txid }: { txid: string }) => {
       </CardContent>
       <CardActions disableSpacing>
         <IconButton disabled aria-label="watch">
-          <FavoriteIcon />
+          <VisibilityOutlinedIcon />
         </IconButton>
         <IconButton disabled aria-label="share">
           <ShareIcon fontSize="small" />
@@ -191,6 +193,15 @@ const CnryCard = ({ tokenId }: { tokenId: number }) => {
   const daysRemainingUntilExpiry = toRelativeTime(keepaliveTimestamp + keepaliveExpiry);
   const { isSignedIn, handleSignIn, handleSignOut, isLoading, session } = useAuth();
   const { installWalletDialogIsOpen, setInstallWalletDialogIsOpen } = useInstallWalletDialog();
+  const [pendingTxIds, setPendingTxIds] = useAtom(userPendingTxIdsAtom);
+
+  useEffect(() => {
+    // fetch latest data
+    const refetch = () => {
+      dispatchCnryWatchCount({ type: 'refetch' });
+    };
+    refetch();
+  }, [pendingTxIds, dispatchCnryWatchCount]);
 
   const handleCopyToClipboard = ({ link }: { link: string }) => {
     const uri = `${typeof window !== 'undefined' ? window.location.href.split('#')[0] : ''}${link}`;
@@ -201,6 +212,7 @@ const CnryCard = ({ tokenId }: { tokenId: number }) => {
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
+
   return cnry ? (
     <Card sx={{ m: 'auto', width: 292, maxWidth: 292 }}>
       <CardHeader
@@ -274,7 +286,7 @@ const CnryCard = ({ tokenId }: { tokenId: number }) => {
               color="secondary"
               badgeContent={cnryWatchCount && cnryWatchCount > 0 ? cnryWatchCount : 0}
             >
-              <FavoriteIcon />
+              <VisibilityOutlinedIcon />
             </StyledBadge>
           </IconButton>
         </Tooltip>
@@ -298,7 +310,7 @@ const CnryCard = ({ tokenId }: { tokenId: number }) => {
           </IconButton>
         </Tooltip>
         {userStxAddress === cnry.cnryKeeper.value ? (
-          <Tooltip title={t`Run keepalive`}>
+          <Tooltip title={t`Publish keepalive`}>
             <IconButton
               aria-label="keepalive"
               onClick={() => handleKeepalive({ tokenId: cnry.index.value })}

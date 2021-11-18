@@ -56,7 +56,7 @@ const SearchFavorites = () => {
             primary={<React.Fragment>{searchFavorites[item].primary_description}</React.Fragment>}
             secondary={
               <React.Fragment>
-                {searchFavorites[item].secondary_description}{' '}
+                {searchFavorites[item].secondary_description}
                 <RelativeTimeFragment timestamp={searchFavorites[item].timestamp} />
               </React.Fragment>
             }

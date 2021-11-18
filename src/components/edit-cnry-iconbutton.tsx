@@ -11,17 +11,30 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import { editCnryMenuAnchorElAtom, editCnryMenuIsOpenAtom } from '@store/ui/edit-cnry-menu-is-open';
 import { anyCnryNameDialogIsOpenAtomFamily } from '@store/ui/set-cnry-name-dialog-is-open';
+import { anyCnryStatementDialogIsOpenAtomFamily } from '@store/ui/set-cnry-statement-dialog-is-open';
+
 import { SetCnryNameDialog } from '@components/set-cnry-name-dialog';
+import { SetCnryStatementDialog } from '@components/set-cnry-statement-dialog';
+
+import { cnryGetMetadataAtom } from '@store/cnry';
 
 const EditCnryMenu = ({ tokenId, cnryName }: { tokenId: number; cnryName: string }) => {
+  const [cnry] = useAtom(cnryGetMetadataAtom(tokenId));
   const [anchorEl, setAnchorEl] = useAtom(editCnryMenuAnchorElAtom(tokenId));
   const [menuIsOpen, setMenuIsOpen] = useAtom(editCnryMenuIsOpenAtom(tokenId));
   const [setCnryNameDialogIsOpen, setSetCnryNameDialogIsOpen] = useAtom(
     anyCnryNameDialogIsOpenAtomFamily(tokenId)
   );
+  const [setCnryStatementDialogIsOpen, setSetCnryStatementDialogIsOpen] = useAtom(
+    anyCnryStatementDialogIsOpenAtomFamily(tokenId)
+  );
   const handleOpenSetNameDialog = () => {
     setMenuIsOpen(false);
     setSetCnryNameDialogIsOpen(true);
+  };
+  const handleOpenSetStatementDialog = () => {
+    setMenuIsOpen(false);
+    setSetCnryStatementDialogIsOpen(true);
   };
   const handleClose = () => {
     setAnchorEl(null);
@@ -49,12 +62,16 @@ const EditCnryMenu = ({ tokenId, cnryName }: { tokenId: number; cnryName: string
         }}
       >
         <MenuList dense>
-          <MenuItem key={tokenId} onClick={handleOpenSetNameDialog}>
+          <MenuItem key={`name-${tokenId}`} onClick={handleOpenSetNameDialog}>
             <ListItemText>Edit Cnry Name</ListItemText>
+          </MenuItem>
+          <MenuItem key={`statement-${tokenId}`} onClick={handleOpenSetStatementDialog}>
+            <ListItemText>Edit Cnry Statement</ListItemText>
           </MenuItem>
         </MenuList>
       </Menu>
-      <SetCnryNameDialog key={tokenId} tokenId={tokenId} cnryName={cnryName} />
+      <SetCnryNameDialog tokenId={tokenId} cnryName={cnryName} />
+      <SetCnryStatementDialog tokenId={tokenId} />
     </>
   );
 };

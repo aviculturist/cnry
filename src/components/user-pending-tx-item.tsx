@@ -62,7 +62,7 @@ const UserPendingTxItem = ({ txid }: { txid: string }) => {
         <ListItemText
           primary={
             <React.Fragment>
-              {tx.function}{' '}
+              {tx.function}
               <IconButton
                 target="_blank"
                 href={`${explorer}/txid/${tx.txid}?chain=${chain}`}

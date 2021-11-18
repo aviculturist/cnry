@@ -5,7 +5,7 @@ import duration from 'dayjs/plugin/duration';
 
 dayjs.extend(relativeTime);
 dayjs.extend(LocalizedFormat);
-dayjs.extend(duration)
+dayjs.extend(duration);
 
 export function toRelativeTime(ts: number): string {
   return dayjs(ts).fromNow();
@@ -15,6 +15,6 @@ export function toDate(ts: number): string {
   return dayjs(ts).format('ll');
 }
 
-export function humanizeDuration(ts:number): string {
+export function humanizeDuration(ts: number): string {
   return dayjs.duration(ts).humanize();
 }

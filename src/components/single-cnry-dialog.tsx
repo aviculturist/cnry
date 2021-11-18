@@ -7,9 +7,14 @@ import CnryCard from '@components/cnry-card';
 import { useIdQuery } from '@hooks/use-queries';
 import useSingleCnryDialogIsOpen from '@hooks/use-metadata-dialog-is-open';
 
+// TODO: automatically expand the dropdown
+
 export const SingleCnryErrorDialog = () => {
   const tokenId = useIdQuery();
-  const { singleCnryDialogIsOpen: metadataDialogIsOpen, setSingleCnryDialogIsOpen: setMetadataDialogIsOpen } = useSingleCnryDialogIsOpen();
+  const {
+    singleCnryDialogIsOpen: metadataDialogIsOpen,
+    setSingleCnryDialogIsOpen: setMetadataDialogIsOpen,
+  } = useSingleCnryDialogIsOpen();
   const router = useRouter();
   const handleClose = () => {
     router.replace('./id={id}', './', { shallow: true });
@@ -27,7 +32,10 @@ export const SingleCnryErrorDialog = () => {
 
 export const SingleCnryDialog = () => {
   const tokenId = useIdQuery();
-  const { singleCnryDialogIsOpen: metadataDialogIsOpen, setSingleCnryDialogIsOpen: setMetadataDialogIsOpen } = useSingleCnryDialogIsOpen();
+  const {
+    singleCnryDialogIsOpen: metadataDialogIsOpen,
+    setSingleCnryDialogIsOpen: setMetadataDialogIsOpen,
+  } = useSingleCnryDialogIsOpen();
   const router = useRouter();
   const handleClose = () => {
     // TODO: this is clumsy

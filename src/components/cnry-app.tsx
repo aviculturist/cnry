@@ -7,6 +7,7 @@ import Stack from '@mui/material/Stack';
 import CircularProgress from '@mui/material/CircularProgress';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
+import Skeleton from '@mui/material/Skeleton';
 import SafeSuspense from '@components/safe-suspense';
 import { useIdQuery } from '@hooks/use-queries';
 import { cnryGetMetadataAtom } from '@store/cnry';
@@ -42,7 +43,13 @@ const CnryApp = () => {
     <>
       <main style={{ width: '100%' }}>
         <Stack sx={{ mt: 2 }} spacing={2}>
-          <SafeSuspense fallback={<CircularProgress />}>
+          <SafeSuspense
+            fallback={
+              <>
+                <Skeleton sx={{ m: 'auto' }} variant="rectangular" width={400} height={200} />
+              </>
+            }
+          >
             <CnryList />
           </SafeSuspense>
           <Box>
@@ -50,7 +57,7 @@ const CnryApp = () => {
               <MaintenanceAlert />
               <Alert severity="info">
                 <AlertTitle>{t`About Cnry`}</AlertTitle>
-                {t`Cnry makes it easy to publish and keep track of warrant canaries.`}{' '}
+                {t`Cnry makes it easy to publish and keep track of warrant canaries. Transactions settle on Bitcoin via Stacks.`}
                 <strong>
                   <a
                     rel="noreferrer"

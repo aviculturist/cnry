@@ -17,7 +17,7 @@ export const SetCnryNameDialog = ({ tokenId, cnryName }: { tokenId: number; cnry
   return (
     <>
       <Dialog fullWidth={true} maxWidth="sm" onClose={handleClose} open={setCnryNameDialogIsOpen}>
-        <DialogTitle>{t`Edit Cnry Name`}</DialogTitle>
+        <DialogTitle>{t`Edit Name`}</DialogTitle>
         <Stack maxWidth="sm" sx={{ m: 'auto', p: 6 }}>
           <SetCnryNameForm key={tokenId} tokenId={tokenId} cnryName={cnryName} />
         </Stack>

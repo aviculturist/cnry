@@ -17,8 +17,6 @@ const SingleTransactionSnackbar = ({ txid }: { txid: string }) => {
   const [tx, setTx] = useAtom(userPendingTxAtom(txid));
   const [explorer] = useAtom(currentStacksExplorerState);
   const [chain] = useAtom(currentChainState);
-  const [pendingTxIds, setPendingTxIds] = useAtom(userPendingTxIdsAtom);
-  const [userPendingTxsCount] = useAtom(userPendingTxsCountAtom);
 
   const handleClose = (event: React.SyntheticEvent | React.MouseEvent, reason?: string) => {
     if (reason === 'clickaway') {

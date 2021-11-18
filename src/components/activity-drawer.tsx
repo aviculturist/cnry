@@ -6,7 +6,11 @@ import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
 import ListSubheader from '@mui/material/ListSubheader';
 import useTransactionsDrawerIsOpen from '@hooks/use-transactions-drawer-is-open';
-import { cnryContractTransactionIdsAtom, userPendingTxIdsAtom, userPendingTxAtom  } from '@store/cnry';
+import {
+  cnryContractTransactionIdsAtom,
+  userPendingTxIdsAtom,
+  userPendingTxAtom,
+} from '@store/cnry';
 import UserPendingTxItem from '@components/user-pending-tx-item';
 import TxItem from '@components/tx-item';
 

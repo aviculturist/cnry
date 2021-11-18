@@ -2,10 +2,8 @@ import * as React from 'react';
 import { useEffect } from 'react';
 import { t } from '@lingui/macro';
 import { useAtom } from 'jotai';
-import { ChainID } from 'micro-stacks/common';
-import { networkAtom, userStxAddressesAtom } from '@micro-stacks/react';
+import { useAuth } from '@micro-stacks/react';
 import Box from '@mui/material/Box';
-import List from '@mui/material/List';
 import Stack from '@mui/material/Stack';
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
@@ -13,17 +11,21 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Skeleton from '@mui/material/Skeleton';
-import { cnryUserPendingTxIdsAtom } from '@store/cnry';
 import {
+  myNftTransactionsAtom,
+  cnryUserPendingTxIdsAtom,
   myCnryTokenIdsAtom,
-  watchingTokenIdsAtom,
+  myWatchingTokenIdsAtom,
   browseCurrentPageAllCnryTokenIdsAtom,
+  userHasCnrysAtom,
+  userIsWatchingCnrysAtom,
 } from '@store/cnry';
 import cnryListTabStateAtom from '@store/ui/cnry-list-tab-state';
-import { PendingCnryCardFromTxId, CnryCardFromTxId } from '@components/cnry-card';
+import { PendingCnryCardFromTxId } from '@components/cnry-card';
 import CnryCard from '@components/cnry-card';
 import HatchCnryForm from '@components/forms/hatch-cnry-form';
 import SafeSuspense from '@components/safe-suspense';
+import { userPendingTxIdsAtom, userPendingTxsCountAtom } from '@store/cnry';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -52,33 +54,34 @@ const TabPanel = (props: TabPanelProps) => {
 };
 
 const CnryList = () => {
-  const [network] = useAtom(networkAtom);
-  const chain = network?.chainId === ChainID.Mainnet ? 'mainnet' : 'testnet';
-  const [userStxAddresses] = useAtom(userStxAddressesAtom);
-  const userStxAddress = userStxAddresses?.[chain] || '';
+  const { isSignedIn, handleSignIn, handleSignOut, isLoading, session } = useAuth();
+  const [myNftTransactions, dispatchMyNftTransactions] = useAtom(myNftTransactionsAtom);
+  const [myWatchingTokenIds, dispatchMyWatchingTokenIds] = useAtom(myWatchingTokenIdsAtom);
   const [userPendingTxids] = useAtom(cnryUserPendingTxIdsAtom);
-  const [myCnrysIds] = useAtom(myCnryTokenIdsAtom);
   const [cnryAllTokenIds] = useAtom(browseCurrentPageAllCnryTokenIdsAtom);
-  const [watcherUserTokenIds] = useAtom(watchingTokenIdsAtom(userStxAddress));
   const [value, setValue] = useAtom(cnryListTabStateAtom);
+  const [userHasCnrys] = useAtom(userHasCnrysAtom);
+  const [userIsWatchingCnrys] = useAtom(userIsWatchingCnrysAtom);
+  const [myCnryIds] = useAtom(myCnryTokenIdsAtom);
+  const [pendingTxIds, setPendingTxIds] = useAtom(userPendingTxIdsAtom);
 
-  const userHasCnrys = myCnrysIds === undefined || myCnrysIds.length == 0 ? false : true;
-  const userHasWatching =
-    watcherUserTokenIds === undefined || watcherUserTokenIds.length == 0 ? false : true;
+  // immediately refetch user queries upon signin/signout/transaction
+  useEffect(() => {
+    // fetch latest data
+    const refetch = () => {
+      dispatchMyNftTransactions({ type: 'refetch' });
+      dispatchMyWatchingTokenIds({ type: 'refetch' });
+    };
+    refetch();
+  }, [dispatchMyNftTransactions, session, pendingTxIds, dispatchMyWatchingTokenIds]);
 
-  // on first page render
   useEffect(() => {
     if (userHasCnrys) {
       setValue('two');
     } else {
       setValue('one');
     }
-  }, []);
-
-  // dispatch query when tx succeeds?
-  useEffect(() => {
-    //
-  }, []);
+  }, [setValue, userHasCnrys]);
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
@@ -104,7 +107,7 @@ const CnryList = () => {
 
   const verticalMyCnrysList = () => (
     <ImageList variant="masonry" cols={2} sx={{ mt: 0 }}>
-      {myCnrysIds.map(tokenId => (
+      {myCnryIds.map(tokenId => (
         <ImageListItem sx={{ width: '100%', m: 'auto' }} key={tokenId}>
           <CnryCard key={tokenId} tokenId={tokenId} />
         </ImageListItem>
@@ -114,7 +117,7 @@ const CnryList = () => {
 
   const verticalWatchingCnrysList = () => (
     <ImageList variant="masonry" cols={2} sx={{ mt: 0 }}>
-      {watcherUserTokenIds.map(tokenId => (
+      {myWatchingTokenIds.map(tokenId => (
         <ImageListItem sx={{ width: '100%', m: 'auto' }} key={tokenId}>
           <CnryCard key={tokenId} tokenId={tokenId} />
         </ImageListItem>
@@ -135,21 +138,27 @@ const CnryList = () => {
     <div>
       <Tabs value={value} onChange={handleChange} centered>
         <Tab value="one" label={t`New`} />
-        <Tab value="two" label={t`My Cnrys`} disabled={userHasCnrys ? false : true} />
-        <Tab value="three" label={t`Watching`} disabled={userHasWatching ? false : true} />
+        <Tab value="two" label={t`My Cnrys`} disabled={!userHasCnrys} />
+        <Tab value="three" label={t`Watching`} disabled={!userIsWatchingCnrys} />
         <Tab value="four" label={t`Browse`} />
       </Tabs>
       <TabPanel value={value} index="one">
         <SafeSuspense
           fallback={
             <>
-              <Skeleton sx={{ m: 'auto' }} variant="rectangular" width={400} height={200} />
+              <Skeleton sx={{ m: 'auto' }} variant="rectangular" width={600} height={400} />
             </>
           }
         >
           <HatchCnryForm />
           <Stack maxWidth="sm" sx={{ m: 'auto' }}>
-            <SafeSuspense fallback={<CircularProgress sx={{ m: 'auto' }} />}>
+            <SafeSuspense
+              fallback={
+                <>
+                  <Skeleton sx={{ m: 'auto' }} variant="rectangular" width={600} height={300} />
+                </>
+              }
+            >
               {horizontalMyPendingCnrysList()}
             </SafeSuspense>
           </Stack>
@@ -173,10 +182,42 @@ const CnryList = () => {
         <Stack maxWidth="sm" sx={{ m: 'auto' }}>
           <SafeSuspense fallback={<CircularProgress sx={{ m: 'auto' }} />}>
             {verticalAllCnrysList()}
-          </SafeSuspense>{' '}
+          </SafeSuspense>
         </Stack>
       </TabPanel>
     </div>
   );
 };
 export default CnryList;
+
+// const tokenIds = txs?.nft_events
+// .filter(
+//   tx => tx.asset_identifier === `${cnryContract}::CNRY`
+//   // || tx.asset_identifier === `${contractAddress}.cnry::CNRY` // v1
+// )
+// .map(tx => {
+//   const content = tx.value.repr.replace(`u`, '');
+//   re
+// const verticalMyCnrysList = () => (
+//   <ImageList variant="masonry" cols={2} sx={{ mt: 0 }}>
+//     {accountTransactions
+//       .filter(
+//         tx =>
+//           (tx)?.tx_type === 'contract_call' &&
+//           tx?.contract_call.contract_id === cnryContract &&
+//           tx?.contract_call.function_name === 'hatch' &&
+//           tx?.tx_status === 'success'
+//       )
+//       //       .map(tx => {
+//       //         const content = (tx as ContractCallTransaction).tx_result.repr
+//       //           .replace(`(ok u`, '')
+//       //           .replace(`)`, '');
+//       //         return Number(content);
+//       //       });
+//       .map(tokenId => (
+//         <ImageListItem sx={{ width: '100%', m: 'auto' }} key={tokenId}>
+//           <CnryCard key={tokenId} tokenId={tokenId} />
+//         </ImageListItem>
+//       ))}
+//   </ImageList>
+// );

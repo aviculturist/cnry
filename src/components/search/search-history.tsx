@@ -70,7 +70,7 @@ const SearchHistory = () => {
             primary={<React.Fragment>{searchHistory[item].primary_description}</React.Fragment>}
             secondary={
               <React.Fragment>
-                {searchHistory[item].secondary_description}{' '}
+                {searchHistory[item].secondary_description}
                 <RelativeTimeFragment timestamp={searchHistory[item].timestamp} />
               </React.Fragment>
             }

@@ -28,7 +28,7 @@ const InstallWalletDialog = () => {
           </Grid>
           <Grid item xs={6}>
             <Typography sx={{ pb: 3 }}>
-            {t`To get started with Cnry you need to install and connect a web wallet.`}
+              {t`To get started with Cnry you need to install and connect a web wallet.`}
             </Typography>
             <Button
               endIcon={<ExitToAppIcon />}

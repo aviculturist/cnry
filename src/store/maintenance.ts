@@ -23,7 +23,6 @@ export const maintenanceModeAtom = atomFamilyWithQuery<string, any>(
     const userStxAddress = userStxAddresses?.[chain] || contractAddress; // bcuz when user is not logged in, queries fail
     const client = get(smartContractsClientAtom);
 
-
     try {
       const data = await client.callReadOnlyFunction({
         contractAddress,

@@ -24,22 +24,12 @@ import type {
 import { smartContractsClientAtom, accountsClientAtom, transactionsClientAtom } from '@store/api';
 import { currentCnryContractState, currentWatcherContractState } from '@store/helpers';
 import {
-  HATCH_FUNCTION,
   WATCH_FUNCTION,
   LASTID_FUNCTION,
   METADATA_FUNCTION,
   ISALIVE_FUNCTION,
 } from '@utils/constants';
 import { paginate, range } from '@utils/paginate';
-
-// a simple array of pending transaction ids
-export const userPendingTxIdsAtom = atom(Array<string>());
-
-// a derived atom that returns the number of pending transaction ids in the array
-export const userPendingTxsCountAtom = atom(get => {
-  const uptxa = get(userPendingTxIdsAtom);
-  return uptxa.length;
-});
 
 const DEFAULT_FETCH_OPTIONS: RequestInit = {
   referrer: 'no-referrer',
@@ -63,6 +53,15 @@ function isTokenTransferTransaction(
 ): tx is TokenTransferTransaction {
   return (tx as TokenTransferTransaction).burn_block_time !== undefined;
 }
+
+// a simple array of pending transaction ids
+export const userPendingTxIdsAtom = atom(Array<string>());
+
+// a derived atom that returns the number of pending transaction ids in the array
+export const userPendingTxsCountAtom = atom(get => {
+  const userPendingTxsIds = get(userPendingTxIdsAtom);
+  return userPendingTxsIds.length;
+});
 
 // An atomFamilyWithQuery for a specific transaction id
 // TODO: is there a way to find all the queries?
@@ -143,49 +142,104 @@ export const cnryUserPendingTxsCountAtom = atom(get => {
   return uptxa.length;
 });
 
-// TODO: this hard codes a 50 item limit to the query
-export const myCnryTokenIdsAtom = atom(get => {
-  const network = get(networkAtom);
-  const chain = network?.chainId === ChainID.Mainnet ? 'mainnet' : 'testnet';
-  const userStxAddresses = get(userStxAddressesAtom);
-  const cnryContract = get(currentCnryContractState);
-  const [contractAddress, contractName] = cnryContract.split('.');
-  const principal = userStxAddresses?.[chain] || contractAddress; // bcuz when user is not logged in, queries fail
-  const client = get(smartContractsClientAtom);
-  const networkUrl = network.getCoreApiUrl();
+// Get the user's first 50 NFT Transactions
+// limit: number;
+// offset: number;
+// total: number;
+// nft_events: NftEvent[];
+export const myNftTransactionsAtom = atomWithQuery<AddressNftListResponse>(
+  'my-nft-transactions',
+  async get => {
+    const network = get(networkAtom);
+    const chain = network?.chainId === ChainID.Mainnet ? 'mainnet' : 'testnet';
+    const userStxAddresses = get(userStxAddressesAtom);
+    const principal = userStxAddresses?.[chain];
+    const accountsClient = get(accountsClientAtom);
+    if (principal === undefined) return { limit: 0, offset: 0, total: 0, nft_events: [] };
 
-  const txs = get(accountTransactionsListClientAtom([principal, { limit: 50 }, networkUrl]));
-  try {
-    const tokenIds = txs?.pages[0].results
-      .filter(
-        tx =>
-          tx?.tx_type === 'contract_call' &&
-          tx?.contract_call.contract_id === cnryContract &&
-          tx?.contract_call.function_name === 'hatch' &&
-          tx?.tx_status === 'success'
-      )
-      .map(tx => {
-        const content = (tx as ContractCallTransaction).tx_result.repr
-          .replace(`(ok u`, '')
-          .replace(`)`, '');
-        return Number(content);
+    try {
+      const txs = await accountsClient.getAccountNft({
+        limit: 50,
+        principal: principal,
       });
-    return tokenIds === undefined ? [] : tokenIds;
-  } catch (_e) {
-    console.log(_e);
-  }
-  return [];
+      return txs as AddressNftListResponse;
+    } catch (_e) {
+      console.log(_e);
+    }
+    return { limit: 0, offset: 0, total: 0, nft_events: [] };
+  },
+  { refetchInterval: 300000 } // five minutes in milliseconds (5000 = 5 seconds)
+);
+
+// a derived atom that filters the myNftTransactionsAtom
+// to extract the CNRY tokenIds
+export const myCnryTokenIdsAtom = atom(get => {
+  const txs = get(myNftTransactionsAtom);
+  if (txs.total === 0) return [];
+  const cnryContract = get(currentCnryContractState);
+  const tokenIds = txs?.nft_events
+    .filter(
+      tx => tx.asset_identifier === `${cnryContract}::CNRY`
+      // || tx.asset_identifier === `${contractAddress}.cnry::CNRY` // v1
+    )
+    .map(tx => {
+      const content = tx.value.repr.replace(`u`, ''); // TODO: use CV deserializing?
+      return Number(content);
+    });
+  return tokenIds.length === 0 ? [] : tokenIds;
 });
 
+// a derived atom that filters the myNftTransactionsAtom
+// to extract the WATCHER tokenIds
+// export const myWatchedTokenIdsAtom = atom(get => {
+//   const txs = get(myNftTransactionsAtom);
+//   const watcherContract = get(currentWatcherContractState);
+//   console.log(txs);
+//   const watcherTokenIds = txs?.nft_events.filter(
+//     tx => tx.asset_identifier === `${watcherContract}::WATCHER`
+//     // || tx.asset_identifier === `${contractAddress}.watcher::WATCHER` // v1
+//   );
+//   // .map(tx => {
+//   //   const content = tx.value.repr.replace(`u`, '');
+//   //   return Number(content);
+//   // });
+//   //const final = await Promise.all(watcherTokenIds.map(async tokenId => txClient.getTransactionById({ txId })));
+
+//   console.log(watcherTokenIds);
+//   return watcherTokenIds;
+// });
+
+export const userHasCnrysAtom = atom(get => {
+  const myCnryIds = get(myCnryTokenIdsAtom);
+  const userHasCnrys = myCnryIds.length === 0 ? false : true;
+  return userHasCnrys;
+});
+
+export const userIsWatchingCnrysAtom = atom(get => {
+  const myWatchingCnryIds = get(myWatchingTokenIdsAtom);
+  const userIsWatchingCnrys = myWatchingCnryIds.length === 0 ? false : true;
+  return userIsWatchingCnrys;
+});
+
+// const userHasCnrys = myCnrysIds === undefined || myCnrysIds.length === 0 ? false : true;
+//   const userHasWatching =
+//     myWatchingTokenIds === undefined || myWatchingTokenIds.length === 0 ? false : true;
+
 // The token ids a user has watched
-// TODO: this only works for the last 50 total transactions
-export const watchingTokenIdsAtom = atomFamilyWithQuery<string, number[]>(
-  'cnry-user-watcher-token-ids',
-  async (get, principal) => {
+// TODO: this only works for the last 50 user transactions
+// This doesn't need to have a parameter, just grab the principal from currently sigend in user if applicable
+export const myWatchingTokenIdsAtom = atomWithQuery<number[]>(
+  'my-watching-token-ids',
+  async get => {
+    const network = get(networkAtom);
+    const chain = network?.chainId === ChainID.Mainnet ? 'mainnet' : 'testnet';
+    const userStxAddresses = get(userStxAddressesAtom);
+    const principal = userStxAddresses?.[chain] || '';
     const accountsClient = get(accountsClientAtom);
     const txClient = get(transactionsClientAtom);
     const cnryContract = get(currentCnryContractState);
     const watcherContract = get(currentWatcherContractState);
+    if (principal === '') return [];
 
     try {
       const txs = await accountsClient.getAccountTransactions({
@@ -217,7 +271,7 @@ export const watchingTokenIdsAtom = atomFamilyWithQuery<string, number[]>(
   { refetchInterval: 300000 } // five minutes in milliseconds (5000 = 5 seconds)
 ); // every minute
 
-// TODO: WIP
+// // TODO: WIP
 export const browseCurrentPageAtom = atom(1);
 export const browseCurrentPageAllCnryTokenIdsAtom = atom(get => {
   const totalItems = get(cnryLastIdAtom);
@@ -228,6 +282,7 @@ export const browseCurrentPageAllCnryTokenIdsAtom = atom(get => {
     pageSize: 10,
     maxPages: 10,
   });
+  // TODO: testnet indexes from 0
   const currentPageTokenIds = Array.from(range(1, totalItems));
   return currentPageTokenIds;
 });
@@ -262,71 +317,6 @@ export const cnryContractTransactionIdsAtom = atomWithQuery<string[]>(
   },
   { refetchInterval: 30000 } // thirty seconds in milliseconds (5000 = 5 seconds)
 );
-
-// export const cnryUserTokenIdsAtom = atomFamilyWithQuery<string, number[]>(
-//   'user-cnry-txs',
-//   async (get, principal) => {
-//     const accountsClient = get(accountsClientAtom);
-//     const cnryContract = get(currentCnryContractState);
-//     const [contractAddress, contractName] = cnryContract.split('.');
-//     try {
-//       const txs = await accountsClient.getAccountNft({
-//         limit: 50,
-//         principal: principal,
-//       });
-//       const tokenIds = txs.nft_events
-//         .filter(
-//           tx =>
-//             tx.asset_identifier === `${cnryContract}::CNRY` ||
-//             tx.asset_identifier === `${contractAddress}.cnry::CNRY`
-//         )
-//         .map(tx => {
-//           const content = tx.value.repr.replace(`u`, '');
-//           return Number(content);
-//         });
-//       return tokenIds;
-//     } catch (_e) {
-//       console.log(_e);
-//     }
-//     return [];
-//   },
-//   { refetchInterval: 300000 } // five minutes in milliseconds (5000 = 5 seconds)
-// );
-
-// // TODO: only grabs 50, convert to infinitequery
-// export const oldcnryUserTokenIdsAtom = atomFamilyWithQuery<string, number[]>(
-//   'user-cnry-token-ids',
-//   async (get, principal) => {
-//     const accountsClient = get(accountsClientAtom);
-//     const cnryContract = get(currentCnryContractState);
-
-//     try {
-//       const txs = await accountsClient.getAccountTransactions({
-//         limit: 50,
-//         principal: cnryContract,
-//       });
-//       const tokenIds = (txs as TransactionResults).results
-//         .filter(
-//           tx =>
-//             tx.sender_address === principal &&
-//             tx.tx_type === 'contract_call' &&
-//             tx.contract_call.function_name === HATCH_FUNCTION &&
-//             tx.tx_status === 'success'
-//         )
-//         .map(tx => {
-//           const content = (tx as ContractCallTransaction).tx_result.repr
-//             .replace(`(ok u`, '')
-//             .replace(`)`, '');
-//           return Number(content);
-//         });
-//       return tokenIds;
-//     } catch (_e) {
-//       console.log(_e);
-//     }
-//     return [];
-//   },
-//   { refetchInterval: 300000 } // five minutes in milliseconds (5000 = 5 seconds)
-// ); // every minute
 
 // TODO: double check it always returns Transaction, may be other scenarios
 export const cnryContractTransactionAtom = atomFamilyWithQuery<string, Transaction | undefined>(
@@ -399,31 +389,6 @@ export const cnryWatchCountAtom = atomFamilyWithQuery<number, number | undefined
   { refetchInterval: 600000 } // ten minutes in milliseconds (5000 = 5 seconds)
 ); // every minute
 
-// TODO: switch to micro-stacks !!
-//
-// export const cnryGetMetadataAtom = atomFamilyWithQuery<string, any>(
-//   'ms-metadata-search-results',
-//   async (get, query) => {
-//     const networkUrl = get(networkAtom).getCoreApiUrl();
-//     const id = query;//BitInt(query);
-//     try {
-//       const response = await fetchReadOnlyFunction({
-//         url: networkUrl,
-//         contractName: 'cnry',
-//         contractAddress: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM',
-//         functionName: 'get-metadata',
-//         functionArgs: [cvToHex(uintCV(id))],
-//       });
-//       console.log(response);
-//       return response;
-//     } catch (_e) {
-//       console.log(_e);
-//     }
-//     return {} as any;
-//   },
-//   { refetchInterval: 10000 }
-// ); // every minute
-
 export const cnryGetMetadataAtom = atomFamilyWithQuery<number | undefined, any | undefined>(
   'cnry-get-metadata',
   async (get, tokenId) => {
@@ -458,8 +423,45 @@ export const cnryGetMetadataAtom = atomFamilyWithQuery<number | undefined, any |
     }
     return undefined;
   },
-  { refetchInterval: 30000 } // 30 seconds in milliseconds (5000 = 5 seconds)
-); // every minute
+  { refetchInterval: 86400000 } // one day in milliseconds (5000 = 5 seconds)
+);
+
+export const watcherGetMetadataAtom = atomFamilyWithQuery<number | undefined, any | undefined>(
+  'watcher-get-metadata',
+  async (get, tokenId) => {
+    if (tokenId === undefined) return undefined;
+    const network = get(networkAtom);
+    const chain = network?.chainId === ChainID.Mainnet ? 'mainnet' : 'testnet';
+    const userStxAddresses = get(userStxAddressesAtom);
+    const watcherContract = get(currentWatcherContractState);
+    const [contractAddress, contractName] = watcherContract.split('.');
+    const userStxAddress = userStxAddresses?.[chain] || '';
+    const client = get(smartContractsClientAtom);
+
+    try {
+      const data = await client.callReadOnlyFunction({
+        contractAddress,
+        contractName,
+        functionName: METADATA_FUNCTION,
+        readOnlyFunctionArgs: {
+          sender: userStxAddress,
+          arguments: [cvToHex(uintCV(tokenId))],
+        },
+      });
+      if (data.okay && data.result) {
+        if (data.cause && data.cause === undefined) {
+          return undefined;
+        }
+        const result = cvToJSON(hexToCV(data.result as string));
+        return result && result.value && result.value.value ? result.value.value : undefined;
+      } // TODO: failed to fetch
+    } catch (_e) {
+      console.log(_e);
+    }
+    return undefined;
+  },
+  { refetchInterval: 86400000 } // one day in milliseconds (5000 = 5 seconds)
+);
 
 /*
  * Total number of cnrys
@@ -559,3 +561,126 @@ export const cnryIsAliveAtom = atomFamilyWithQuery<number, boolean>(
   },
   { refetchInterval: 86400000 } // one day in milliseconds (5000 = 5 seconds)
 );
+
+// TODO: this hard codes a 50 item limit to the query
+// export const oldmyCnryTokenIdsAtom = atom(get => {
+//   const network = get(networkAtom);
+//   const chain = network?.chainId === ChainID.Mainnet ? 'mainnet' : 'testnet';
+//   const userStxAddresses = get(userStxAddressesAtom);
+//   const cnryContract = get(currentCnryContractState);
+//   const [contractAddress, contractName] = cnryContract.split('.');
+//   const principal = userStxAddresses?.[chain] || contractAddress; // bcuz when user is not logged in, queries fail
+//   const client = get(smartContractsClientAtom);
+//   const networkUrl = network.getCoreApiUrl();
+
+//   const txs = get(accountTransactionsListClientAtom([principal, { limit: 50 }, networkUrl]));
+//   try {
+//     const tokenIds = txs?.pages[0].results
+//       .filter(
+//         tx =>
+//           tx?.tx_type === 'contract_call' &&
+//           tx?.contract_call.contract_id === cnryContract &&
+//           tx?.contract_call.function_name === 'hatch' &&
+//           tx?.tx_status === 'success'
+//       )
+//       .map(tx => {
+//         const content = (tx as ContractCallTransaction).tx_result.repr
+//           .replace(`(ok u`, '')
+//           .replace(`)`, '');
+//         return Number(content);
+//       });
+//     return tokenIds === undefined ? [] : tokenIds;
+//   } catch (_e) {
+//     console.log(_e);
+//   }
+//   return [];
+// });
+
+// // TODO: only grabs 50, convert to infinitequery
+// export const oldcnryUserTokenIdsAtom = atomFamilyWithQuery<string, number[]>(
+//   'user-cnry-token-ids',
+//   async (get, principal) => {
+//     const accountsClient = get(accountsClientAtom);
+//     const cnryContract = get(currentCnryContractState);
+
+//     try {
+//       const txs = await accountsClient.getAccountTransactions({
+//         limit: 50,
+//         principal: cnryContract,
+//       });
+//       const tokenIds = (txs as TransactionResults).results
+//         .filter(
+//           tx =>
+//             tx.sender_address === principal &&
+//             tx.tx_type === 'contract_call' &&
+//             tx.contract_call.function_name === HATCH_FUNCTION &&
+//             tx.tx_status === 'success'
+//         )
+//         .map(tx => {
+//           const content = (tx as ContractCallTransaction).tx_result.repr
+//             .replace(`(ok u`, '')
+//             .replace(`)`, '');
+//           return Number(content);
+//         });
+//       return tokenIds;
+//     } catch (_e) {
+//       console.log(_e);
+//     }
+//     return [];
+//   },
+//   { refetchInterval: 300000 } // five minutes in milliseconds (5000 = 5 seconds)
+// ); // every minute
+
+// TODO: switch to micro-stacks !!
+//
+// export const cnryGetMetadataAtom = atomFamilyWithQuery<string, any>(
+//   'ms-metadata-search-results',
+//   async (get, query) => {
+//     const networkUrl = get(networkAtom).getCoreApiUrl();
+//     const id = query;//BitInt(query);
+//     try {
+//       const response = await fetchReadOnlyFunction({
+//         url: networkUrl,
+//         contractName: 'cnry',
+//         contractAddress: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM',
+//         functionName: 'get-metadata',
+//         functionArgs: [cvToHex(uintCV(id))],
+//       });
+//       console.log(response);
+//       return response;
+//     } catch (_e) {
+//       console.log(_e);
+//     }
+//     return {} as any;
+//   },
+//   { refetchInterval: 10000 }
+// ); // every minute
+// Get CNRY tokens
+// export const oldmyCnryTokenIdsAtom = atomFamilyWithQuery<string, number[]>(
+//   'user-cnry-txs',
+//   async (get, principal) => {
+//     const accountsClient = get(accountsClientAtom);
+//     const cnryContract = get(currentCnryContractState);
+//     const [contractAddress, contractName] = cnryContract.split('.');
+//     try {
+//       const txs = await accountsClient.getAccountNft({
+//         limit: 50,
+//         principal: principal,
+//       });
+//       const tokenIds = txs.nft_events
+//         .filter(
+//           tx => tx.asset_identifier === `${cnryContract}::CNRY`
+//           // || tx.asset_identifier === `${contractAddress}.cnry::CNRY` // v1
+//         )
+//         .map(tx => {
+//           const content = tx.value.repr.replace(`u`, '');
+//           return Number(content);
+//         });
+//       return tokenIds;
+//     } catch (_e) {
+//       console.log(_e);
+//     }
+//     return [];
+//   },
+//   { refetchInterval: 300000 } // five minutes in milliseconds (5000 = 5 seconds)
+// );

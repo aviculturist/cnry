@@ -28,7 +28,7 @@ const AddNetworkDialog = () => {
         <DialogTitle>Add Network</DialogTitle>
         <DialogContent>
           <DialogContentText>
-          {t`Add and select a new Stacks Blockchain API node using this form.`}
+            {t`Add and select a new Stacks Blockchain API node using this form.`}
           </DialogContentText>
           <Formik
             initialValues={{
@@ -93,10 +93,10 @@ const AddNetworkDialog = () => {
                 {isSubmitting && <LinearProgress />}
                 <br />
                 <Button color="primary" disabled={isSubmitting} onClick={handleClose}>
-                {t`Cancel`}
+                  {t`Cancel`}
                 </Button>
                 <Button color="primary" disabled={isSubmitting} onClick={submitForm}>
-                {t`Add and Select`}
+                  {t`Add and Select`}
                 </Button>
               </Form>
             )}
