@@ -12,12 +12,15 @@ import ListItemText from '@mui/material/ListItemText';
 import { editCnryMenuAnchorElAtom, editCnryMenuIsOpenAtom } from '@store/ui/edit-cnry-menu-is-open';
 import { anyCnryNameDialogIsOpenAtomFamily } from '@store/ui/set-cnry-name-dialog-is-open';
 import { anyCnryStatementDialogIsOpenAtomFamily } from '@store/ui/set-cnry-statement-dialog-is-open';
+import { anyCnryKeepaliveExpiryDialogIsOpenAtomFamily } from '@store/ui/set-cnry-keepalive-expiry-dialog-is-open';
 
 import { SetCnryNameDialog } from '@components/set-cnry-name-dialog';
 import { SetCnryStatementDialog } from '@components/set-cnry-statement-dialog';
+import { SetCnryKeepaliveExpiryDialog } from '@components/set-cnry-keepalive-expiry-dialog';
 
 import { cnryGetMetadataAtom } from '@store/cnry';
 
+// TODO: remove cnryName param
 const EditCnryMenu = ({ tokenId, cnryName }: { tokenId: number; cnryName: string }) => {
   const [cnry] = useAtom(cnryGetMetadataAtom(tokenId));
   const [anchorEl, setAnchorEl] = useAtom(editCnryMenuAnchorElAtom(tokenId));
@@ -28,6 +31,9 @@ const EditCnryMenu = ({ tokenId, cnryName }: { tokenId: number; cnryName: string
   const [setCnryStatementDialogIsOpen, setSetCnryStatementDialogIsOpen] = useAtom(
     anyCnryStatementDialogIsOpenAtomFamily(tokenId)
   );
+  const [setCnryKeepaliveExpiryDialogIsOpen, setSetCnryKeepaliveExpiryDialogIsOpen] = useAtom(
+    anyCnryKeepaliveExpiryDialogIsOpenAtomFamily(tokenId)
+  );
   const handleOpenSetNameDialog = () => {
     setMenuIsOpen(false);
     setSetCnryNameDialogIsOpen(true);
@@ -35,6 +41,10 @@ const EditCnryMenu = ({ tokenId, cnryName }: { tokenId: number; cnryName: string
   const handleOpenSetStatementDialog = () => {
     setMenuIsOpen(false);
     setSetCnryStatementDialogIsOpen(true);
+  };
+  const handleOpenSetKeepaliveExpiryDialog = () => {
+    setMenuIsOpen(false);
+    setSetCnryKeepaliveExpiryDialogIsOpen(true);
   };
   const handleClose = () => {
     setAnchorEl(null);
@@ -63,15 +73,19 @@ const EditCnryMenu = ({ tokenId, cnryName }: { tokenId: number; cnryName: string
       >
         <MenuList dense>
           <MenuItem key={`name-${tokenId}`} onClick={handleOpenSetNameDialog}>
-            <ListItemText>Edit Cnry Name</ListItemText>
+            <ListItemText>Edit Name</ListItemText>
           </MenuItem>
           <MenuItem key={`statement-${tokenId}`} onClick={handleOpenSetStatementDialog}>
-            <ListItemText>Edit Cnry Statement</ListItemText>
+            <ListItemText>Edit Statement</ListItemText>
+          </MenuItem>
+          <MenuItem key={`keepaliveExpiry-${tokenId}`} onClick={handleOpenSetKeepaliveExpiryDialog}>
+            <ListItemText>Edit Keepalive Expiry Frequency</ListItemText>
           </MenuItem>
         </MenuList>
       </Menu>
       <SetCnryNameDialog tokenId={tokenId} cnryName={cnryName} />
       <SetCnryStatementDialog tokenId={tokenId} />
+      <SetCnryKeepaliveExpiryDialog tokenId={tokenId} />
     </>
   );
 };

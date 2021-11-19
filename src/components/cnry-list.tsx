@@ -81,7 +81,6 @@ const CnryList = () => {
 
   useEffect(() => {
     if (userHasCnrys) {
-      console.log('userHasCnrys');
       setCnryListTabState('two');
     } else {
       setCnryListTabState('one');

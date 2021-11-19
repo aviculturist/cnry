@@ -1,0 +1,106 @@
+import React from 'react';
+import { useAtom } from 'jotai';
+import { t } from '@lingui/macro';
+import { useFormik } from 'formik';
+import * as yup from 'yup';
+import TextField from '@mui/material/TextField';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import Button from '@mui/material/Button';
+import Stack from '@mui/material/Stack';
+import Box from '@mui/system/Box';
+import useSetCnryKeepaliveExpiry from '@hooks/use-set-cnry-keepalive-expiry';
+import { anyCnryKeepaliveExpiryDialogIsOpenAtomFamily } from '@store/ui/set-cnry-keepalive-expiry-dialog-is-open';
+
+const validationSchema = yup.object({
+  keepaliveExpiry: yup.number().required(t`A keepaliveExpiry is required`),
+});
+
+const SetCnryKeepaliveExpiryForm = ({
+  tokenId,
+  cnryKeepaliveExpiry,
+}: {
+  tokenId: number;
+  cnryKeepaliveExpiry: number;
+}) => {
+  const handleSetCnryKeepaliveExpiry = useSetCnryKeepaliveExpiry(tokenId, cnryKeepaliveExpiry);
+  const formik = useFormik({
+    initialValues: {
+      keepaliveExpiry: cnryKeepaliveExpiry,
+    },
+    validationSchema: validationSchema,
+    onSubmit: (values, { setSubmitting }) => {
+      void handleSetCnryKeepaliveExpiry(tokenId, values.keepaliveExpiry);
+      setTimeout(() => {
+        setSubmitting(false);
+      }, 500);
+    },
+  });
+
+  return (
+    <>
+      <Box
+        key={tokenId}
+        onSubmit={formik.handleSubmit}
+        component="form"
+        autoComplete="off"
+        sx={{
+          mb: 4,
+          justifyContent: 'center',
+          gap: 2,
+        }}
+      >
+        <Stack
+          borderRadius={4}
+          maxWidth="sm"
+          sx={{ m: 'auto', mb: 1, p: 4, bgcolor: 'background.paper' }}
+          spacing={4}
+        >
+          <TextField
+            select
+            //labelId="keepaliveExpiry"
+            id="keepaliveExpiry"
+            name="keepaliveExpiry"
+            value={formik.values.keepaliveExpiry}
+            label="Keepalive Expiry Frequency"
+            onChange={formik.handleChange}
+            error={formik.touched.keepaliveExpiry && Boolean(formik.errors.keepaliveExpiry)}
+          >
+            <MenuItem key="keepaliveExpiry-86400" id="keepaliveExpiry-86400" value={86400}>
+              Every day
+            </MenuItem>
+            <MenuItem key="keepaliveExpiry-604800" id="keepaliveExpiry-604800" value={604800}>
+              Every week
+            </MenuItem>
+            <MenuItem key="keepaliveExpiry-2629800" id="keepaliveExpiry-2629800" value={2629800}>
+              Every month
+            </MenuItem>
+          </TextField>
+          {/* <TextField
+            fullWidth
+            multiline
+            rows={4}
+            id="keepaliveExpiry"
+            name="keepaliveExpiry"
+            label={t`KeepaliveExpiry`}
+            value={formik.values.keepaliveExpiry}
+            onChange={formik.handleChange}
+            error={formik.touched.keepaliveExpiry && Boolean(formik.errors.keepaliveExpiry)}
+            helperText={formik.touched.keepaliveExpiry && formik.errors.keepaliveExpiry}
+          /> */}
+          <Button
+            size="large"
+            color="primary"
+            variant="contained"
+            fullWidth
+            type="submit"
+            disabled={formik.isSubmitting}
+          >
+            {t`Save`}
+          </Button>
+        </Stack>
+      </Box>
+    </>
+  );
+};
+export default SetCnryKeepaliveExpiryForm;

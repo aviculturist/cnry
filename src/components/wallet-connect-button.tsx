@@ -46,7 +46,7 @@ const WalletConnectButton = () => {
           : () => {
               try {
                 // TODO: fix coming upstream
-                handleSignIn({});
+                handleSignIn();
               } catch (_e) {
                 console.log(_e);
               }
