@@ -32,8 +32,7 @@ or visit [testnet.cnry.org](https://testnet.cnry.org).
 
 > If you prefer not using the integration environment,
 > Cnry can be run locally and pointed at `testnet`,
-> `regtest`(with some limitations). Skip
-> ahead to Step 4 and for Steps 5 and 6 use another network.
+> Skip ahead to Step 4 and for Steps 5 and 6 use another network.
 
 1. To run Cnry with the integration environment locally, install and run [Docker Desktop](https://www.docker.com/products/docker-desktop).
 
