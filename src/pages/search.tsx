@@ -6,7 +6,6 @@ import { wrapWithMicroStacks } from '@micro-stacks/nextjs';
 import { StacksMainnet, StacksTestnet, StacksMocknet } from 'micro-stacks/network';
 import {
   DEFAULT_MAINNET_SERVER,
-  DEFAULT_REGTEST_SERVER,
   DEFAULT_TESTNET_SERVER,
   DEFAULT_LOCALNET_SERVER,
   ENV,

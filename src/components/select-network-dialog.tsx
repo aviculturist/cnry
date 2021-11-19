@@ -2,7 +2,7 @@ import * as React from 'react';
 import { t } from '@lingui/macro';
 import { useAtom } from 'jotai';
 import { useNetwork } from '@micro-stacks/react';
-import { StacksMainnet, StacksRegtest, StacksMocknet, StacksTestnet } from 'micro-stacks/network';
+import { StacksMainnet, StacksMocknet, StacksTestnet } from 'micro-stacks/network';
 
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -78,8 +78,6 @@ const NetworkListItem = ({ network, index }: { network: any; index: number }) =>
         ? new StacksMainnet({ url: networks[index].url })
         : index === 1
         ? new StacksTestnet({ url: networks[index].url })
-        : index === 2
-        ? new StacksRegtest({ url: networks[index].url })
         : new StacksMocknet({ url: networks[index].url })
     );
     setOpen(false);
