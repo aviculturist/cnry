@@ -49,7 +49,8 @@
     "yup": "^0.32.11"
   },
   "resolutions": {
-    "@mui/styled-engine": "npm:@mui/styled-engine-sc@next"
+    "@mui/styled-engine": "npm:@mui/styled-engine-sc@next",
+    "jotai": "npm:jotai@1.4.4"
   },
   "eslintConfig": {
     "extends": [
