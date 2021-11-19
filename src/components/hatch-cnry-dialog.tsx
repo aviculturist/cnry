@@ -68,7 +68,7 @@ const HatchCnryDialog = () => {
                   label="Name"
                   variant="outlined"
                   fullWidth
-                  placeholder={t`My Stacks Node`}
+                  placeholder={t`Acme Corp Warrant Canary`}
                 />
                 <br />
                 <Field
@@ -78,7 +78,7 @@ const HatchCnryDialog = () => {
                   name="statement"
                   variant="outlined"
                   fullWidth
-                  placeholder={t`We have not been approached by the FBI`}
+                  placeholder={t`Acme Corp has never received an order under Section 215 of the USA Patriot Act.`}
                 />
                 {isSubmitting && <LinearProgress />}
                 <br />

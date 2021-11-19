@@ -13,7 +13,7 @@ import { useIdQuery } from '@hooks/use-queries';
 import { cnryGetMetadataAtom } from '@store/cnry';
 import useSingleCnryDialogIsOpen from '@hooks/use-metadata-dialog-is-open';
 import { SingleCnryErrorDialog, SingleCnryDialog } from '@components/single-cnry-dialog';
-import HatchCnryDialog from '@components/hatch-cnry';
+import HatchCnryDialog from '@components/hatch-cnry-dialog';
 import ActivityDrawer from '@components/activity-drawer';
 import InstallWalletDialog from '@components/install-wallet-dialog';
 import TransactionSnackbars from '@components/transaction-snackbars';

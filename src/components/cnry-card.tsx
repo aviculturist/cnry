@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useEffect } from 'react';
-import { t, Trans } from '@lingui/macro';
+import { t } from '@lingui/macro';
 import { useAtom } from 'jotai';
 import { useAtomValue } from 'jotai/utils';
 import { ChainID } from 'micro-stacks/common';
@@ -29,7 +29,6 @@ import ShareIcon from '@mui/icons-material/Share';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Tooltip from '@mui/material/Tooltip';
 import CircularProgress from '@mui/material/CircularProgress';
-import { currentStacksExplorerState, currentChainState } from '@store/helpers';
 import {
   cnryGetMetadataAtom,
   cnryContractTransactionAtom,
@@ -84,7 +83,6 @@ const PendingCnryCardFromTxId = ({ txid }: { txid: string }) => {
       const txs = pendingTxIds.filter(item => item !== txid);
       setPendingTxIds(txs); // remove from array
       userPendingTxAtom.remove(txid); // remove from queries
-      //console.log('Removing within cnry-card: ' + txid);
       setValue('two');
     }
   }, [tx]);
