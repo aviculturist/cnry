@@ -222,11 +222,15 @@
 (define-public (set-keepaliveExpiry (tokenId uint) (keepaliveExpiry uint))
   (let
     (
+      (now (get-time) )
       (cnry (unwrap! (map-get? cnrys {tokenId: tokenId}) (err ERR_NOT_FOUND)))
     )
     (asserts! (is-owner tokenId) (err ERR_NOT_AUTHORIZED))
     (asserts! (is-within-keepaliveExpiry (get keepaliveTimestamp cnry) (get keepaliveExpiry cnry) tokenId) (err ERR_CNRY_EXPIRED) )
     (begin
+      (map-set cnrys {tokenId: tokenId}
+        (merge cnry { keepaliveTimestamp: now }) ;; reset keepalive to now
+      )
       (map-set cnrys {tokenId: tokenId}
         (merge cnry { keepaliveExpiry: keepaliveExpiry })
       )
