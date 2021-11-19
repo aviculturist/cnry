@@ -7,10 +7,13 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import Tooltip from '@mui/material/Tooltip';
+import IconButton from '@mui/material/IconButton';
+import ContentCopyOutlinedIcon from '@mui/icons-material/ContentCopyOutlined';
 import { truncateMiddle } from '@utils/common';
 import { toDate, toRelativeTime, humanizeDuration } from '@utils/time';
 
-function createData(name: string, value: string) {
+function createData(name: string, value: string | React.ReactFragment) {
   return { name, value };
 }
 
@@ -32,11 +35,34 @@ const CnryMetadataTable = ({ cnry }: { cnry: any }) => {
   const expiresDate = toDate(keepaliveTimestamp + keepaliveExpiry);
   const lastKeepalive = toDate(keepaliveTimestamp);
 
+  const handleCopyToClipboard = ({ principal }: { principal: string }) => {
+    //const uri = `${typeof window !== 'undefined' ? window.location.href.split('#')[0] : ''}${link}`;
+    navigator.clipboard.writeText(principal);
+  };
+
   const rows = [
     createData('Name', `${cnry.cnryName.value}`),
     createData('Uri', `${cnry.cnryUri.value}`),
     createData('Proof', `${cnry.cnryProof.value}`),
-    createData('Keeper', `${truncateMiddle(cnry.cnryKeeper.value)}`),
+    createData(
+      'Keeper',
+      <React.Fragment>
+        <>
+          <Tooltip title={t`Copy principal to clipboard`}>
+            <IconButton
+              size="small"
+              aria-label="copy"
+              onClick={() => handleCopyToClipboard({ principal: `${cnry.cnryKeeper.value}` })}
+            >
+              <ContentCopyOutlinedIcon fontSize="small" />
+            </IconButton>
+          </Tooltip>
+          <a rel="noreferrer" target="_blank" href={`./search/?q=${cnry.cnryKeeper.value}`}>
+            {truncateMiddle(cnry.cnryKeeper.value)}
+          </a>
+        </>
+      </React.Fragment>
+    ),
     createData('Expires', `${expiresDate}`), // TODO: after expired
     createData('Updated', `${lastKeepalive}`),
     createData('Frequency', `${humanizeDuration(keepaliveExpiry)}`),

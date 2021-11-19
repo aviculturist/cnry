@@ -30,8 +30,6 @@ import MaintenanceAlert from '@components/maintenance-alert';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import BasicPagination from '@components/pagination';
-import { browseCurrentPageAtom, cnryLastIdAtom } from '@store/cnry';
-import { paginate, range } from '@utils/paginate';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -65,7 +63,7 @@ const CnryList = () => {
   const [myWatchingTokenIds, dispatchMyWatchingTokenIds] = useAtom(myWatchingTokenIdsAtom);
   const [userPendingTxids] = useAtom(cnryUserPendingTxIdsAtom);
   const [cnryAllTokenIds] = useAtom(browseCurrentPageAllCnryTokenIdsAtom);
-  const [value, setValue] = useAtom(cnryListTabStateAtom);
+  const [cnryListTabState, setCnryListTabState] = useAtom(cnryListTabStateAtom);
   const [userHasCnrys] = useAtom(userHasCnrysAtom);
   const [userIsWatchingCnrys] = useAtom(userIsWatchingCnrysAtom);
   const [myCnryIds] = useAtom(myCnryTokenIdsAtom);
@@ -83,14 +81,15 @@ const CnryList = () => {
 
   useEffect(() => {
     if (userHasCnrys) {
-      setValue('two');
+      console.log('userHasCnrys');
+      setCnryListTabState('two');
     } else {
-      setValue('one');
+      setCnryListTabState('one');
     }
-  }, [setValue, userHasCnrys]);
+  }, [setCnryListTabState, userHasCnrys]);
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
-    setValue(newValue);
+    setCnryListTabState(newValue);
   };
 
   const horizontalMyPendingCnrysList = () => (
@@ -145,21 +144,24 @@ const CnryList = () => {
 
   return (
     <div>
-      <Tabs value={value} onChange={handleChange} centered>
+      <Tabs value={cnryListTabState} onChange={handleChange} centered>
         <Tab value="one" label={t`New`} />
         <Tab value="two" label={t`My Cnrys`} disabled={!userHasCnrys} />
         <Tab value="three" label={t`Watching`} disabled={!userIsWatchingCnrys} />
         <Tab value="four" label={t`Browse`} />
       </Tabs>
-      <TabPanel value={value} index="one">
-        <SafeSuspense
-          fallback={
-            <>
-              <Skeleton sx={{ m: 'auto' }} variant="rectangular" width={600} height={400} />
-            </>
-          }
-        >
-          <HatchCnryForm />
+      <TabPanel value={cnryListTabState} index="one">
+        <>
+          <SafeSuspense
+            fallback={
+              <>
+                <Skeleton sx={{ m: 'auto' }} variant="rectangular" width={600} height={400} />
+              </>
+            }
+          >
+            <HatchCnryForm />
+          </SafeSuspense>
+
           <Stack maxWidth="sm" sx={{ m: 'auto' }}>
             <SafeSuspense
               fallback={
@@ -171,43 +173,46 @@ const CnryList = () => {
               {horizontalMyPendingCnrysList()}
             </SafeSuspense>
           </Stack>
-        </SafeSuspense>
-        <Stack sx={{ mt: 3 }} spacing={2}>
-          <Box>
-            <Stack maxWidth="sm" sx={{ m: 'auto' }} spacing={2}>
-              <MaintenanceAlert />
-              <Alert severity="info">
-                <AlertTitle>{t`About Cnry`}</AlertTitle>
-                {t`Cnry makes it easy to publish and keep track of warrant canaries. Transactions settle on Bitcoin via Stacks.`}
-                <strong>
-                  <a
-                    rel="noreferrer"
-                    target="_blank"
-                    href="https://github.com/aviculturist/cnry#-cnry"
-                  >
-                    Learn more.
-                  </a>
-                </strong>
-              </Alert>
-            </Stack>
-          </Box>
-        </Stack>
+
+          <Stack sx={{ mt: 3 }} spacing={2}>
+            <Box>
+              <Stack maxWidth="sm" sx={{ m: 'auto' }} spacing={2}>
+                <SafeSuspense fallback={<></>}>
+                  <MaintenanceAlert />
+                </SafeSuspense>
+                <Alert severity="info">
+                  <AlertTitle>{t`About Cnry`}</AlertTitle>
+                  {t`Cnry makes it easy to publish and keep track of warrant canaries. Transactions settle on Bitcoin via Stacks.`}{' '}
+                  <strong>
+                    <a
+                      rel="noreferrer"
+                      target="_blank"
+                      href="https://github.com/aviculturist/cnry#-cnry"
+                    >
+                      Learn more.
+                    </a>
+                  </strong>
+                </Alert>
+              </Stack>
+            </Box>
+          </Stack>
+        </>
       </TabPanel>
-      <TabPanel value={value} index="two">
+      <TabPanel value={cnryListTabState} index="two">
         <Stack maxWidth="sm" sx={{ m: 'auto' }}>
           <SafeSuspense fallback={<CircularProgress sx={{ m: 'auto' }} />}>
             {verticalMyCnrysList()}
           </SafeSuspense>
         </Stack>
       </TabPanel>
-      <TabPanel value={value} index="three">
+      <TabPanel value={cnryListTabState} index="three">
         <Stack maxWidth="sm" sx={{ m: 'auto' }}>
           <SafeSuspense fallback={<CircularProgress sx={{ m: 'auto' }} />}>
             {verticalWatchingCnrysList()}
           </SafeSuspense>
         </Stack>
       </TabPanel>
-      <TabPanel value={value} index="four">
+      <TabPanel value={cnryListTabState} index="four">
         <Stack maxWidth="sm" sx={{ m: 'auto' }}>
           <SafeSuspense fallback={<CircularProgress sx={{ m: 'auto' }} />}>
             {verticalAllCnrysList()}
