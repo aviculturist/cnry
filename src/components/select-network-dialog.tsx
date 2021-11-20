@@ -54,13 +54,41 @@ const NetworkStatusCircularProgress = ({ color }: NetworkStatusCircularProgressP
   );
 };
 
+const NetworkListItemSkeleton = ({ index }: { index: number }) => {
+  return (
+    <ListItem key={index}>
+      <ListItemButton disabled>
+        <ListItemAvatar>
+          <Avatar color="warning">
+            <IconButton sx={{ zIndex: 1600 }} size="medium" color="warning">
+              <CloudOffOutlinedIcon />
+            </IconButton>
+            <NetworkStatusCircularProgress color="warning" />
+          </Avatar>
+        </ListItemAvatar>
+        <ListItemText
+          primary={
+            <React.Fragment>
+              Loading...
+              <Chip sx={{ ml: 1 }} size="small" label="loading..." />
+            </React.Fragment>
+          }
+          secondary={<React.Fragment>loading...</React.Fragment>}
+        />
+      </ListItemButton>
+
+      <ListItemSecondaryAction>
+        <IconButton edge="end" aria-label="delete">
+          <AutorenewOutlinedIcon />
+        </IconButton>
+      </ListItemSecondaryAction>
+    </ListItem>
+  );
+};
+
 const NetworkListItem = ({ network, index }: { network: any; index: number }) => {
-  const {
-    networks,
-    currentNetworkIndex,
-    handleUpdateNetworkIndex,
-    handleRemoveNetwork,
-  } = useNetworks();
+  const { networks, currentNetworkIndex, handleUpdateNetworkIndex, handleRemoveNetwork } =
+    useNetworks();
   const { handleSetNetwork } = useNetwork();
   const [, setOpen] = useAtom(networkDialogIsOpenAtom);
   const [anyStatus, dispatchAnyStatus] = useAtom(anyNetworkStatusAtom(network.name));
@@ -85,7 +113,7 @@ const NetworkListItem = ({ network, index }: { network: any; index: number }) =>
     setOpen(false);
   };
 
-  const isCustom = index >= 4 ? true : false;
+  const isCustom = index >= 3 ? true : false;
 
   // fetch status onClick
   const timer = React.useRef<number>();
@@ -158,6 +186,7 @@ const NetworkListItem = ({ network, index }: { network: any; index: number }) =>
     </ListItem>
   );
 };
+
 const SelectNetworkDialog = () => {
   const [networkDialogIsOpen, setNetworkDialogIsOpen] = useAtom(networkDialogIsOpenAtom);
   const [, setAddNetworkDialogIsOpen] = useAtom(addNetworkDialogIsOpenAtom);
@@ -175,7 +204,7 @@ const SelectNetworkDialog = () => {
         <DialogTitle>{t`Select network`}</DialogTitle>
         <List sx={{ pt: 0 }}>
           {networks.map((network, key) => (
-            <SafeSuspense key={key} fallback={<NetworkStatusCircularProgress color="success" />}>
+            <SafeSuspense key={key} fallback={<NetworkListItemSkeleton key={key} index={key} />}>
               <NetworkListItem key={key} index={key} network={network} />
             </SafeSuspense>
           ))}
