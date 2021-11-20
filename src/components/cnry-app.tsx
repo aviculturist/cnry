@@ -1,13 +1,8 @@
 import * as React from 'react';
 import { useEffect } from 'react';
-import { t } from '@lingui/macro';
 import { useAtom } from 'jotai';
-import Box from '@mui/system/Box';
 import Stack from '@mui/material/Stack';
 import CircularProgress from '@mui/material/CircularProgress';
-import Alert from '@mui/material/Alert';
-import AlertTitle from '@mui/material/AlertTitle';
-import Skeleton from '@mui/material/Skeleton';
 import SafeSuspense from '@components/safe-suspense';
 import { useIdQuery } from '@hooks/use-queries';
 import { cnryGetMetadataAtom } from '@store/cnry';
@@ -18,7 +13,7 @@ import ActivityDrawer from '@components/activity-drawer';
 import InstallWalletDialog from '@components/install-wallet-dialog';
 import TransactionSnackbars from '@components/transaction-snackbars';
 import CnryList from '@components/cnry-list';
-import MaintenanceAlert from '@components/maintenance-alert';
+import CnryListSkeleton from '@components/cnry-list-skeleton';
 
 const CnryItemQueryPopup = () => {
   const tokenId = useIdQuery();
@@ -43,16 +38,9 @@ const CnryApp = () => {
     <>
       <main style={{ width: '100%' }}>
         <Stack sx={{ mt: 2 }} spacing={2}>
-          <SafeSuspense
-            fallback={
-              <>
-                <Skeleton sx={{ m: 'auto' }} variant="rectangular" width={400} height={200} />
-              </>
-            }
-          >
+          <SafeSuspense fallback={<CnryListSkeleton />}>
             <CnryList />
           </SafeSuspense>
-
         </Stack>
       </main>
 

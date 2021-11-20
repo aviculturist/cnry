@@ -30,6 +30,7 @@ import MaintenanceAlert from '@components/maintenance-alert';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import BasicPagination from '@components/pagination';
+import CnryCardSkeleton from '@components/cnry-card-skeleton';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -44,8 +45,8 @@ const TabPanel = (props: TabPanelProps) => {
     <div
       role="tabpanel"
       hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
+      id={`cnry-tabpanel-${index}`}
+      aria-labelledby={`cnry-tab-${index}`}
       {...other}
     >
       {value === index && (
@@ -113,7 +114,9 @@ const CnryList = () => {
     <ImageList variant="masonry" cols={2} sx={{ mt: 0 }}>
       {myCnryIds.map(tokenId => (
         <ImageListItem sx={{ width: '100%', m: 'auto' }} key={tokenId}>
-          <CnryCard key={tokenId} tokenId={tokenId} />
+          <SafeSuspense key={tokenId} fallback={<CnryCardSkeleton />}>
+            <CnryCard key={tokenId} tokenId={tokenId} />
+          </SafeSuspense>
         </ImageListItem>
       ))}
     </ImageList>
@@ -123,7 +126,9 @@ const CnryList = () => {
     <ImageList variant="masonry" cols={2} sx={{ mt: 0 }}>
       {myWatchingTokenIds.map(tokenId => (
         <ImageListItem sx={{ width: '100%', m: 'auto' }} key={tokenId}>
-          <CnryCard key={tokenId} tokenId={tokenId} />
+          <SafeSuspense key={tokenId} fallback={<CnryCardSkeleton />}>
+            <CnryCard key={tokenId} tokenId={tokenId} />
+          </SafeSuspense>
         </ImageListItem>
       ))}
     </ImageList>
@@ -133,7 +138,9 @@ const CnryList = () => {
       <ImageList variant="masonry" cols={2} sx={{ mt: 0 }}>
         {cnryAllTokenIds.map(tokenId => (
           <ImageListItem sx={{ width: '100%', m: 'auto' }} key={tokenId}>
-            <CnryCard key={tokenId} tokenId={tokenId} />
+            <SafeSuspense key={tokenId} fallback={<CnryCardSkeleton />}>
+              <CnryCard key={tokenId} tokenId={tokenId} />
+            </SafeSuspense>
           </ImageListItem>
         ))}
       </ImageList>
@@ -199,23 +206,17 @@ const CnryList = () => {
       </TabPanel>
       <TabPanel value={cnryListTabState} index="two">
         <Stack maxWidth="sm" sx={{ m: 'auto' }}>
-          <SafeSuspense fallback={<CircularProgress sx={{ m: 'auto' }} />}>
-            {verticalMyCnrysList()}
-          </SafeSuspense>
+          {verticalMyCnrysList()}
         </Stack>
       </TabPanel>
       <TabPanel value={cnryListTabState} index="three">
         <Stack maxWidth="sm" sx={{ m: 'auto' }}>
-          <SafeSuspense fallback={<CircularProgress sx={{ m: 'auto' }} />}>
-            {verticalWatchingCnrysList()}
-          </SafeSuspense>
+          {verticalWatchingCnrysList()}
         </Stack>
       </TabPanel>
       <TabPanel value={cnryListTabState} index="four">
         <Stack maxWidth="sm" sx={{ m: 'auto' }}>
-          <SafeSuspense fallback={<CircularProgress sx={{ m: 'auto' }} />}>
-            {verticalAllCnrysList()}
-          </SafeSuspense>
+          {verticalAllCnrysList()}
         </Stack>
       </TabPanel>
     </div>
