@@ -23,6 +23,7 @@ import CheckIcon from '@mui/icons-material/Check';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AutorenewOutlinedIcon from '@mui/icons-material/AutorenewOutlined';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
+import Chip from '@mui/material/Chip';
 
 import AddNetworkDialog from '@components/add-network-dialog';
 import { useNetworks } from '@hooks/use-networks';
@@ -31,7 +32,7 @@ import { anyNetworkStatusAtom, anyNetworkIsLoadingFamily } from '@store/networks
 import { networkDialogIsOpenAtom } from '@store/ui/network-dialog-is-open';
 import { addNetworkDialogIsOpenAtom } from '@store/ui/add-network-dialog-is-open';
 import SafeSuspense from '@components/safe-suspense';
-import Chip from '@mui/material/Chip';
+import { cnryLastIdAtom, watcherLastIdAtom } from '@store/cnry';
 
 interface NetworkStatusCircularProgressProps {
   color: 'success' | 'warning';
@@ -68,7 +69,8 @@ const NetworkListItem = ({ network, index }: { network: any; index: number }) =>
   const color = anyStatus.status === 'ready' ? 'success' : 'warning';
   const isLoadingFamily = anyNetworkIsLoadingFamily(network);
   const [isLoading, setIsLoading] = useAtom(isLoadingFamily);
-
+  const [cnryLastId, dispatchCnryLastId] = useAtom(cnryLastIdAtom);
+  const [watcherLastId, dispatchWatcherLastId] = useAtom(watcherLastIdAtom);
   const handleSelectNetwork = (index: number) => {
     // used to select and display user selections
     handleUpdateNetworkIndex(index);
@@ -80,6 +82,8 @@ const NetworkListItem = ({ network, index }: { network: any; index: number }) =>
         ? new StacksTestnet({ url: networks[index].url })
         : new StacksMocknet({ url: networks[index].url })
     );
+    dispatchCnryLastId({ type: 'refetch' });
+    dispatchWatcherLastId({ type: 'refetch' });
     setOpen(false);
   };
 
