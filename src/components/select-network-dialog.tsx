@@ -57,10 +57,8 @@ const NetworkStatusCircularProgress = ({ color }: NetworkStatusCircularProgressP
 const NetworkListItem = ({ network, index }: { network: any; index: number }) => {
   const {
     networks,
-    setCustomNetworks,
     currentNetworkIndex,
     handleUpdateNetworkIndex,
-    handleAddNetwork,
     handleRemoveNetwork,
   } = useNetworks();
   const { handleSetNetwork } = useNetwork();
@@ -69,8 +67,8 @@ const NetworkListItem = ({ network, index }: { network: any; index: number }) =>
   const color = anyStatus.status === 'ready' ? 'success' : 'warning';
   const isLoadingFamily = anyNetworkIsLoadingFamily(network);
   const [isLoading, setIsLoading] = useAtom(isLoadingFamily);
-  const [cnryLastId, dispatchCnryLastId] = useAtom(cnryLastIdAtom);
-  const [watcherLastId, dispatchWatcherLastId] = useAtom(watcherLastIdAtom);
+  const [, dispatchCnryLastId] = useAtom(cnryLastIdAtom);
+  const [, dispatchWatcherLastId] = useAtom(watcherLastIdAtom);
   const handleSelectNetwork = (index: number) => {
     // used to select and display user selections
     handleUpdateNetworkIndex(index);
@@ -174,7 +172,7 @@ const SelectNetworkDialog = () => {
   return (
     <>
       <Dialog fullWidth={true} maxWidth="xs" onClose={handleClose} open={networkDialogIsOpen}>
-        <DialogTitle>Select network</DialogTitle>
+        <DialogTitle>{t`Select network`}</DialogTitle>
         <List sx={{ pt: 0 }}>
           {networks.map((network, key) => (
             <SafeSuspense key={key} fallback={<NetworkStatusCircularProgress color="success" />}>

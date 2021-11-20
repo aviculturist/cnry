@@ -33,7 +33,7 @@ const NetworkStatusIconButton = () => {
   };
 
   return (
-    <Tooltip title={networkIsOffline ? t`Network Offline` : t`Network Online`}>
+    <Tooltip title={networkIsOffline ? 'Network Offline' : 'Network Online'}>
       <IconButton
         onClick={() => refetch()}
         size="small"
