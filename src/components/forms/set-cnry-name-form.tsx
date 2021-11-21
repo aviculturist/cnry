@@ -50,7 +50,6 @@ const SetCnryNameForm = ({ tokenId, cnryName }: { tokenId: number; cnryName: str
             id="name"
             name="name"
             label={t`Name`}
-            //placeholder="Acme Corp Warrant Canary"
             value={formik.values.name}
             onChange={formik.handleChange}
             error={formik.touched.name && Boolean(formik.errors.name)}

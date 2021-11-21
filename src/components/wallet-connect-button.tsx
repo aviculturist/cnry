@@ -54,7 +54,7 @@ const WalletConnectButton = () => {
             }
       }
     >
-      {isLoading ? t`Loading...` : isSignedIn ? t`Sign out` : t`Connect Stacks Wallet`}
+      {isLoading ? 'Loading...' : isSignedIn ? 'Sign out' : 'Connect Stacks Wallet'}
     </Button>
   );
 };

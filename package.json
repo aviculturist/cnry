@@ -50,7 +50,8 @@
   },
   "resolutions": {
     "@mui/styled-engine": "npm:@mui/styled-engine-sc@next",
-    "jotai": "npm:jotai@1.4.4"
+    "jotai": "npm:jotai@1.4.4",
+    "cli-table": "0.3.1"
   },
   "eslintConfig": {
     "extends": [

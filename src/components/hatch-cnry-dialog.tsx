@@ -38,10 +38,10 @@ const HatchCnryDialog = () => {
             validate={values => {
               const errors: Partial<{ name: string; statement: string }> = {};
               if (!values.name) {
-                errors.name = t`Required`;
+                errors.name = 'Required';
               }
               if (!values.statement) {
-                errors.statement = t`Required`;
+                errors.statement = 'Required';
               }
 
               return errors;

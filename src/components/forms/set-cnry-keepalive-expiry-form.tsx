@@ -1,16 +1,13 @@
 import React from 'react';
-import { useAtom } from 'jotai';
 import { t } from '@lingui/macro';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import TextField from '@mui/material/TextField';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import Box from '@mui/system/Box';
 import useSetCnryKeepaliveExpiry from '@hooks/use-set-cnry-keepalive-expiry';
-import { anyCnryKeepaliveExpiryDialogIsOpenAtomFamily } from '@store/ui/set-cnry-keepalive-expiry-dialog-is-open';
 
 const validationSchema = yup.object({
   keepaliveExpiry: yup.number().required(t`A keepaliveExpiry is required`),
@@ -67,13 +64,19 @@ const SetCnryKeepaliveExpiryForm = ({
             error={formik.touched.keepaliveExpiry && Boolean(formik.errors.keepaliveExpiry)}
           >
             <MenuItem key="keepaliveExpiry-86400" id="keepaliveExpiry-86400" value={86400}>
-              Every day
+              {t`Every day`}
             </MenuItem>
             <MenuItem key="keepaliveExpiry-604800" id="keepaliveExpiry-604800" value={604800}>
-              Every week
+              {t`Every week`}
             </MenuItem>
             <MenuItem key="keepaliveExpiry-2629800" id="keepaliveExpiry-2629800" value={2629800}>
-              Every month
+              {t`Every month`}
+            </MenuItem>
+            <MenuItem key="keepaliveExpiry-7890000" id="keepaliveExpiry-7890000" value={7890000}>
+              {t`Every quarter (three months)`}
+            </MenuItem>
+            <MenuItem key="keepaliveExpiry-31536000" id="keepaliveExpiry-31536000" value={31536000}>
+              {t`Every year`}
             </MenuItem>
           </TextField>
           {/* <TextField
