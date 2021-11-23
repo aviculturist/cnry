@@ -1,15 +1,33 @@
 import { useCallback } from 'react';
 import { useAtom } from 'jotai';
-import { useTransactionPopup } from '@micro-stacks/react';
+import { stringUtf8CV } from 'micro-stacks/clarity';
+import {
+  PostConditionMode,
+  createSTXPostCondition,
+  createNonFungiblePostCondition,
+  FungibleConditionCode,
+  NonFungibleConditionCode,
+  createAssetInfo,
+} from 'micro-stacks/transactions';
+import { networkAtom, userStxAddressesAtom, useTransactionPopup } from '@micro-stacks/react';
+import { ChainID } from 'micro-stacks/common';
 import { currentCnryContractState } from '@store/helpers';
 import { HATCH_FUNCTION } from '@utils/constants';
-import { cnryUserPendingTxIdsAtom, userPendingTxIdsAtom, userPendingTxAtom } from '@store/cnry';
-import { uintCV } from 'micro-stacks/clarity';
-import { noneCV, someCV, stringUtf8CV } from '@stacks/transactions';
+import {
+  cnryUserPendingTxIdsAtom,
+  userPendingTxIdsAtom,
+  userPendingTxAtom,
+  hatchPriceAtom,
+} from '@store/cnry';
 
 const useHatch = () => {
   const [cnryContract] = useAtom(currentCnryContractState);
   const [contractAddress, contractName] = cnryContract.split('.');
+  const [network] = useAtom(networkAtom);
+  const [hatchPrice] = useAtom(hatchPriceAtom);
+  const chain = network?.chainId === ChainID.Mainnet ? 'mainnet' : 'testnet';
+  const [userStxAddresses] = useAtom(userStxAddressesAtom);
+  const userStxAddress = userStxAddresses?.[chain] || contractAddress;
   const { handleContractCall } = useTransactionPopup();
   const [cnryUserPendingTxIds, setCnryUserPendingTxIds] = useAtom(cnryUserPendingTxIdsAtom);
   const [pendingTxIds, setPendingTxIds] = useAtom(userPendingTxIdsAtom);
@@ -28,6 +46,19 @@ const useHatch = () => {
     console.log(errorMessage);
   }, []);
 
+  const stxPostCond = createSTXPostCondition(
+    userStxAddress,
+    FungibleConditionCode.Equal,
+    hatchPrice
+  );
+
+  const nftPostCond = createNonFungiblePostCondition(
+    userStxAddress,
+    NonFungibleConditionCode.Owns,
+    createAssetInfo(contractAddress, contractName, 'CNRY'),
+    stringUtf8CV('CNRY')
+  );
+
   return useCallback(
     (cnryName, statement) => {
       void handleContractCall({
@@ -35,12 +66,21 @@ const useHatch = () => {
         contractName,
         functionName: HATCH_FUNCTION,
         functionArgs: [stringUtf8CV(cnryName), stringUtf8CV(statement)],
-        postConditions: [],
+        postConditionMode: PostConditionMode.Deny,
+        postConditions: [stxPostCond, nftPostCond],
         onFinish,
         onCancel,
       });
     },
-    [handleContractCall, contractAddress, contractName, onFinish, onCancel]
+    [
+      handleContractCall,
+      contractAddress,
+      contractName,
+      stxPostCond,
+      nftPostCond,
+      onFinish,
+      onCancel,
+    ]
   );
 };
 export default useHatch;

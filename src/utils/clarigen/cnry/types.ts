@@ -4,16 +4,21 @@ import { ClarityTypes, Transaction } from '@clarigen/core';
 export interface CnryContract {
 
   hatch: (cnryName: string, cnryStatement: string) => Transaction<bigint, bigint>;
-  keepalive: (tokenId: number | bigint) => Transaction<bigint, ClarityTypes.Response<null, bigint>>;
+  keepalive: (tokenId: number | bigint) => Transaction<bigint, bigint>;
   setBaseUri: (newBaseUri: string) => Transaction<boolean, bigint>;
-  setKeepaliveExpiry: (tokenId: number | bigint, keepaliveExpiry: number | bigint) => Transaction<bigint, ClarityTypes.Response<null, bigint>>;
-  setName: (tokenId: number | bigint, cnryName: string) => Transaction<bigint, ClarityTypes.Response<null, bigint>>;
-  setProof: (tokenId: number | bigint, cnryProof: string) => Transaction<bigint, ClarityTypes.Response<null, bigint>>;
-  setStatement: (tokenId: number | bigint, cnryStatement: string) => Transaction<bigint, ClarityTypes.Response<null, bigint>>;
-  setUri: (tokenId: number | bigint, cnryUri: string) => Transaction<bigint, ClarityTypes.Response<null, bigint>>;
+  setHatchPrice: (newHatchPrice: number | bigint) => Transaction<boolean, bigint>;
+  setKeepaliveExpiry: (tokenId: number | bigint, keepaliveExpiry: number | bigint) => Transaction<bigint, bigint>;
+  setKeepalivePrice: (newKeepalivePrice: number | bigint) => Transaction<boolean, bigint>;
+  setName: (tokenId: number | bigint, cnryName: string) => Transaction<bigint, bigint>;
+  setProof: (tokenId: number | bigint, cnryProof: string) => Transaction<bigint, bigint>;
+  setStatement: (tokenId: number | bigint, cnryStatement: string) => Transaction<bigint, bigint>;
+  setUri: (tokenId: number | bigint, cnryUri: string) => Transaction<bigint, bigint>;
+  setWatchPrice: (newWatchPrice: number | bigint) => Transaction<boolean, bigint>;
   transfer: (tokenId: number | bigint, sender: string, recipient: string) => Transaction<null, bigint>;
-  watch: (tokenId: number | bigint) => Transaction<bigint, ClarityTypes.Response<null, bigint>>;
+  watch: (tokenId: number | bigint) => Transaction<bigint, bigint>;
+  getHatchPrice: () => Promise<bigint>;
   getKeepaliveExpiry: (tokenId: number | bigint) => Promise<ClarityTypes.Response<bigint, bigint>>;
+  getKeepalivePrice: () => Promise<bigint>;
   getKeepaliveTimestamp: (tokenId: number | bigint) => Promise<ClarityTypes.Response<bigint, bigint>>;
   getLastTokenId: () => Promise<ClarityTypes.Response<bigint, null>>;
   getMetadata: (tokenId: number | bigint) => Promise<{
@@ -29,6 +34,7 @@ export interface CnryContract {
     } | null>;
   getOwner: (tokenId: number | bigint) => Promise<ClarityTypes.Response<string | null, null>>;
   getTokenUri: (tokenId: number | bigint) => Promise<ClarityTypes.Response<string | null, bigint>>;
+  getWatchPrice: () => Promise<bigint>;
   getWatcherCount: (tokenId: number | bigint) => Promise<ClarityTypes.Response<{
   "count": bigint
     }, null>>;

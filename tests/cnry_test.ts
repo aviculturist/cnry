@@ -10,30 +10,30 @@ import {
 // @ts-ignore
 import { assertEquals } from 'https://deno.land/std@0.90.0/testing/asserts.ts';
 
+// Clarinet.test({
+//   name: 'it adds the cnry contract to watcher watched-contract storage',
+//   async fn(chain: Chain, accounts: Map<string, Account>) {
+//     const deployer = accounts.get('deployer')!;
+
+//     const call = chain.callReadOnlyFn('watcher', 'get-watched-contract', [], deployer.address);
+
+//     call.result
+//       .expectOk()
+//       .expectSome()
+//       .expectPrincipal('ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.cnry');
+//   },
+// });
+
 Clarinet.test({
-  name: 'it adds the cnry contract to watcher watched-contract storage',
+  name: 'wallet_1 can hatch a Cnry',
   async fn(chain: Chain, accounts: Map<string, Account>) {
-    const deployer = accounts.get('deployer')!;
-
-    const call = chain.callReadOnlyFn('watcher', 'get-watched-contract', [], deployer.address);
-
-    call.result
-      .expectOk()
-      .expectSome()
-      .expectPrincipal('ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.cnry');
-  },
-});
-
-Clarinet.test({
-  name: 'deployer can hatch a Cnry',
-  async fn(chain: Chain, accounts: Map<string, Account>) {
-    const account = accounts.get('deployer')!;
+    const account = accounts.get('wallet_1')!;
     // wallet_1 calls the mint function
     const block = chain.mineBlock([
       Tx.contractCall(
         'cnry',
         'hatch',
-        [types.utf8('Deployer Warrant Canary'), types.utf8('The FBI has not been here today.')],
+        [types.utf8('Wallet 1 Warrant Canary'), types.utf8('The FBI has not been here today.')],
         account.address
       ),
     ]);
@@ -44,15 +44,15 @@ Clarinet.test({
 });
 
 Clarinet.test({
-  name: 'non-depoyer account can hatch Cnry',
+  name: 'wallet_2 account can hatch Cnry',
   async fn(chain: Chain, accounts: Map<string, Account>) {
-    const account = accounts.get('wallet_1')!;
+    const account = accounts.get('wallet_2')!;
     // wallet_1 calls the mint function
     const block = chain.mineBlock([
       Tx.contractCall(
         'cnry',
         'hatch',
-        [types.utf8('Non Deployer Warrant Canary'), types.utf8('The FBI has not been here today.')],
+        [types.utf8('wallet_2 Warrant Canary'), types.utf8('The FBI has not been here today.')],
         account.address
       ),
     ]);

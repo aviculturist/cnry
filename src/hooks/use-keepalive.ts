@@ -1,15 +1,25 @@
 import { useCallback } from 'react';
 import { useAtom } from 'jotai';
-import { useTransactionPopup } from '@micro-stacks/react';
+import { uintCV } from 'micro-stacks/clarity';
+import {
+  PostConditionMode,
+  createSTXPostCondition,
+  FungibleConditionCode,
+} from 'micro-stacks/transactions';
+import { networkAtom, userStxAddressesAtom, useTransactionPopup } from '@micro-stacks/react';
+import { ChainID } from 'micro-stacks/common';
 import { currentCnryContractState } from '@store/helpers';
 import { KEEPALIVE_FUNCTION } from '@utils/constants';
-import { userPendingTxIdsAtom, userPendingTxAtom } from '@store/cnry';
-import { uintCV } from 'micro-stacks/clarity';
-import { intCV } from '@stacks/transactions';
+import { userPendingTxIdsAtom, userPendingTxAtom, keepalivePriceAtom } from '@store/cnry';
 
 const useKeepalive = () => {
   const [cnryContract] = useAtom(currentCnryContractState);
   const [contractAddress, contractName] = cnryContract.split('.');
+  const [network] = useAtom(networkAtom);
+  const [keepalivePrice] = useAtom(keepalivePriceAtom);
+  const chain = network?.chainId === ChainID.Mainnet ? 'mainnet' : 'testnet';
+  const [userStxAddresses] = useAtom(userStxAddressesAtom);
+  const userStxAddress = userStxAddresses?.[chain] || contractAddress;
   const { handleContractCall } = useTransactionPopup();
   const [pendingTxIds, setPendingTxIds] = useAtom(userPendingTxIdsAtom);
 
@@ -26,6 +36,12 @@ const useKeepalive = () => {
     console.log(errorMessage);
   }, []);
 
+  const stxPostCond = createSTXPostCondition(
+    userStxAddress,
+    FungibleConditionCode.Equal,
+    keepalivePrice
+  );
+
   return useCallback(
     cnryTokenId => {
       void handleContractCall({
@@ -33,12 +49,13 @@ const useKeepalive = () => {
         contractName,
         functionName: KEEPALIVE_FUNCTION,
         functionArgs: [uintCV(Number(cnryTokenId.tokenId))],
-        postConditions: [],
+        postConditionMode: PostConditionMode.Deny,
+        postConditions: [stxPostCond],
         onFinish,
         onCancel,
       });
     },
-    [handleContractCall, contractAddress, contractName, onFinish, onCancel]
+    [handleContractCall, contractAddress, contractName, stxPostCond, onFinish, onCancel]
   );
 };
 export default useKeepalive;

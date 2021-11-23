@@ -104,12 +104,7 @@ export const CnryInterface: ClarityAbi = {
       "outputs": {
         "type": {
           "response": {
-            "error": {
-              "response": {
-                "error": "uint128",
-                "ok": "none"
-              }
-            },
+            "error": "uint128",
             "ok": "uint128"
           }
         }
@@ -141,6 +136,24 @@ export const CnryInterface: ClarityAbi = {
       "access": "public",
       "args": [
         {
+          "name": "new-hatchPrice",
+          "type": "uint128"
+        }
+      ],
+      "name": "set-hatchPrice",
+      "outputs": {
+        "type": {
+          "response": {
+            "error": "uint128",
+            "ok": "bool"
+          }
+        }
+      }
+    },
+    {
+      "access": "public",
+      "args": [
+        {
           "name": "tokenId",
           "type": "uint128"
         },
@@ -153,13 +166,26 @@ export const CnryInterface: ClarityAbi = {
       "outputs": {
         "type": {
           "response": {
-            "error": {
-              "response": {
-                "error": "uint128",
-                "ok": "none"
-              }
-            },
+            "error": "uint128",
             "ok": "uint128"
+          }
+        }
+      }
+    },
+    {
+      "access": "public",
+      "args": [
+        {
+          "name": "new-keepalivePrice",
+          "type": "uint128"
+        }
+      ],
+      "name": "set-keepalivePrice",
+      "outputs": {
+        "type": {
+          "response": {
+            "error": "uint128",
+            "ok": "bool"
           }
         }
       }
@@ -184,12 +210,7 @@ export const CnryInterface: ClarityAbi = {
       "outputs": {
         "type": {
           "response": {
-            "error": {
-              "response": {
-                "error": "uint128",
-                "ok": "none"
-              }
-            },
+            "error": "uint128",
             "ok": "uint128"
           }
         }
@@ -215,12 +236,7 @@ export const CnryInterface: ClarityAbi = {
       "outputs": {
         "type": {
           "response": {
-            "error": {
-              "response": {
-                "error": "uint128",
-                "ok": "none"
-              }
-            },
+            "error": "uint128",
             "ok": "uint128"
           }
         }
@@ -246,12 +262,7 @@ export const CnryInterface: ClarityAbi = {
       "outputs": {
         "type": {
           "response": {
-            "error": {
-              "response": {
-                "error": "uint128",
-                "ok": "none"
-              }
-            },
+            "error": "uint128",
             "ok": "uint128"
           }
         }
@@ -277,13 +288,26 @@ export const CnryInterface: ClarityAbi = {
       "outputs": {
         "type": {
           "response": {
-            "error": {
-              "response": {
-                "error": "uint128",
-                "ok": "none"
-              }
-            },
+            "error": "uint128",
             "ok": "uint128"
+          }
+        }
+      }
+    },
+    {
+      "access": "public",
+      "args": [
+        {
+          "name": "new-watchPrice",
+          "type": "uint128"
+        }
+      ],
+      "name": "set-watchPrice",
+      "outputs": {
+        "type": {
+          "response": {
+            "error": "uint128",
+            "ok": "bool"
           }
         }
       }
@@ -326,15 +350,18 @@ export const CnryInterface: ClarityAbi = {
       "outputs": {
         "type": {
           "response": {
-            "error": {
-              "response": {
-                "error": "uint128",
-                "ok": "none"
-              }
-            },
+            "error": "uint128",
             "ok": "uint128"
           }
         }
+      }
+    },
+    {
+      "access": "read_only",
+      "args": [],
+      "name": "get-hatchPrice",
+      "outputs": {
+        "type": "uint128"
       }
     },
     {
@@ -353,6 +380,14 @@ export const CnryInterface: ClarityAbi = {
             "ok": "uint128"
           }
         }
+      }
+    },
+    {
+      "access": "read_only",
+      "args": [],
+      "name": "get-keepalivePrice",
+      "outputs": {
+        "type": "uint128"
       }
     },
     {
@@ -502,6 +537,14 @@ export const CnryInterface: ClarityAbi = {
             }
           }
         }
+      }
+    },
+    {
+      "access": "read_only",
+      "args": [],
+      "name": "get-watchPrice",
+      "outputs": {
+        "type": "uint128"
       }
     },
     {
@@ -700,6 +743,26 @@ export const CnryInterface: ClarityAbi = {
     },
     {
       "access": "constant",
+      "name": "ERR_FAILED_TO_TRANSFER",
+      "type": {
+        "response": {
+          "error": "uint128",
+          "ok": "none"
+        }
+      }
+    },
+    {
+      "access": "constant",
+      "name": "ERR_INSUFFICIENT_BALANCE",
+      "type": {
+        "response": {
+          "error": "uint128",
+          "ok": "none"
+        }
+      }
+    },
+    {
+      "access": "constant",
       "name": "ERR_NOT_AUTHORIZED",
       "type": {
         "response": {
@@ -729,7 +792,22 @@ export const CnryInterface: ClarityAbi = {
     },
     {
       "access": "variable",
+      "name": "hatchPrice",
+      "type": "uint128"
+    },
+    {
+      "access": "variable",
+      "name": "keepalivePrice",
+      "type": "uint128"
+    },
+    {
+      "access": "variable",
       "name": "lastId",
+      "type": "uint128"
+    },
+    {
+      "access": "variable",
+      "name": "watchPrice",
       "type": "uint128"
     }
   ]

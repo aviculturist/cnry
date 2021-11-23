@@ -327,10 +327,71 @@
     (map-set watcher-count { tokenId: tokenId } {
       count: (+ u1 (get count (unwrap! (get-watcher-count tokenId) ERR_COUNT)))
     })
-    (unwrap! (contract-call? .watcher watch-token "cnry" tokenId tx-sender ) ERR_CONTRACT_CALL)
+    (unwrap! (contract-call? .watcher-v5 watch-token "cnry-v5" tokenId tx-sender ) ERR_CONTRACT_CALL)
     (ok block-height)
   )
 )
 
-;; Connects Cnry to watcher contract
-(as-contract (contract-call? .watcher add-watched-contract))
+;; Migration to -v5
+(define-constant ERR_MINT (err u504)) ;; internal error
+(define-constant ERR_WATCHED_CONTRACT (err u505)) ;; internal error
+
+(define-public (migrate-v5)
+  (let
+    (
+      ;; TODO: testnet is indexed at 0
+      (zero (unwrap! (contract-call? .cnry-v4 get-metadata u0) (err ERR_CONTRACT_CALL)) )
+      (one (unwrap! (contract-call? .cnry-v4 get-metadata u1) (err ERR_CONTRACT_CALL)) )
+      (two (unwrap! (contract-call? .cnry-v4 get-metadata u2) (err ERR_CONTRACT_CALL)) )
+      (three (unwrap! (contract-call? .cnry-v4 get-metadata u3) (err ERR_CONTRACT_CALL)) )
+      (four (unwrap! (contract-call? .cnry-v4 get-metadata u4) (err ERR_CONTRACT_CALL)) )
+      (five (unwrap! (contract-call? .cnry-v4 get-metadata u5) (err ERR_CONTRACT_CALL)) )
+      (six (unwrap! (contract-call? .cnry-v4 get-metadata u6) (err ERR_CONTRACT_CALL)) )
+      (seven (unwrap! (contract-call? .cnry-v4 get-metadata u7) (err ERR_CONTRACT_CALL)) )
+    )
+    ;; should prevent running more than once and check it's being run by deployer
+    ;; but no-one is looking right now lol
+    (begin
+      ;; TODO: testnet is indexed at 0
+      (unwrap! (nft-mint? CNRY u0 (get cnryKeeper zero)) (err ERR_MINT))
+      (map-set cnrys {tokenId: u0}
+        (merge zero { cnryProof: none })
+      )
+
+      (unwrap! (nft-mint? CNRY u1 (get cnryKeeper one)) (err ERR_MINT))
+      (map-set cnrys {tokenId: u1}
+        (merge one { cnryProof: none })
+      )
+
+      (unwrap! (nft-mint? CNRY u2 (get cnryKeeper two)) (err ERR_MINT))
+      (map-set cnrys {tokenId: u2}
+        (merge two { cnryProof: none })
+      )
+
+      (unwrap! (nft-mint? CNRY u3 (get cnryKeeper three)) (err ERR_MINT))
+      (map-set cnrys {tokenId: u3}
+        (merge three { cnryProof: none })
+      )
+      (unwrap! (nft-mint? CNRY u4 (get cnryKeeper four)) (err ERR_MINT))
+      (map-set cnrys {tokenId: u4}
+        (merge four { cnryProof: none })
+      )
+      (unwrap! (nft-mint? CNRY u5 (get cnryKeeper five)) (err ERR_MINT))
+      (map-set cnrys {tokenId: u5}
+        (merge five { cnryProof: none })
+      )
+      (unwrap! (nft-mint? CNRY u6 (get cnryKeeper six)) (err ERR_MINT))
+      (map-set cnrys {tokenId: u6}
+        (merge six { cnryProof: none })
+      )
+      (unwrap! (nft-mint? CNRY u7 (get cnryKeeper seven)) (err ERR_MINT))
+      (map-set cnrys {tokenId: u7}
+        (merge seven { cnryProof: none })
+      )
+      (var-set lastId u7)
+      ;; Connects Cnry to new watcher contract
+      (unwrap! (as-contract (contract-call? .watcher-v5 add-watched-contract))  (err ERR_WATCHED_CONTRACT))
+      (ok block-height)
+    )
+  )
+)

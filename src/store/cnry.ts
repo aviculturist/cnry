@@ -527,6 +527,93 @@ export const watcherLastIdAtom = atomWithQuery<number>(
   { refetchInterval: 300000 } // five minutes in milliseconds (5000 = 5 seconds)
 );
 
+export const hatchPriceAtom = atomWithQuery<bigint>(
+  'cnry-get-hatch-price',
+  async get => {
+    const client = get(smartContractsClientAtom);
+    const cnryContract = get(currentCnryContractState);
+    const [contractAddress, contractName] = cnryContract.split('.');
+
+    try {
+      const data = await client.callReadOnlyFunction({
+        contractAddress,
+        contractName,
+        functionName: 'get-hatchPrice',
+        readOnlyFunctionArgs: {
+          sender: contractAddress,
+          arguments: [],
+        },
+      });
+      if (data.okay && data.result) {
+        const result = cvToJSON(hexToCV(data.result as string));
+        return result.value;
+      } // TODO: failed to fetch
+    } catch (_e) {
+      console.log(_e);
+    }
+    return 0n;
+  },
+  { refetchInterval: 3600000 } // one hour in milliseconds (5000 = 5 seconds)
+);
+
+export const keepalivePriceAtom = atomWithQuery<bigint>(
+  'cnry-get-keepalive-price',
+  async get => {
+    const client = get(smartContractsClientAtom);
+    const cnryContract = get(currentCnryContractState);
+    const [contractAddress, contractName] = cnryContract.split('.');
+
+    try {
+      const data = await client.callReadOnlyFunction({
+        contractAddress,
+        contractName,
+        functionName: 'get-keepalivePrice',
+        readOnlyFunctionArgs: {
+          sender: contractAddress,
+          arguments: [],
+        },
+      });
+      if (data.okay && data.result) {
+        const result = cvToJSON(hexToCV(data.result as string));
+        return result.value;
+      } // TODO: failed to fetch
+    } catch (_e) {
+      console.log(_e);
+    }
+    return 0n;
+  },
+  { refetchInterval: 3600000 } // one hour in milliseconds (5000 = 5 seconds)
+);
+
+export const watchPriceAtom = atomWithQuery<bigint>(
+  'cnry-get-watch-price',
+  async get => {
+    const client = get(smartContractsClientAtom);
+    const cnryContract = get(currentCnryContractState);
+    const [contractAddress, contractName] = cnryContract.split('.');
+
+    try {
+      const data = await client.callReadOnlyFunction({
+        contractAddress,
+        contractName,
+        functionName: 'get-watchPrice',
+        readOnlyFunctionArgs: {
+          sender: contractAddress,
+          arguments: [],
+        },
+      });
+      if (data.okay && data.result) {
+        const result = cvToJSON(hexToCV(data.result as string));
+        return result.value;
+      } // TODO: failed to fetch
+    } catch (_e) {
+      console.log(_e);
+    }
+    return 0n;
+  },
+  { refetchInterval: 3600000 } // one hour in milliseconds (5000 = 5 seconds)
+);
+
 /*
  * Check if a specific cnry is alive
  */

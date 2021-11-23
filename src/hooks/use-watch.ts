@@ -1,14 +1,25 @@
 import { useCallback } from 'react';
 import { useAtom } from 'jotai';
-import { useTransactionPopup } from '@micro-stacks/react';
+import { uintCV } from 'micro-stacks/clarity';
+import {
+  PostConditionMode,
+  createSTXPostCondition,
+  FungibleConditionCode,
+} from 'micro-stacks/transactions';
+import { networkAtom, userStxAddressesAtom, useTransactionPopup } from '@micro-stacks/react';
+import { ChainID } from 'micro-stacks/common';
 import { currentCnryContractState } from '@store/helpers';
 import { WATCH_FUNCTION } from '@utils/constants';
-import { userPendingTxIdsAtom, userPendingTxAtom } from '@store/cnry';
-import { uintCV } from 'micro-stacks/clarity';
+import { userPendingTxIdsAtom, userPendingTxAtom, watchPriceAtom } from '@store/cnry';
 
 const useWatch = () => {
   const [cnryContract] = useAtom(currentCnryContractState);
   const [contractAddress, contractName] = cnryContract.split('.');
+  const [network] = useAtom(networkAtom);
+  const [watchPrice] = useAtom(watchPriceAtom);
+  const chain = network?.chainId === ChainID.Mainnet ? 'mainnet' : 'testnet';
+  const [userStxAddresses] = useAtom(userStxAddressesAtom);
+  const userStxAddress = userStxAddresses?.[chain] || contractAddress;
   const { handleContractCall } = useTransactionPopup();
   const [pendingTxIds, setPendingTxIds] = useAtom(userPendingTxIdsAtom);
 
@@ -25,6 +36,12 @@ const useWatch = () => {
     console.log(errorMessage);
   }, []);
 
+  const stxPostCond = createSTXPostCondition(
+    userStxAddress,
+    FungibleConditionCode.Equal,
+    watchPrice
+  );
+
   return useCallback(
     cnryTokenId => {
       void handleContractCall({
@@ -32,12 +49,13 @@ const useWatch = () => {
         contractName,
         functionName: WATCH_FUNCTION,
         functionArgs: [uintCV(Number(cnryTokenId))],
-        postConditions: [],
+        postConditionMode: PostConditionMode.Deny,
+        postConditions: [stxPostCond],
         onFinish,
         onCancel,
       });
     },
-    [handleContractCall, contractAddress, contractName, onFinish, onCancel]
+    [handleContractCall, contractAddress, contractName, stxPostCond, onFinish, onCancel]
   );
 };
 export default useWatch;
