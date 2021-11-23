@@ -20,7 +20,7 @@ const deployed = NodeProvider.fromContracts(contracts, clarigenConfig);
 
 async function run() {
   const cnry = deployed.cnry.contract;
-  const setNameTx = cnry.setName(tokenId, name) as Transaction<bigint, Response<null, bigint>>;
+  const setNameTx = cnry.setName(tokenId, name) as Transaction<bigint, bigint>;
 
   const result = (await setNameTx.submit({
     postConditions: [],

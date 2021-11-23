@@ -19,10 +19,7 @@ async function run() {
   const cnry = deployed.cnry.contract;
   const tokenId = 1;
   //const incrementTx = counter.increment() as NodeTransaction<boolean, null>;
-  const setNameTx = cnry.setStatement(tokenId, 'Foobar') as Transaction<
-    bigint,
-    Response<null, bigint>
-  >;
+  const setNameTx = cnry.setStatement(tokenId, 'Foobar') as Transaction<bigint, bigint>;
 
   const result = (await setNameTx.submit({
     postConditions: [],

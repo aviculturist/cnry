@@ -19,7 +19,7 @@ const deployed = NodeProvider.fromContracts(contracts, clarigenConfig);
 
 async function run() {
   const cnry = deployed.cnry.contract;
-  const watchTx = cnry.watch(tokenId) as Transaction<bigint, Response<null, bigint>>;
+  const watchTx = cnry.watch(tokenId) as Transaction<bigint, bigint>;
 
   const result = (await watchTx.submit({
     postConditions: [],

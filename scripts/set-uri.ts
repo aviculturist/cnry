@@ -20,7 +20,7 @@ async function run() {
   const tokenId = 0;
   const setNameTx = cnry.setUri(tokenId, 'ipfs://QmBLAHBLAHBLAH/{id}') as Transaction<
     bigint,
-    Response<null, bigint>
+    bigint
   >;
 
   const result = (await setNameTx.submit({

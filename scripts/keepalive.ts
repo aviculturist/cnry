@@ -18,7 +18,7 @@ const deployed = NodeProvider.fromContracts(contracts, clarigenConfig);
 
 async function run() {
   const cnry = deployed.cnry.contract;
-  const keepaliveTx = cnry.keepalive(tokenId) as Transaction<bigint, Response<null, bigint>>;
+  const keepaliveTx = cnry.keepalive(tokenId) as Transaction<bigint, bigint>;
 
   const result = (await keepaliveTx.submit({
     postConditions: [],
