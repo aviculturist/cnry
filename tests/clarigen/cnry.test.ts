@@ -1,5 +1,13 @@
 import { TestProvider, txOk, txErr } from '@clarigen/test';
 import { cvToValue, TransactionReceipt } from '@clarigen/core';
+import {
+  FungibleConditionCode,
+  NonFungibleConditionCode,
+  makeStandardSTXPostCondition,
+  makeStandardNonFungiblePostCondition,
+  createAssetInfo,
+  stringUtf8CV,
+} from '@stacks/transactions';
 
 import { contracts, accounts, CnryContract, WatcherContract } from '@contracts';
 
@@ -17,24 +25,59 @@ async function deploy() {
 }
 const delay = (ms: number | undefined) => new Promise(res => setTimeout(res, ms));
 
+// const stxPostCond = createSTXPostCondition(userStxAddress, FungibleConditionCode.Equal, hatchPrice);
+
+// const nftPostCond = createNonFungiblePostCondition(
+//   userStxAddress,
+//   NonFungibleConditionCode.Owns,
+//   createAssetInfo(contractAddress, contractName, 'CNRY'),
+//   stringUtf8CV('CNRY')
+// );
+
 describe('Cnry contract', () => {
   beforeAll(async () => {
     await deploy();
   });
+  // wallet_1 gets a CNRY token
+  const nftPostConditionAddress = accounts.wallet_1.address;
+  const nftPostConditionCode = NonFungibleConditionCode.Owns;
+  const assetAddress = accounts.deployer.address;
+  const assetContractName = 'cnry';
+  const assetName = 'CNRY';
+  const tokenAssetName = stringUtf8CV('CNRY');
+  const nonFungibleAssetInfo = createAssetInfo(assetAddress, assetContractName, assetName);
+
+  const standardNonFungiblePostCondition = makeStandardNonFungiblePostCondition(
+    nftPostConditionAddress,
+    nftPostConditionCode,
+    nonFungibleAssetInfo,
+    tokenAssetName
+  );
+  // Deployer gets 1 STX
+  const postConditionAddress = accounts.deployer.address;
+  const postConditionCode = FungibleConditionCode.Equal;
+  const postConditionAmount = 1000000n; // is this equiv to new BigNum(1000000) ?
+  const postConditions = [
+    makeStandardSTXPostCondition(postConditionAddress, postConditionCode, postConditionAmount),
+    standardNonFungiblePostCondition,
+  ];
 
   test('wallet_1 (Alice) can hatch a Cnry and the first Cnry has tokenId 1', async () => {
     const tx = cnry.hatch(
       'Acme Corp',
       'Acme Corp has never received an order under Section 215 of the USA Patriot Act.'
     );
+    // Fails
     //const result = await txOk(tx, alice);
 
     const result = (await tx.submit({
       sender: accounts.wallet_1.address,
-      postConditions: [],
+      postConditions: postConditions,
     })) as TransactionReceipt<bigint, bigint>;
+    console.log(accounts.deployer.balance);
+    console.log(accounts.wallet_1.balance);
     console.log(result.getResult());
-    //expect(result.value).toEqual(1n);
+    expect((await result.getResult()).value).toEqual(1n);
   });
 
   test('Alice can update the Cnry Uri', async () => {
