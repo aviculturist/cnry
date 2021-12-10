@@ -17,7 +17,7 @@ const ClearApplicationDataMenuItem = () => {
     setOpen(true);
   };
 
-  const handleClose = (event: React.SyntheticEvent | React.MouseEvent, reason?: string) => {
+  const handleClose = (event: Event | React.SyntheticEvent<any, Event>, reason?: string) => {
     if (reason === 'clickaway') {
       return;
     }
