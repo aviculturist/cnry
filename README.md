@@ -174,6 +174,16 @@ If you'd like to contribute to the project, please reach out on Discord or via T
 
 The current version is very much a WIP, things are still broken or partly implemented and many of the contract functions haven't been expressed in the ui.
 
+## Burps
+
+Added to resolutions:
+
+"cli-table": "0.3.1",
+Broken lingui
+
+"@oclif/plugin-help": "3.2.14"
+https://github.com/netlify/cli/issues/3788#issuecomment-990914667
+
 ## Design Caveats
 
 - The `cnry` and `watcher` are NFTs. But don't ape in with any expectation that they will increase in value. In fact, the current `testnet` contracts have the `transfer` function disabled  ... because ... well, I still need to work out if there's any way to preserve those functions given the way the contracts interact.
