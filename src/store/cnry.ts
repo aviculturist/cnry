@@ -1,11 +1,10 @@
 import { atom } from 'jotai';
 import { atomWithQuery, atomFamilyWithQuery } from 'jotai-query-toolkit';
 import { networkAtom, userStxAddressesAtom } from '@micro-stacks/react';
-import { fetchReadOnlyFunction } from 'micro-stacks/api'; // TODO: seemingly broken
+import { fetchReadOnlyFunction } from 'micro-stacks/api';
 import { accountBalancesClientAtom, accountTransactionsListClientAtom } from '@micro-stacks/query';
-
 import { ChainID } from 'micro-stacks/common';
-import { uintCV } from 'micro-stacks/clarity';
+import { uintCV, cvToTrueValue, hexToValue } from 'micro-stacks/clarity';
 // TODO: these return differently
 //import { cvToJSON, hexToCV } from 'micro-stacks/clarity';
 //import { cvToJSON, hexToCV } from '@stacks/transactions';
@@ -342,52 +341,24 @@ export const cnryWatchCountAtom = atomFamilyWithQuery<number, number | undefined
     const userStxAddresses = get(userStxAddressesAtom);
     const cnryContract = get(currentCnryContractState);
     const [contractAddress, contractName] = cnryContract.split('.');
-    const senderAddress = userStxAddresses?.[chain] || contractAddress; // bcuz when user is not logged in, queries fail
-    const client = get(smartContractsClientAtom);
-    const networkUrl = network.getCoreApiUrl();
-    // try {
-    //   const response = await fetchReadOnlyFunction({
-    //     url: networkUrl,
-    //     contractName,
-    //     contractAddress,
-    //     functionName: 'get-watcher-count',
-    //     functionArgs: [uintCV(tokenId)],
-    //     senderAddress,
-    //   });
-    //   console.log(response);
-    //   return 1; //response;
-    // } catch (_e) {
-    //   console.log(_e);
-    // }
+    const senderAddress = userStxAddresses?.[chain] || contractAddress;
     try {
-      const data = await client.callReadOnlyFunction({
-        contractAddress,
+      const response = await fetchReadOnlyFunction<{count: bigint}>({
+        network,
         contractName,
+        contractAddress,
         functionName: 'get-watcher-count',
-        readOnlyFunctionArgs: {
-          sender: senderAddress,
-          arguments: [cvToHex(uintCV(tokenId))],
-        },
-      });
-      if (data.okay && data.result) {
-        const result = cvToJSON(hexToCV(data.result as string));
-        return result.value.value.count.value as number; // this is ridiculous
-      } // TODO: failed to fetch
-
-      // if (data.okay && data.result) {
-      //   if (data.cause && data.cause === undefined) {
-      //     return undefined;
-      //   }
-      //   const result = cvToJSON(hexToCV(data.result as string));
-      //   return result && result.value && result.value.value ? result.value.value : undefined;
-      // } // TODO: failed to fetch
+        functionArgs: [uintCV(tokenId)],
+        senderAddress: senderAddress,
+      }, true);
+      return Number(response.count);
     } catch (_e) {
       console.log(_e);
     }
-    return undefined; //{} as any;
+    return undefined;
   },
   { refetchInterval: 600000 } // ten minutes in milliseconds (5000 = 5 seconds)
-); // every minute
+);
 
 export const cnryGetMetadataAtom = atomFamilyWithQuery<number | undefined, any | undefined>(
   'cnry-get-metadata',
