@@ -21,8 +21,8 @@ import { SetCnryKeepaliveExpiryDialog } from '@components/set-cnry-keepalive-exp
 import { cnryGetMetadataAtom } from '@store/cnry';
 
 // TODO: remove cnryName param
-const EditCnryMenu = ({ tokenId, cnryName }: { tokenId: number; cnryName: string }) => {
-  const [cnry] = useAtom(cnryGetMetadataAtom(tokenId));
+const EditCnryMenu = ({ tokenId }: { tokenId: number }) => {
+  const [cnryMetadata] = useAtom(cnryGetMetadataAtom(tokenId));
   const [anchorEl, setAnchorEl] = useAtom(editCnryMenuAnchorElAtom(tokenId));
   const [menuIsOpen, setMenuIsOpen] = useAtom(editCnryMenuIsOpenAtom(tokenId));
   const [setCnryNameDialogIsOpen, setSetCnryNameDialogIsOpen] = useAtom(
@@ -83,22 +83,18 @@ const EditCnryMenu = ({ tokenId, cnryName }: { tokenId: number; cnryName: string
           </MenuItem>
         </MenuList>
       </Menu>
-      <SetCnryNameDialog tokenId={tokenId} cnryName={cnryName} />
+      <SetCnryNameDialog tokenId={tokenId} />
       <SetCnryStatementDialog tokenId={tokenId} />
       <SetCnryKeepaliveExpiryDialog tokenId={tokenId} />
     </>
   );
 };
 // alternative to moving this prop around so many times? atom?
-const EditCnryIconButton = ({ tokenId, cnryName }: { tokenId: number; cnryName: string }) => {
+const EditCnryIconButton = ({ tokenId }: { tokenId: number }) => {
   const [menuIsOpen, setMenuIsOpen] = useAtom(editCnryMenuIsOpenAtom(tokenId));
   const [, setAnchorEl] = useAtom(editCnryMenuAnchorElAtom(tokenId));
 
-  const handleEditCnry = (
-    event: React.MouseEvent<HTMLElement>,
-    tokenId: number,
-    cnryName: string
-  ) => {
+  const handleEditCnry = (event: React.MouseEvent<HTMLElement>, tokenId: number) => {
     setAnchorEl(event.currentTarget);
     setMenuIsOpen(true);
   };
@@ -107,7 +103,7 @@ const EditCnryIconButton = ({ tokenId, cnryName }: { tokenId: number; cnryName: 
     <div>
       <IconButton
         size="small"
-        onClick={event => handleEditCnry(event, tokenId, cnryName)}
+        onClick={event => handleEditCnry(event, tokenId)}
         color="primary"
         id={`edit-cnry-button-${tokenId}`}
         aria-controls={`edit-cnry-menu-${tokenId}`}
@@ -118,7 +114,7 @@ const EditCnryIconButton = ({ tokenId, cnryName }: { tokenId: number; cnryName: 
           <MoreVertIcon fontSize="small" />
         </Tooltip>
       </IconButton>
-      <EditCnryMenu key={tokenId} cnryName={cnryName} tokenId={tokenId} />
+      <EditCnryMenu key={tokenId.toString()} tokenId={tokenId} />
     </div>
   );
 };

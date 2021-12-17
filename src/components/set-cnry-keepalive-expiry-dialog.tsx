@@ -16,7 +16,7 @@ export const SetCnryKeepaliveExpiryDialog = ({ tokenId }: { tokenId: number }) =
     setSetCnryKeepaliveExpiryDialogisOpen(false);
   };
 
-  return (
+  return ( cnryMetadata ?
     <>
       <Dialog
         fullWidth={true}
@@ -27,12 +27,12 @@ export const SetCnryKeepaliveExpiryDialog = ({ tokenId }: { tokenId: number }) =
         <DialogTitle>{t`Edit Keepalive Expiry Frequency`}</DialogTitle>
         <Stack maxWidth="sm" sx={{ m: 'auto', p: 6 }}>
           <SetCnryKeepaliveExpiryForm
-            key={tokenId}
+            key={tokenId.toString()}
             tokenId={tokenId}
-            cnryKeepaliveExpiry={cnryMetadata.keepaliveExpiry.value}
+            cnryKeepaliveExpiry={Number(cnryMetadata.keepaliveExpiry)}
           />
         </Stack>
       </Dialog>
-    </>
+    </> : <></>
   );
 };

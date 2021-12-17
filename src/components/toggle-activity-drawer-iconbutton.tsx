@@ -4,7 +4,7 @@ import Badge from '@mui/material/Badge';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import NotificationsNoneTwoToneIcon from '@mui/icons-material/NotificationsNoneTwoTone';
-import { userPendingTxsCountAtom } from '@store/cnry';
+import { currentPendingTxsCountAtom } from '@store/transactions';
 import useTransactionsDrawerIsOpen from '@hooks/use-transactions-drawer-is-open';
 import { t } from '@lingui/macro';
 
@@ -13,7 +13,7 @@ const ToggleActivityDrawerIconButton = () => {
   const handleToggleDrawer = (event: React.MouseEvent<HTMLElement>) => {
     void setTransactionsDrawerIsOpen(true);
   };
-  const [pendingTxsCount] = useAtom(userPendingTxsCountAtom);
+  const [pendingTxsCount] = useAtom(currentPendingTxsCountAtom);
 
   return (
     <IconButton onClick={handleToggleDrawer} color="primary" size="small">

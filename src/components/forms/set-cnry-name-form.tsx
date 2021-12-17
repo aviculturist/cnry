@@ -29,7 +29,7 @@ const SetCnryNameForm = ({ tokenId, cnryName }: { tokenId: number; cnryName: str
   return (
     <>
       <Box
-        key={tokenId}
+        key={tokenId.toString()}
         onSubmit={formik.handleSubmit}
         component="form"
         autoComplete="off"

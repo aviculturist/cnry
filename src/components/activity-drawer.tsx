@@ -6,13 +6,13 @@ import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
 import ListSubheader from '@mui/material/ListSubheader';
 import useTransactionsDrawerIsOpen from '@hooks/use-transactions-drawer-is-open';
-import { cnryContractTransactionIdsAtom, userPendingTxIdsAtom } from '@store/cnry';
+import { cnryContractTransactionIdsAtom, currentPendingTxIdsAtom } from '@store/transactions';
 import UserPendingTxItem from '@components/user-pending-tx-item';
 import TxItem from '@components/tx-item';
 
 const ActivityDrawer = () => {
   const { transactionsDrawerIsOpen, setTransactionsDrawerIsOpen } = useTransactionsDrawerIsOpen();
-  const [userPendingTxIds] = useAtom(userPendingTxIdsAtom);
+  const [userPendingTxIds] = useAtom(currentPendingTxIdsAtom);
   const [cnryTransactionIds] = useAtom(cnryContractTransactionIdsAtom);
   const toggleDrawer = (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
     if (
@@ -29,8 +29,8 @@ const ActivityDrawer = () => {
     <Box
       sx={{ width: 250 }}
       role="presentation"
-      onClick={toggleDrawer(false)}
-      onKeyDown={toggleDrawer(false)}
+      onClick={() => toggleDrawer(false)}
+      onKeyDown={() => toggleDrawer(false)}
     >
       <List
         sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
@@ -50,8 +50,8 @@ const ActivityDrawer = () => {
     <Box
       sx={{ width: 250 }}
       role="presentation"
-      onClick={toggleDrawer(false)}
-      onKeyDown={toggleDrawer(false)}
+      onClick={() => toggleDrawer(false)}
+      onKeyDown={() => toggleDrawer(false)}
     >
       <List
         sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}

@@ -10,7 +10,8 @@ import { networkAtom, userStxAddressesAtom, useTransactionPopup } from '@micro-s
 import { ChainID } from 'micro-stacks/common';
 import { currentCnryContractState } from '@store/helpers';
 import { KEEPALIVE_FUNCTION } from '@utils/constants';
-import { userPendingTxIdsAtom, userPendingTxAtom, keepalivePriceAtom } from '@store/cnry';
+import { keepalivePriceAtom } from '@store/cnry';
+import { currentPendingTxIdsAtom, userPendingTxAtom } from '@store/transactions';
 
 const useKeepalive = () => {
   const [cnryContract] = useAtom(currentCnryContractState);
@@ -21,7 +22,7 @@ const useKeepalive = () => {
   const [userStxAddresses] = useAtom(userStxAddressesAtom);
   const userStxAddress = userStxAddresses?.[chain] || contractAddress;
   const { handleContractCall } = useTransactionPopup();
-  const [pendingTxIds, setPendingTxIds] = useAtom(userPendingTxIdsAtom);
+  const [pendingTxIds, setPendingTxIds] = useAtom(currentPendingTxIdsAtom);
 
   const onFinish = useCallback(
     data => {
@@ -43,12 +44,12 @@ const useKeepalive = () => {
   );
 
   return useCallback(
-    cnryTokenId => {
+    cnry => {
       void handleContractCall({
         contractAddress,
         contractName,
         functionName: KEEPALIVE_FUNCTION,
-        functionArgs: [uintCV(Number(cnryTokenId.tokenId))],
+        functionArgs: [uintCV(Number(cnry.tokenId))],
         postConditionMode: PostConditionMode.Deny,
         postConditions: [stxPostCond],
         onFinish,

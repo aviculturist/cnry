@@ -5,7 +5,7 @@ import { useAtom } from 'jotai';
 import { useAtomValue } from 'jotai/utils';
 import { ChainID } from 'micro-stacks/common';
 import { useAuth, networkAtom, userStxAddressesAtom } from '@micro-stacks/react';
-import { ContractCallTransaction } from '@blockstack/stacks-blockchain-api-types';
+import { ContractCallTransaction } from '@stacks/stacks-blockchain-api-types';
 import { styled } from '@mui/material/styles';
 import { red } from '@mui/material/colors';
 import { green } from '@mui/material/colors';
@@ -29,14 +29,12 @@ import ShareIcon from '@mui/icons-material/Share';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Tooltip from '@mui/material/Tooltip';
 import CircularProgress from '@mui/material/CircularProgress';
+import { cnryGetMetadataAtom, cnryIsAliveAtom, cnryWatchCountAtom } from '@store/cnry';
 import {
-  cnryGetMetadataAtom,
-  cnryContractTransactionAtom,
-  cnryIsAliveAtom,
   cnryUserPendingTxIdsAtom,
   userPendingTxAtom,
-  cnryWatchCountAtom,
-} from '@store/cnry';
+  cnryContractTransactionAtom,
+} from '@store/transactions';
 import cnryListTabStateAtom from '@store/ui/cnry-list-tab-state';
 import useWatch from '@hooks/use-watch';
 import useKeepalive from '@hooks/use-keepalive';
@@ -44,7 +42,7 @@ import { toDate, toRelativeTime } from '@utils/time';
 import CnryMetadataTable from '@components/cnry-metadata-table';
 import EditCnryIconButton from '@components/edit-cnry-iconbutton';
 import useInstallWalletDialog from '@hooks/use-install-wallet-dialog';
-import { userPendingTxIdsAtom } from '@store/cnry';
+import { currentPendingTxIdsAtom } from '@store/transactions';
 
 const StyledBadge = styled(Badge)<BadgeProps>(({ theme }: { theme: any }) => ({
   '& .MuiBadge-badge': {
@@ -168,7 +166,7 @@ const CnryCardFromTxId = ({ txid }: { txid: string }) => {
     tokenIdString !== undefined
       ? Number(tokenIdString.replace('(ok u', '').replace(')', ''))
       : undefined;
-  return tokenId === undefined ? <></> : <CnryCard key={tokenId} tokenId={tokenId} />;
+  return tokenId === undefined ? <></> : <CnryCard key={tokenId.toString()} tokenId={tokenId} />;
 };
 export { CnryCardFromTxId };
 
@@ -181,23 +179,23 @@ const CnryCard = ({ tokenId }: { tokenId: number }) => {
   const [userStxAddresses] = useAtom(userStxAddressesAtom);
   const userStxAddress = userStxAddresses?.[chain] || '';
   const [isAlive] = useAtom(cnryIsAliveAtom(tokenId));
-  const [cnry] = useAtom(cnryGetMetadataAtom(tokenId));
-  const [cnryWatchCount, dispatchCnryWatchCount] = useAtom(cnryWatchCountAtom(tokenId));
-  const hatchedDate = toDate(cnry.hatchedTimestamp.value * 1000);
-  const keepaliveTimestamp = cnry.keepaliveTimestamp.value * 1000;
-  const keepaliveExpiry = cnry.keepaliveExpiry.value * 1000;
+  const [cnryMetadata] = useAtom(cnryGetMetadataAtom(tokenId));
+  const [cnryWatchCount] = useAtom(cnryWatchCountAtom(tokenId));
+  const hatchedDate = cnryMetadata ? toDate(Number(cnryMetadata.hatchedTimestamp) * 1000) : NaN;
+  const keepaliveTimestamp = cnryMetadata ? Number(cnryMetadata.keepaliveTimestamp) * 1000 : NaN;
+  const keepaliveExpiry = cnryMetadata ? Number(cnryMetadata.keepaliveExpiry) * 1000 : NaN;
   const daysRemainingUntilExpiry = toRelativeTime(keepaliveTimestamp + keepaliveExpiry);
   const { isSignedIn, handleSignIn, session } = useAuth();
   const { setInstallWalletDialogIsOpen } = useInstallWalletDialog();
-  const [pendingTxIds] = useAtom(userPendingTxIdsAtom);
+  const [pendingTxIds] = useAtom(currentPendingTxIdsAtom);
 
-  useEffect(() => {
-    // fetch latest data
-    const refetch = () => {
-      dispatchCnryWatchCount({ type: 'refetch' });
-    };
-    refetch();
-  }, [pendingTxIds, dispatchCnryWatchCount]);
+  // useEffect(() => {
+  //   // fetch latest data
+  //   const refetch = () => {
+  //     dispatchCnryWatchCount({ type: 'refetch' });
+  //   };
+  //   refetch();
+  // }, [pendingTxIds, dispatchCnryWatchCount]);
 
   const handleCopyToClipboard = ({ link }: { link: string }) => {
     const uri = `${typeof window !== 'undefined' ? window.location.href.split('#')[0] : ''}${link}`;
@@ -209,7 +207,7 @@ const CnryCard = ({ tokenId }: { tokenId: number }) => {
     setExpanded(!expanded);
   };
 
-  return cnry ? (
+  return cnryMetadata ? (
     <Card sx={{ m: 'auto', width: 292, maxWidth: 292 }}>
       <CardHeader
         avatar={
@@ -218,7 +216,7 @@ const CnryCard = ({ tokenId }: { tokenId: number }) => {
           </Avatar>
         }
         action={
-          userStxAddress === cnry.cnryKeeper.value ? (
+          userStxAddress === cnryMetadata.cnryKeeper ? (
             <>
               <Typography component="div">
                 <Chip
@@ -231,7 +229,7 @@ const CnryCard = ({ tokenId }: { tokenId: number }) => {
                   variant="outlined"
                 />
               </Typography>
-              <EditCnryIconButton tokenId={cnry.index.value} cnryName={cnry.cnryName.value} />
+              <EditCnryIconButton tokenId={Number(cnryMetadata.index)} />
             </>
           ) : (
             <>
@@ -249,7 +247,7 @@ const CnryCard = ({ tokenId }: { tokenId: number }) => {
             </>
           )
         }
-        title={cnry.cnryName.value}
+        title={cnryMetadata.cnryName}
         subheader={`Hatched on ${hatchedDate}, expiry ${daysRemainingUntilExpiry}`}
       />
       {/* <CardMedia
@@ -261,7 +259,7 @@ const CnryCard = ({ tokenId }: { tokenId: number }) => {
 
       <CardContent>
         <Typography variant="body2" color="text.secondary">
-          {cnry.cnryStatement.value}
+          {cnryMetadata.cnryStatement}
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
@@ -286,7 +284,7 @@ const CnryCard = ({ tokenId }: { tokenId: number }) => {
           <IconButton
             size="small"
             target="_blank"
-            href={`./?id=${cnry.index.value}`}
+            href={`./?id=${cnryMetadata.index}`}
             aria-label="share"
           >
             <ShareIcon fontSize="small" />
@@ -296,16 +294,16 @@ const CnryCard = ({ tokenId }: { tokenId: number }) => {
           <IconButton
             size="small"
             aria-label="copy"
-            onClick={() => handleCopyToClipboard({ link: `./?id=${cnry.index.value}` })}
+            onClick={() => handleCopyToClipboard({ link: `./?id=${cnryMetadata.index}` })}
           >
             <ContentCopyOutlinedIcon fontSize="small" />
           </IconButton>
         </Tooltip>
-        {userStxAddress === cnry.cnryKeeper.value ? (
+        {userStxAddress === cnryMetadata.cnryKeeper ? (
           <Tooltip title={t`Publish keepalive`}>
             <IconButton
               aria-label="keepalive"
-              onClick={() => handleKeepalive({ tokenId: cnry.index.value })}
+              onClick={() => handleKeepalive({ tokenId: cnryMetadata.index })}
             >
               <RestoreIcon />
             </IconButton>
@@ -324,7 +322,7 @@ const CnryCard = ({ tokenId }: { tokenId: number }) => {
       </CardActions>
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <CardContent>
-          <CnryMetadataTable cnry={cnry} />
+          <CnryMetadataTable cnry={cnryMetadata} />
         </CardContent>
       </Collapse>
     </Card>

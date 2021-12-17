@@ -84,8 +84,8 @@ export const anyNetworkInfoAtom = atomFamilyWithQuery<string, CoreNodeInfoRespon
     }
     return {} as CoreNodeInfoResponse;
   },
-  { refetchInterval: 600000 }
-); // ten minutes
+  { refetchInterval: 600000 } // ten minutes in milliseconds (5000 = 5 seconds)
+);
 
 export const anyNetworkStatusAtom = atomFamilyWithQuery<string, ServerStatusResponse>(
   'any-network-status',
@@ -103,8 +103,8 @@ export const anyNetworkStatusAtom = atomFamilyWithQuery<string, ServerStatusResp
     }
     return {} as ServerStatusResponse;
   },
-  { refetchInterval: 600000 }
-); // ten minutes
+  { refetchInterval: 600000 } // ten minutes in milliseconds (5000 = 5 seconds)
+);
 
 export const anyNetworkIsLoadingFamily = atomFamily((networkName: string) => atom(false));
 
@@ -140,5 +140,5 @@ export const networkInfoAtom = atomWithQuery<NetworkInfo>(
     }
     return {} as NetworkInfo;
   },
-  { refetchInterval: 300000 } // onSuccess: () => handleSuccess() TODO
-); // every minute
+  { refetchInterval: 300000 } // five minutes in milliseconds (5000 = 5 seconds)
+);

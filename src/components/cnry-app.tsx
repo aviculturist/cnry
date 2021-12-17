@@ -17,14 +17,14 @@ import CnryListSkeleton from '@components/cnry-list-skeleton';
 
 const CnryItemQueryPopup = () => {
   const tokenId = useIdQuery();
-  const [metadataResult] = useAtom(cnryGetMetadataAtom(tokenId));
+  const [cnryMetadata] = useAtom(cnryGetMetadataAtom(tokenId));
   const { setSingleCnryDialogIsOpen: setMetadataDialogIsOpen } = useSingleCnryDialogIsOpen();
 
   useEffect(() => {
     tokenId && setMetadataDialogIsOpen(true);
-  }, [tokenId, metadataResult, setMetadataDialogIsOpen]);
+  }, [tokenId, cnryMetadata, setMetadataDialogIsOpen]);
 
-  if (metadataResult) {
+  if (cnryMetadata) {
     return <SingleCnryDialog />;
   } else {
     return <SingleCnryErrorDialog />;
@@ -44,20 +44,20 @@ const CnryApp = () => {
         </Stack>
       </main>
 
-      <SafeSuspense fallback={<CircularProgress />}>
+      <SafeSuspense fallback={<></>}>
         <ActivityDrawer />
       </SafeSuspense>
       {tokenId !== undefined ? (
-        <SafeSuspense fallback={<CircularProgress />}>
+        <SafeSuspense fallback={<></>}>
           <CnryItemQueryPopup />
         </SafeSuspense>
       ) : (
         ''
       )}
-      <SafeSuspense fallback={<CircularProgress />}>
+      <SafeSuspense fallback={<></>}>
         <HatchCnryDialog />
       </SafeSuspense>
-      <SafeSuspense fallback={<CircularProgress />}>
+      <SafeSuspense fallback={<></>}>
         <TransactionSnackbars />
       </SafeSuspense>
 

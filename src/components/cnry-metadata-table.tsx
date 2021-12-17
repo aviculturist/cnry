@@ -28,9 +28,9 @@ function createData(name: string, value: string | React.ReactFragment) {
 //     hatchedTimestamp: uint
 // ${toRelativeTime(tx.timestamp * 1000)}
 const CnryMetadataTable = ({ cnry }: { cnry: any }) => {
-  const hatchedDate = toDate(cnry.hatchedTimestamp.value * 1000);
-  const keepaliveTimestamp = cnry.keepaliveTimestamp.value * 1000;
-  const keepaliveExpiry = cnry.keepaliveExpiry.value * 1000;
+  const hatchedDate = toDate(Number(cnry.hatchedTimestamp) * 1000);
+  const keepaliveTimestamp = Number(cnry.keepaliveTimestamp) * 1000;
+  const keepaliveExpiry = Number(cnry.keepaliveExpiry) * 1000;
   //const daysRemainingUntilExpiry = toRelativeTime(keepaliveTimestamp + keepaliveExpiry);
   const expiresDate = toDate(keepaliveTimestamp + keepaliveExpiry);
   const lastKeepalive = toDate(keepaliveTimestamp);
@@ -41,9 +41,9 @@ const CnryMetadataTable = ({ cnry }: { cnry: any }) => {
   };
 
   const rows = [
-    createData('Name', `${cnry.cnryName.value}`),
-    createData('Uri', `${cnry.cnryUri.value}`),
-    createData('Proof', `${cnry.cnryProof.value}`),
+    createData('Name', `${cnry.cnryName}`),
+    createData('Uri', `${cnry.cnryUri}`),
+    createData('Proof', `${cnry.cnryProof}`),
     createData(
       'Keeper',
       <React.Fragment>
@@ -52,13 +52,13 @@ const CnryMetadataTable = ({ cnry }: { cnry: any }) => {
             <IconButton
               size="small"
               aria-label="copy"
-              onClick={() => handleCopyToClipboard({ principal: `${cnry.cnryKeeper.value}` })}
+              onClick={() => handleCopyToClipboard({ principal: `${cnry.cnryKeeper}` })}
             >
               <ContentCopyOutlinedIcon fontSize="small" />
             </IconButton>
           </Tooltip>
-          <a rel="noreferrer" target="_blank" href={`./search/?q=${cnry.cnryKeeper.value}`}>
-            {truncateMiddle(cnry.cnryKeeper.value)}
+          <a rel="noreferrer" target="_blank" href={`./search/?q=${cnry.cnryKeeper}`}>
+            {truncateMiddle(cnry.cnryKeeper)}
           </a>
         </>
       </React.Fragment>
@@ -72,7 +72,7 @@ const CnryMetadataTable = ({ cnry }: { cnry: any }) => {
   return (
     <TableContainer component={Paper}>
       <Table size="small" sx={{ maxWidth: 290 }} aria-label="caption table">
-        <caption>Cnry # {cnry.index.value} Metadata</caption>
+        <caption>Cnry # {cnry.index} Metadata</caption>
         <TableHead>
           <TableRow>
             <TableCell>{t`Key`}</TableCell>

@@ -6,6 +6,23 @@ import Button from '@mui/material/Button';
 import { networkInfoAtom } from '@store/networks';
 import { currentStacksExplorerState, currentChainState } from '@store/helpers';
 import ProgressIcon from '@components/progress-icon';
+import StacksIcon from '@assets/stacks-icon';
+
+const StacksChainTipButtonSkeleton = () => {
+  return (
+    <Tooltip title={t`Stacks Chain Tip`}>
+      <Button
+        startIcon={<StacksIcon/>}
+        variant="text"
+        size="small"
+        color={'success'}
+      >
+        ????
+      </Button>
+    </Tooltip>
+  );
+};
+export { StacksChainTipButtonSkeleton };
 
 const StacksChainTipButton = () => {
   const [networkInfo] = useAtom(networkInfoAtom);
@@ -31,4 +48,4 @@ const StacksChainTipButton = () => {
     </Tooltip>
   );
 };
-export default StacksChainTipButton;
+export { StacksChainTipButton };

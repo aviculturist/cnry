@@ -13,13 +13,12 @@ import { networkAtom, userStxAddressesAtom, useTransactionPopup } from '@micro-s
 import { ChainID } from 'micro-stacks/common';
 import { currentCnryContractState } from '@store/helpers';
 import { HATCH_FUNCTION } from '@utils/constants';
+import { hatchPriceAtom } from '@store/cnry';
 import {
   cnryUserPendingTxIdsAtom,
-  userPendingTxIdsAtom,
+  currentPendingTxIdsAtom,
   userPendingTxAtom,
-  hatchPriceAtom,
-} from '@store/cnry';
-
+} from '@store/transactions';
 const useHatch = () => {
   const [cnryContract] = useAtom(currentCnryContractState);
   const [contractAddress, contractName] = cnryContract.split('.');
@@ -30,7 +29,7 @@ const useHatch = () => {
   const userStxAddress = userStxAddresses?.[chain] || contractAddress;
   const { handleContractCall } = useTransactionPopup();
   const [cnryUserPendingTxIds, setCnryUserPendingTxIds] = useAtom(cnryUserPendingTxIdsAtom);
-  const [pendingTxIds, setPendingTxIds] = useAtom(userPendingTxIdsAtom);
+  const [pendingTxIds, setPendingTxIds] = useAtom(currentPendingTxIdsAtom);
 
   const onFinish = useCallback(
     data => {

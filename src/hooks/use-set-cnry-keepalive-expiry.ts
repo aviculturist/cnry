@@ -3,7 +3,7 @@ import { useAtom } from 'jotai';
 import { useTransactionPopup } from '@micro-stacks/react';
 import { currentCnryContractState } from '@store/helpers';
 import { KEEPALIVE_FUNCTION } from '@utils/constants';
-import { cnryUserPendingTxIdsAtom, userPendingTxIdsAtom, userPendingTxAtom } from '@store/cnry';
+import { cnryUserPendingTxIdsAtom, currentPendingTxIdsAtom, userPendingTxAtom } from '@store/transactions';
 //import { uintCV, intCV } from 'micro-stacks/clarity';
 import { noneCV, someCV, uintCV, stringUtf8CV } from '@stacks/transactions';
 import { anyCnryKeepaliveExpiryDialogIsOpenAtomFamily } from '@store/ui/set-cnry-keepalive-expiry-dialog-is-open';
@@ -13,24 +13,19 @@ const useSetCnryKeepaliveExpiry = (tokenId: number, cnryKeepaliveExpiry: number)
   const [contractAddress, contractName] = cnryContract.split('.');
   const { handleContractCall } = useTransactionPopup();
   const [cnryUserPendingTxIds, setCnryUserPendingTxIds] = useAtom(cnryUserPendingTxIdsAtom);
-  const [pendingTxIds, setPendingTxIds] = useAtom(userPendingTxIdsAtom);
+  const [pendingTxIds, setPendingTxIds] = useAtom(currentPendingTxIdsAtom);
   const [setCnryKeepaliveExpiryDialogIsOpen, setSetCnryKeepaliveExpiryDialogIsOpen] = useAtom(
     anyCnryKeepaliveExpiryDialogIsOpenAtomFamily(tokenId)
   );
   const onFinish = useCallback(
     data => {
+      //setPendingTxIds([...pendingTxIds, data.txId]); // adds this txid to the array of pending transactions
       setPendingTxIds([...pendingTxIds, data.txId]); // adds this txid to the array of pending transactions
       void userPendingTxAtom(data.txId); // creates an atomFamilyWithQuery to track status
       setCnryUserPendingTxIds([...cnryUserPendingTxIds, data.txId]); // adds this txid to the array of pending transactions
       setSetCnryKeepaliveExpiryDialogIsOpen(false);
     },
-    [
-      cnryUserPendingTxIds,
-      pendingTxIds,
-      setCnryUserPendingTxIds,
-      setPendingTxIds,
-      setSetCnryKeepaliveExpiryDialogIsOpen,
-    ]
+    [cnryUserPendingTxIds, setCnryUserPendingTxIds, setPendingTxIds, setSetCnryKeepaliveExpiryDialogIsOpen]
   );
 
   const onCancel = useCallback(errorMessage => {

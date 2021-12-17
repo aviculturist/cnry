@@ -77,7 +77,7 @@ export const currentBitcoinExplorerState = atom(get => {
   return defaultBitcoinExplorer;
 });
 
-// TODO: this needs to be deprecated, other mainnets could be added
+// TODO: refactor to allow other mainnet endpoints
 export const currentChainState = atom(get => {
   const network = get(networkAtom);
   const defaultChain = network.getCoreApiUrl() === DEFAULT_MAINNET_SERVER ? 'mainnet' : 'testnet';

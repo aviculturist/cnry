@@ -3,7 +3,7 @@ import { useAtom } from 'jotai';
 import { useTransactionPopup } from '@micro-stacks/react';
 import { currentCnryContractState } from '@store/helpers';
 import { HATCH_FUNCTION } from '@utils/constants';
-import { cnryUserPendingTxIdsAtom, userPendingTxIdsAtom, userPendingTxAtom } from '@store/cnry';
+import { cnryUserPendingTxIdsAtom, currentPendingTxIdsAtom, userPendingTxAtom } from '@store/transactions';
 //import { uintCV, intCV } from 'micro-stacks/clarity';
 import { noneCV, someCV, uintCV, stringUtf8CV } from '@stacks/transactions';
 import { anyCnryNameDialogIsOpenAtomFamily } from '@store/ui/set-cnry-name-dialog-is-open';
@@ -13,7 +13,7 @@ const useSetCnryName = (tokenId: number, cnryName: string) => {
   const [contractAddress, contractName] = cnryContract.split('.');
   const { handleContractCall } = useTransactionPopup();
   const [cnryUserPendingTxIds, setCnryUserPendingTxIds] = useAtom(cnryUserPendingTxIdsAtom);
-  const [pendingTxIds, setPendingTxIds] = useAtom(userPendingTxIdsAtom);
+  const [pendingTxIds, setPendingTxIds] = useAtom(currentPendingTxIdsAtom);
   const [setCnryNameDialogIsOpen, setSetCnryNameDialogIsOpen] = useAtom(
     anyCnryNameDialogIsOpenAtomFamily(tokenId)
   );

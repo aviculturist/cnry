@@ -17,6 +17,7 @@ export const SetCnryStatementDialog = ({ tokenId }: { tokenId: number }) => {
   };
 
   return (
+    cnryMetadata ?
     <>
       <Dialog
         fullWidth={true}
@@ -27,12 +28,12 @@ export const SetCnryStatementDialog = ({ tokenId }: { tokenId: number }) => {
         <DialogTitle>{t`Edit Statement`}</DialogTitle>
         <Stack maxWidth="sm" sx={{ m: 'auto', p: 6 }}>
           <SetCnryStatementForm
-            key={tokenId}
+            key={tokenId.toString()}
             tokenId={tokenId}
-            cnryStatement={cnryMetadata.cnryStatement.value}
+            cnryStatement={cnryMetadata.cnryStatement}
           />
         </Stack>
       </Dialog>
-    </>
+    </> : <></>
   );
 };

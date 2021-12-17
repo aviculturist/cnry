@@ -14,14 +14,14 @@ import ChangeCircleOutlinedIcon from '@mui/icons-material/ChangeCircleOutlined';
 import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 import LaunchIcon from '@mui/icons-material/Launch';
-import { userPendingTxIdsAtom, userPendingTxAtom } from '@store/cnry';
+import { currentPendingTxIdsAtom, userPendingTxAtom } from '@store/transactions';
 import { currentStacksExplorerState, currentChainState } from '@store/helpers';
 import { toRelativeTime } from '@utils/time';
 
 const UserPendingTxItem = ({ txid }: { txid: string }) => {
   const [explorer] = useAtom(currentStacksExplorerState);
   const [chain] = useAtom(currentChainState);
-  const [pendingTxIds, setPendingTxIds] = useAtom(userPendingTxIdsAtom);
+  const [pendingTxIds, setPendingTxIds] = useAtom(currentPendingTxIdsAtom);
   const tx = useAtomValue(userPendingTxAtom(txid));
 
   // Remove transactions from the pending list

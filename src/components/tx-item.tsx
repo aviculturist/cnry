@@ -5,12 +5,15 @@ import { useAtom } from 'jotai';
 import { useAtomValue } from 'jotai/utils';
 import {
   Transaction,
+  MempoolTransaction,
   TokenTransferTransaction,
+  MempoolTokenTransferTransaction,
   SmartContractTransaction,
+  MempoolSmartContractTransaction,
   ContractCallTransaction,
-} from '@blockstack/stacks-blockchain-api-types';
+  MempoolContractCallTransaction,
+} from '@stacks/stacks-blockchain-api-types';
 import IconButton from '@mui/material/IconButton';
-import Tooltip from '@mui/material/Tooltip';
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
@@ -18,11 +21,11 @@ import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 import LaunchIcon from '@mui/icons-material/Launch';
-import { cnryContractTransactionAtom } from '@store/cnry';
+import { cnryContractTransactionAtom } from '@store/transactions';
 import { currentStacksExplorerState, currentChainState } from '@store/helpers';
 import { toRelativeTime } from '@utils/time';
 
-const TransactionTypeSelector = ({ tx }: { tx: Transaction }) => {
+const TransactionTypeSelector = ({ tx }: { tx: Transaction | MempoolTransaction }) => {
   switch (tx.tx_type) {
     // TokenTransferTransaction
     case 'token_transfer':
@@ -49,7 +52,11 @@ const TransactionTypeSelector = ({ tx }: { tx: Transaction }) => {
   }
 };
 
-const TokenTransferTransactionItem = ({ tx }: { tx: TokenTransferTransaction }) => {
+const TokenTransferTransactionItem = ({
+  tx,
+}: {
+  tx: TokenTransferTransaction | MempoolTokenTransferTransaction;
+}) => {
   const [explorer] = useAtom(currentStacksExplorerState);
   const [chain] = useAtom(currentChainState);
 
@@ -67,12 +74,20 @@ const TokenTransferTransactionItem = ({ tx }: { tx: TokenTransferTransaction }) 
           </IconButton>
         </React.Fragment>
       }
-      secondary={<React.Fragment>{toRelativeTime(tx.burn_block_time * 1000)}</React.Fragment>}
+      secondary={
+        <React.Fragment>
+          {'burn_block_time' in tx ? toRelativeTime(tx.burn_block_time * 1000) : ''}
+        </React.Fragment>
+      }
     />
   );
 };
 
-const SmartContractTransactionItem = ({ tx }: { tx: SmartContractTransaction }) => {
+const SmartContractTransactionItem = ({
+  tx,
+}: {
+  tx: SmartContractTransaction | MempoolSmartContractTransaction;
+}) => {
   const [explorer] = useAtom(currentStacksExplorerState);
   const [chain] = useAtom(currentChainState);
 
@@ -90,12 +105,20 @@ const SmartContractTransactionItem = ({ tx }: { tx: SmartContractTransaction }) 
           </IconButton>
         </React.Fragment>
       }
-      secondary={<React.Fragment>{toRelativeTime(tx.burn_block_time * 1000)}</React.Fragment>}
+      secondary={
+        <React.Fragment>
+          {'burn_block_time' in tx ? toRelativeTime(tx.burn_block_time * 1000) : ''}
+        </React.Fragment>
+      }
     />
   );
 };
 
-const ContractCallTransactionItem = ({ tx }: { tx: ContractCallTransaction }) => {
+const ContractCallTransactionItem = ({
+  tx,
+}: {
+  tx: ContractCallTransaction | MempoolContractCallTransaction;
+}) => {
   const [explorer] = useAtom(currentStacksExplorerState);
   const [chain] = useAtom(currentChainState);
 
@@ -113,7 +136,11 @@ const ContractCallTransactionItem = ({ tx }: { tx: ContractCallTransaction }) =>
           </IconButton>
         </React.Fragment>
       }
-      secondary={<React.Fragment>{toRelativeTime(tx.burn_block_time * 1000)}</React.Fragment>}
+      secondary={
+        <React.Fragment>
+          {'burn_block_time' in tx ? toRelativeTime(tx.burn_block_time * 1000) : ''}
+        </React.Fragment>
+      }
     />
   );
 };

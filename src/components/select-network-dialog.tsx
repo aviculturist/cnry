@@ -95,8 +95,7 @@ const NetworkListItem = ({ network, index }: { network: any; index: number }) =>
   const color = anyStatus.status === 'ready' ? 'success' : 'warning';
   const isLoadingFamily = anyNetworkIsLoadingFamily(network);
   const [isLoading, setIsLoading] = useAtom(isLoadingFamily);
-  const [, dispatchCnryLastId] = useAtom(cnryLastIdAtom);
-  const [, dispatchWatcherLastId] = useAtom(watcherLastIdAtom);
+
   const handleSelectNetwork = (index: number) => {
     // used to select and display user selections
     handleUpdateNetworkIndex(index);
@@ -108,8 +107,6 @@ const NetworkListItem = ({ network, index }: { network: any; index: number }) =>
         ? new StacksTestnet({ url: networks[index].url })
         : new StacksMocknet({ url: networks[index].url })
     );
-    dispatchCnryLastId({ type: 'refetch' });
-    dispatchWatcherLastId({ type: 'refetch' });
     setOpen(false);
   };
 

@@ -21,7 +21,7 @@
 (define-public (addMaintenanceMode (commitHash (string-ascii 7)) (maintenance bool) (wall (string-ascii 280)))
   (begin
     (asserts! (is-eq contract-caller AVICULTURIST) (err ERR_NOT_AUTHORIZED))
-    (asserts! (is-none (map-get? maintenanceMode {commitHash: commitHash})) (err ERR_FOUND))
+    (asserts! (is-eq (some { maintenance: maintenance, wall: wall }) (map-get? maintenanceMode {commitHash: commitHash})) (err ERR_NOT_AUTHORIZED))
     (map-set maintenanceMode {commitHash: commitHash}
       {
         maintenance: maintenance,

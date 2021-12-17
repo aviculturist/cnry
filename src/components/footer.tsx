@@ -7,10 +7,15 @@ import Toolbar from '@mui/material/Toolbar';
 import Tooltip from '@mui/material/Tooltip';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
-import CircularProgress from '@mui/material/CircularProgress';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import BitcoinBlockHeightButton from '@components/bitcoin-block-height-button';
-import StacksChainTipButton from '@components/stacks-chain-tip-button';
+import {
+  BitcoinBlockHeightButtonSkeleton,
+  BitcoinBlockHeightButton,
+} from '@components/bitcoin-block-height-button';
+import {
+  StacksChainTipButtonSkeleton,
+  StacksChainTipButton,
+} from '@components/stacks-chain-tip-button';
 import NetworkOfflineSnackbar from '@components/network-offline-snackbar';
 import NetworkStatusIconButton from '@components/network-status-iconbutton';
 import SafeSuspense from '@components/safe-suspense';
@@ -27,9 +32,19 @@ const CountBlurb = () => {
       size="small"
       color="secondary"
       variant="text"
-      // target="_blank"
-      // href={`${GITHUB_URL}/commit/${buildHash}`}
     >{`${cnryLastId} cnrys hatched with ${watcherLastId} watchers`}</Button>
+  );
+};
+
+const CountBlurbSkeleton = () => {
+  return (
+    <Button
+      disabled
+      sx={{ m: 'auto', textTransform: 'none' }}
+      size="small"
+      color="secondary"
+      variant="text"
+    >{`? cnrys hatched with ? watchers`}</Button>
   );
 };
 
@@ -41,7 +56,7 @@ const Footer = () => {
     <AppBar position="fixed" color="transparent" elevation={3} sx={{ top: 'auto', bottom: 0 }}>
       {/* Footer */}
       <Toolbar>
-        <Suspense fallback={<CircularProgress />}>
+        <Suspense fallback={<></>}>
           <NetworkStatusIconButton />
         </Suspense>
         <Button
@@ -65,18 +80,18 @@ const Footer = () => {
           </Tooltip>
         </Button>
         <Box sx={{ flexGrow: 1 }} />
-        <SafeSuspense fallback={<CircularProgress />}>
+        <SafeSuspense fallback={<CountBlurbSkeleton />}>
           <CountBlurb />
         </SafeSuspense>
-        <Suspense fallback={<CircularProgress />}>
+        <Suspense fallback={<BitcoinBlockHeightButtonSkeleton />}>
           <BitcoinBlockHeightButton />
         </Suspense>
-        <Suspense fallback={<CircularProgress />}>
+        <Suspense fallback={<StacksChainTipButtonSkeleton />}>
           <StacksChainTipButton />
         </Suspense>
       </Toolbar>
       {/* End footer */}
-      <Suspense fallback={<CircularProgress />}>
+      <Suspense fallback={<></>}>
         <NetworkOfflineSnackbar />
       </Suspense>
     </AppBar>

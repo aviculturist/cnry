@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useEffect } from 'react';
+import { useEffect, useCallback } from 'react';
 import { t } from '@lingui/macro';
 import { useAtom } from 'jotai';
 import { useAuth } from '@micro-stacks/react';
@@ -7,25 +7,23 @@ import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
-import CircularProgress from '@mui/material/CircularProgress';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Skeleton from '@mui/material/Skeleton';
 import {
-  myNftTransactionsAtom,
-  cnryUserPendingTxIdsAtom,
   myCnryTokenIdsAtom,
   myWatchingTokenIdsAtom,
   browseCurrentPageAllCnryTokenIdsAtom,
   userHasCnrysAtom,
   userIsWatchingCnrysAtom,
 } from '@store/cnry';
+import { myNftTransactionsAtom, cnryUserPendingTxIdsAtom } from '@store/transactions';
 import cnryListTabStateAtom from '@store/ui/cnry-list-tab-state';
 import { PendingCnryCardFromTxId } from '@components/cnry-card';
 import CnryCard from '@components/cnry-card';
 import HatchCnryForm from '@components/forms/hatch-cnry-form';
 import SafeSuspense from '@components/safe-suspense';
-import { userPendingTxIdsAtom } from '@store/cnry';
+import { currentPendingTxIdsAtom } from '@store/transactions';
 import MaintenanceAlert from '@components/maintenance-alert';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
@@ -68,17 +66,19 @@ const CnryList = () => {
   const [userHasCnrys] = useAtom(userHasCnrysAtom);
   const [userIsWatchingCnrys] = useAtom(userIsWatchingCnrysAtom);
   const [myCnryIds] = useAtom(myCnryTokenIdsAtom);
-  const [pendingTxIds] = useAtom(userPendingTxIdsAtom);
+  const [pendingTxIds] = useAtom(currentPendingTxIdsAtom);
+
+  // fetch latest data
+  // https://typeofnan.dev/fix-the-maximum-update-depth-exceeded-error-in-react/
+  const refetch = useCallback(() => {
+    dispatchMyNftTransactions({ type: 'refetch' });
+    dispatchMyWatchingTokenIds({ type: 'refetch' });
+  }, []);
 
   // immediately refetch user queries upon signin/signout/transaction
   useEffect(() => {
-    // fetch latest data
-    const refetch = () => {
-      dispatchMyNftTransactions({ type: 'refetch' });
-      dispatchMyWatchingTokenIds({ type: 'refetch' });
-    };
     refetch();
-  }, [dispatchMyNftTransactions, session, pendingTxIds, dispatchMyWatchingTokenIds]);
+  }, [dispatchMyNftTransactions, session, pendingTxIds, dispatchMyWatchingTokenIds, refetch]);
 
   useEffect(() => {
     if (userHasCnrys) {
@@ -113,9 +113,9 @@ const CnryList = () => {
   const verticalMyCnrysList = () => (
     <ImageList variant="masonry" cols={2} sx={{ mt: 0 }}>
       {myCnryIds.map(tokenId => (
-        <ImageListItem sx={{ width: '100%', m: 'auto' }} key={tokenId}>
-          <SafeSuspense key={tokenId} fallback={<CnryCardSkeleton />}>
-            <CnryCard key={tokenId} tokenId={tokenId} />
+        <ImageListItem sx={{ width: '100%', m: 'auto' }} key={tokenId.toString()}>
+          <SafeSuspense key={tokenId.toString()} fallback={<CnryCardSkeleton />}>
+            <CnryCard key={tokenId.toString()} tokenId={tokenId} />
           </SafeSuspense>
         </ImageListItem>
       ))}
@@ -125,9 +125,9 @@ const CnryList = () => {
   const verticalWatchingCnrysList = () => (
     <ImageList variant="masonry" cols={2} sx={{ mt: 0 }}>
       {myWatchingTokenIds.map(tokenId => (
-        <ImageListItem sx={{ width: '100%', m: 'auto' }} key={tokenId}>
-          <SafeSuspense key={tokenId} fallback={<CnryCardSkeleton />}>
-            <CnryCard key={tokenId} tokenId={tokenId} />
+        <ImageListItem sx={{ width: '100%', m: 'auto' }} key={tokenId.toString()}>
+          <SafeSuspense key={tokenId.toString()} fallback={<CnryCardSkeleton />}>
+            <CnryCard key={tokenId.toString()} tokenId={tokenId} />
           </SafeSuspense>
         </ImageListItem>
       ))}
@@ -137,9 +137,9 @@ const CnryList = () => {
     <>
       <ImageList variant="masonry" cols={2} sx={{ mt: 0 }}>
         {cnryAllTokenIds.map(tokenId => (
-          <ImageListItem sx={{ width: '100%', m: 'auto' }} key={tokenId}>
-            <SafeSuspense key={tokenId} fallback={<CnryCardSkeleton />}>
-              <CnryCard key={tokenId} tokenId={tokenId} />
+          <ImageListItem sx={{ width: '100%', m: 'auto' }} key={tokenId.toString()}>
+            <SafeSuspense key={tokenId.toString()} fallback={<CnryCardSkeleton />}>
+              <CnryCard key={tokenId.toString()} tokenId={tokenId} />
             </SafeSuspense>
           </ImageListItem>
         ))}
@@ -249,8 +249,8 @@ export default CnryList;
 //       //         return Number(content);
 //       //       });
 //       .map(tokenId => (
-//         <ImageListItem sx={{ width: '100%', m: 'auto' }} key={tokenId}>
-//           <CnryCard key={tokenId} tokenId={tokenId} />
+//         <ImageListItem sx={{ width: '100%', m: 'auto' }} key={tokenId.toString()}>
+//           <CnryCard key={tokenId.toString()} tokenId={tokenId} />
 //         </ImageListItem>
 //       ))}
 //   </ImageList>

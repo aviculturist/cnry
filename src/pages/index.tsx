@@ -35,9 +35,10 @@ const Index: NextPage<any> = () => {
 };
 
 // an array of queries for initial data
+const agetQueries: GetQueries = () => [];
 const getQueries: GetQueries = () => [
   [
-    'cnryLastId',
+    'cnry-get-last-id',
     async () => {
       return 1;
     },

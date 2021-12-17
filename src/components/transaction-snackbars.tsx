@@ -7,7 +7,7 @@ import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import LaunchIcon from '@mui/icons-material/Launch';
 import { currentStacksExplorerState, currentChainState } from '@store/helpers';
-import { userPendingTxIdsAtom, userPendingTxAtom } from '@store/cnry';
+import { currentPendingTxIdsAtom, userPendingTxAtom } from '@store/transactions';
 import { truncateMiddle } from '@utils/common';
 
 const SingleTransactionSnackbar = ({ txid }: { txid: string }) => {
@@ -66,7 +66,7 @@ const SingleTransactionSnackbar = ({ txid }: { txid: string }) => {
 
 // TODO: not entirely sure if looping through all pending transactions is the best pattern
 const TransactionSnackbars = () => {
-  const [pendingTxIds] = useAtom(userPendingTxIdsAtom);
+  const [pendingTxIds] = useAtom(currentPendingTxIdsAtom);
   return (
     <div>
       {pendingTxIds.map(item => (

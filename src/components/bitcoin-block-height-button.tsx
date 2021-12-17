@@ -8,6 +8,23 @@ import { networkInfoAtom } from '@store/networks';
 import { currentBitcoinExplorerState } from '@store/helpers';
 import { DEFAULT_LOCALNET_SERVER } from '@utils/constants';
 import ProgressIcon from '@components/progress-icon';
+import BitcoinIcon from '@assets/bitcoin-icon';
+
+const BitcoinBlockHeightButtonSkeleton = () => {
+  return (
+    <Tooltip title={t`Bitcoin Block Height`}>
+      <Button
+        startIcon={<BitcoinIcon />}
+        variant="text"
+        size="small"
+        color={'success'}
+      >
+        ????
+      </Button>
+    </Tooltip>
+  );
+}
+export { BitcoinBlockHeightButtonSkeleton };
 
 const BitcoinBlockHeightButton = () => {
   const { network } = useNetwork();
@@ -34,4 +51,4 @@ const BitcoinBlockHeightButton = () => {
     </Tooltip>
   );
 };
-export default BitcoinBlockHeightButton;
+export { BitcoinBlockHeightButton };

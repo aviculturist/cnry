@@ -3,7 +3,7 @@ import { useAtom } from 'jotai';
 import { useTransactionPopup } from '@micro-stacks/react';
 import { currentCnryContractState } from '@store/helpers';
 import { HATCH_FUNCTION } from '@utils/constants';
-import { cnryUserPendingTxIdsAtom, userPendingTxIdsAtom, userPendingTxAtom } from '@store/cnry';
+import { cnryUserPendingTxIdsAtom, currentPendingTxIdsAtom, userPendingTxAtom } from '@store/transactions';
 //import { uintCV, intCV } from 'micro-stacks/clarity';
 import { noneCV, someCV, uintCV, stringUtf8CV } from '@stacks/transactions';
 import { anyCnryStatementDialogIsOpenAtomFamily } from '@store/ui/set-cnry-statement-dialog-is-open';
@@ -13,7 +13,7 @@ const useSetCnryStatement = (tokenId: number, cnryStatement: string) => {
   const [contractAddress, contractName] = cnryContract.split('.');
   const { handleContractCall } = useTransactionPopup();
   const [cnryUserPendingTxIds, setCnryUserPendingTxIds] = useAtom(cnryUserPendingTxIdsAtom);
-  const [pendingTxIds, setPendingTxIds] = useAtom(userPendingTxIdsAtom);
+  const [pendingTxIds, setPendingTxIds] = useAtom(currentPendingTxIdsAtom);
   const [setCnryStatementDialogIsOpen, setSetCnryStatementDialogIsOpen] = useAtom(
     anyCnryStatementDialogIsOpenAtomFamily(tokenId)
   );
@@ -24,7 +24,7 @@ const useSetCnryStatement = (tokenId: number, cnryStatement: string) => {
       setCnryUserPendingTxIds([...cnryUserPendingTxIds, data.txId]); // adds this txid to the array of pending transactions
       setSetCnryStatementDialogIsOpen(false);
     },
-    [cnryUserPendingTxIds, pendingTxIds, setCnryUserPendingTxIds, setPendingTxIds]
+    [cnryUserPendingTxIds, setCnryUserPendingTxIds, setPendingTxIds, setSetCnryStatementDialogIsOpen]
   );
 
   const onCancel = useCallback(errorMessage => {

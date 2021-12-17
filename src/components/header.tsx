@@ -9,8 +9,6 @@ import WalletConnectButton from '@components/wallet-connect-button';
 import ChooseLanguageButton from '@components/choose-language-button';
 import ToggleSearchDialogIconButton from '@components/toggle-search-dialog-iconbutton';
 import TogglePrivacySettingsIconbutton from '@components/toggle-privacy-settings-iconbutton';
-import SafeSuspense from '@components/safe-suspense';
-import CircularProgress from '@mui/material/CircularProgress';
 
 const Header = () => {
   return (
@@ -28,9 +26,7 @@ const Header = () => {
           <Box sx={{ flexGrow: 1 }} />
           <ToggleDarkModeIconButton />
           <ToggleSearchDialogIconButton />
-          <SafeSuspense fallback={<CircularProgress />}>
-            <TogglePrivacySettingsIconbutton />
-          </SafeSuspense>
+          <TogglePrivacySettingsIconbutton />
           <ToggleSelectNetworkDialogButton />
           <WalletConnectButton />
           <ChooseLanguageButton />
