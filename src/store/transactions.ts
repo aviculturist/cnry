@@ -11,18 +11,16 @@ import type {
   ContractCallTransaction,
   Transaction,
   MempoolTransaction,
-  TokenTransferTransaction,
   AddressNftListResponse,
 } from '@stacks/stacks-blockchain-api-types';
 import { accountsClientAtom } from '@store/api';
-import { currentCnryContractState, currentWatcherContractState } from '@store/helpers';
+import { currentCnryContractState } from '@store/helpers';
 import {
   WATCH_FUNCTION,
   LASTID_FUNCTION,
   METADATA_FUNCTION,
   ISALIVE_FUNCTION,
 } from '@utils/constants';
-import { paginate, range } from '@utils/paginate';
 import { StacksNetwork } from 'micro-stacks/network';
 import { StacksSessionState } from 'micro-stacks/connect';
 import { atomFamily, atomWithStorage } from 'jotai/utils';
@@ -44,7 +42,10 @@ export interface UserTransaction {
   txstatus: 'submitted' | 'pending' | 'aborted' | 'dropped' | 'success'; // "submitted" is before node accepts
 }
 
-const anyPendingTxIdsAtom = atomWithStorage('anyPendingTransactions', <{ [key: string]: Array<string> }>{});
+const anyPendingTxIdsAtom = atomWithStorage(
+  'anyPendingTransactions',
+  <{ [key: string]: Array<string> }>{}
+);
 
 const anyPendingTxIdsAtomFamily = atomFamily<
   [StacksNetwork, StacksSessionState | null],
@@ -53,18 +54,15 @@ const anyPendingTxIdsAtomFamily = atomFamily<
   atom(
     get => {
       const [network, session] = param;
+      // index is a concatination of the api url and user address
       const idx = session
         ? network.getCoreApiUrl() +
           '-' +
           session.addresses[network.isMainnet() ? 'mainnet' : 'testnet']
-        : network
-        ? network.getCoreApiUrl()
-        : 'default';
-
+        : network.getCoreApiUrl();
       const pendingTxIdsList = get(anyPendingTxIdsAtom);
-      const pendingList = get(anyPendingTxIdsAtom)[idx];
-      const retList = pendingTxIdsList[idx] === undefined ? [] : pendingTxIdsList[idx];
-      return retList;
+      const pendingList = pendingTxIdsList[idx] === undefined ? [] : pendingTxIdsList[idx];
+      return pendingList;
     },
     (get, set, newArray: Array<string>) => {
       const [network, session] = param;
@@ -73,9 +71,7 @@ const anyPendingTxIdsAtomFamily = atomFamily<
         ? network.getCoreApiUrl() +
           '-' +
           session.addresses[network.isMainnet() ? 'mainnet' : 'testnet']
-        : network
-        ? network.getCoreApiUrl()
-        : 'default';
+        : network.getCoreApiUrl();
       const prev = get(anyPendingTxIdsAtom);
       set(anyPendingTxIdsAtom, { ...prev, [idx]: newArray });
     }

@@ -19,6 +19,10 @@ import {
   LASTID_FUNCTION,
   METADATA_FUNCTION,
   ISALIVE_FUNCTION,
+  GET_HATCHPRICE_FUNCTION,
+  GET_KEEPALIVEPRICE_FUNCTION,
+  GET_WATCHPRICE_FUNCTION,
+  GET_WATCHERCOUNT_FUNCTION,
 } from '@utils/constants';
 import { paginate, range } from '@utils/paginate';
 
@@ -45,14 +49,14 @@ export const browseCurrentPageAllCnryTokenIdsAtom = atom(get => {
     pageSize: 10,
     maxPages: 10,
   });
-  // TODO: testnet indexes from 0
+  // TODO: testnet indexes from 0, devnet from 1
   const currentPageTokenIds = Array.from(range(startIndex + 1, endIndex + 1));
   return currentPageTokenIds;
 });
 
 // a derived atom that filters the myNftTransactionsAtom
 // to extract the CNRY tokenIds
-// TODO: refactor
+// TODO: refactor with micro-stacks
 export const myCnryTokenIdsAtom = atom(get => {
   const txs = get(myNftTransactionsAtom);
   if (txs.total === 0) return [];
@@ -63,7 +67,7 @@ export const myCnryTokenIdsAtom = atom(get => {
       // || tx.asset_identifier === `${contractAddress}.cnry::CNRY` // v1
     )
     .map(tx => {
-      const content = tx.value.repr.replace(`u`, ''); // TODO: use CV deserializing?
+      const content = tx.value.repr.replace(`u`, '');
       return Number(content);
     });
   return tokenIds.length === 0 ? [] : tokenIds;
@@ -76,7 +80,8 @@ export const userHasCnrysAtom = atom(get => {
 });
 
 // TODO: this only works for the last 50 user transactions
-// This doesn't need to have a parameter, just grab the principal from currently sigend in user if applicable
+// and has a clumsy deduplication mechanism
+// TODO: refactor with micro-stacks
 export const myWatchingTokenIdsAtom = atomWithQuery<number[]>(
   'my-watching-token-ids',
   async get => {
@@ -108,7 +113,6 @@ export const myWatchingTokenIdsAtom = atomWithQuery<number[]>(
           return content ? Number(content) : 0;
         });
       const deduplicatedUserWatchedCnryTokenIds = [...new Set(userWatchedCnryTokenIds)];
-
       return deduplicatedUserWatchedCnryTokenIds;
     } catch (_e) {
       console.log(_e);
@@ -116,7 +120,7 @@ export const myWatchingTokenIdsAtom = atomWithQuery<number[]>(
     return [];
   },
   { refetchInterval: 300000 } // five minutes in milliseconds (5000 = 5 seconds)
-); // every minute
+);
 
 export const userIsWatchingCnrysAtom = atom(get => {
   const myWatchingCnryIds = get(myWatchingTokenIdsAtom);
@@ -131,6 +135,7 @@ export const cnryWatchCountAtom = atomFamily<number, Atom<number>>(tokenId =>
     return get(cnryWatchCountQueryAtom([tokenId, network, session]));
   })
 );
+
 export const cnryWatchCountQueryAtom = atomFamilyWithQuery<
   [number, StacksNetwork, StacksSessionState | null],
   number
@@ -149,7 +154,7 @@ export const cnryWatchCountQueryAtom = atomFamilyWithQuery<
           network,
           contractName,
           contractAddress,
-          functionName: 'get-watcher-count',
+          functionName: GET_WATCHERCOUNT_FUNCTION,
           functionArgs: [uintCV(tokenId)],
           senderAddress,
         },
@@ -166,12 +171,13 @@ export const cnryWatchCountQueryAtom = atomFamilyWithQuery<
 
 // tokenId can be undefined because query params that may not be valid numbers will return undefined
 // TODO: perhaps there's a cleaner way to handle this case
-export const cnryGetMetadataAtom = atomFamily<number | undefined, Atom<CnryMetadata | undefined>>(tokenId =>
-  atom<CnryMetadata | undefined>(get => {
-    const network = get(networkAtom);
-    const session = get(stacksSessionAtom);
-    return get(cnryGetMetadataQueryAtom([tokenId, network, session]));
-  })
+export const cnryGetMetadataAtom = atomFamily<number | undefined, Atom<CnryMetadata | undefined>>(
+  tokenId =>
+    atom<CnryMetadata | undefined>(get => {
+      const network = get(networkAtom);
+      const session = get(stacksSessionAtom);
+      return get(cnryGetMetadataQueryAtom([tokenId, network, session]));
+    })
 );
 export const cnryGetMetadataQueryAtom = atomFamilyWithQuery<
   [number | undefined, StacksNetwork, StacksSessionState | null],
@@ -305,7 +311,7 @@ export const hatchPriceQueryAtom = atomFamilyWithQuery<
         network,
         contractName,
         contractAddress,
-        functionName: 'get-hatchPrice',
+        functionName: GET_HATCHPRICE_FUNCTION,
         functionArgs: [],
         senderAddress,
       });
@@ -340,7 +346,7 @@ export const keepalivePriceQueryAtom = atomFamilyWithQuery<
         network,
         contractName,
         contractAddress,
-        functionName: 'get-keepalivePrice',
+        functionName: GET_KEEPALIVEPRICE_FUNCTION,
         functionArgs: [],
         senderAddress,
       });
@@ -375,7 +381,7 @@ export const watchPriceQueryAtom = atomFamilyWithQuery<
         network,
         contractName,
         contractAddress,
-        functionName: 'get-watchPrice',
+        functionName: GET_WATCHPRICE_FUNCTION,
         functionArgs: [],
         senderAddress,
       });
