@@ -16,13 +16,24 @@ import LinearProgress from '@mui/material/LinearProgress';
 import { addNetworkDialogIsOpenAtom } from '@store/ui/add-network-dialog-is-open';
 import { Network } from '@store/networks';
 import { useNetworks } from '@hooks/use-networks';
+import { fetchCoreApiInfo } from 'micro-stacks/api';
 
 const AddNetworkDialog = () => {
   const [open, setOpen] = useAtom(addNetworkDialogIsOpenAtom);
   const { handleAddNetwork } = useNetworks();
-
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const getNetworkChain = async (url: string) => {
+    try {
+      const res = await fetchCoreApiInfo({ url: url });
+      const network_id = res.network_id;
+      return network_id === 1 ? 'mainnet' : 'testnet';
+    } catch (_e) {
+      console.log(_e);
+    }
+    return 'testnet';
   };
 
   return (
@@ -39,6 +50,7 @@ const AddNetworkDialog = () => {
               url: '',
             }}
             validate={values => {
+              const chain = getNetworkChain(values.url);
               const errors: Partial<Network> = {};
               if (!values.name) {
                 errors.name = 'Required';
@@ -52,22 +64,24 @@ const AddNetworkDialog = () => {
               ) {
                 errors.url = 'Invalid url';
               }
+              if (!chain) {
+                errors.url = 'Node is unreachable';
+              }
               return errors;
             }}
-            onSubmit={(values, { setSubmitting }) => {
+            // TODO: use of async here adds a loading component automatically?
+            onSubmit={async (values, { setSubmitting }) => {
               const url = new URL(values.url);
-              // TODO: run an info query to discover the chainMode
-              //await setChainMode(networkMode);
+              const chain = await getNetworkChain(values.url);
               void handleAddNetwork({
                 name: values.name.trim(),
                 label: url.host,
                 url: values.url,
-                chain: 'testnet',
+                chain: chain,
               });
               setOpen(false);
               setTimeout(() => {
                 setSubmitting(false);
-                //alert(JSON.stringify(values, null, 2));
               }, 500);
             }}
           >
