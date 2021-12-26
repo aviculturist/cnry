@@ -1,5 +1,5 @@
 
-;; ui-settings
+;; maintenance.clar
 ;; Enables a site deployed with static export to receive ui messages
 ;; to specific versions, identified by short commitHash
 ;; Useful if versions of a site need to be put into maintenance mode
