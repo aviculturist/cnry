@@ -14,11 +14,11 @@ import type {
   AddressNftListResponse,
 } from '@stacks/stacks-blockchain-api-types';
 import { accountsClientAtom } from '@store/api';
-import { currentCnryContractState } from '@store/helpers';
+import { currentCnryContractState } from '@utils/helpers';
 import {
   WATCH_FUNCTION,
   LASTID_FUNCTION,
-  METADATA_FUNCTION,
+  GET_METADATA_FUNCTION,
   ISALIVE_FUNCTION,
 } from '@utils/constants';
 import { StacksNetwork } from 'micro-stacks/network';
@@ -41,6 +41,8 @@ export interface UserTransaction {
   timestamp: number;
   txstatus: 'submitted' | 'pending' | 'aborted' | 'dropped' | 'success'; // "submitted" is before node accepts
 }
+
+export const submittedTransactionAtom = atom(<string | undefined>(undefined));
 
 const anyPendingTxIdsAtom = atomWithStorage(
   'anyPendingTransactions',
@@ -92,10 +94,11 @@ export const currentPendingTxIdsAtom = atom<Array<string>, Array<string>>(
 );
 
 export const currentPendingTxsCountAtom = atom(get => {
-  const userPendingTxsIds = get(currentPendingTxIdsAtom);
-  return userPendingTxsIds.length;
+  const currentPendingTxsIds = get(currentPendingTxIdsAtom);
+  return currentPendingTxsIds.length;
 });
 
+// TODO: rename, trackPendingTxAtom ?
 export const userPendingTxAtom = atomFamilyWithQuery<string, UserTransaction>(
   'pending-tx',
   async (get, txid) => {

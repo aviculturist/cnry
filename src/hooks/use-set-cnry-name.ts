@@ -1,30 +1,41 @@
 import { useCallback } from 'react';
 import { useAtom } from 'jotai';
 import { useTransactionPopup } from '@micro-stacks/react';
-import { currentCnryContractState } from '@store/helpers';
-import { HATCH_FUNCTION } from '@utils/constants';
-import { cnryUserPendingTxIdsAtom, currentPendingTxIdsAtom, userPendingTxAtom } from '@store/transactions';
-//import { uintCV, intCV } from 'micro-stacks/clarity';
-import { noneCV, someCV, uintCV, stringUtf8CV } from '@stacks/transactions';
+import { currentCnryContractState } from '@utils/helpers';
+import { SET_NAME_FUNCTION } from '@utils/constants';
+import { userPendingTxAtom, submittedTransactionAtom } from '@store/transactions';
+import { uintCV, stringUtf8CV } from 'micro-stacks/clarity';
 import { anyCnryNameDialogIsOpenAtomFamily } from '@store/ui/set-cnry-name-dialog-is-open';
+import { submittedTransactionDialogIsOpenAtom } from '@store/ui/submitted-transaction-dialog-is-open';
+import { currentUpdatingCnrysAtom } from '@store/cnry';
 
-const useSetCnryName = (tokenId: number, cnryName: string) => {
+const useSetCnryName = (tokenId: number) => {
   const [cnryContract] = useAtom(currentCnryContractState);
   const [contractAddress, contractName] = cnryContract.split('.');
   const { handleContractCall } = useTransactionPopup();
-  const [cnryUserPendingTxIds, setCnryUserPendingTxIds] = useAtom(cnryUserPendingTxIdsAtom);
-  const [pendingTxIds, setPendingTxIds] = useAtom(currentPendingTxIdsAtom);
-  const [setCnryNameDialogIsOpen, setSetCnryNameDialogIsOpen] = useAtom(
-    anyCnryNameDialogIsOpenAtomFamily(tokenId)
-  );
+  const [, setSetCnryNameDialogIsOpen] = useAtom(anyCnryNameDialogIsOpenAtomFamily(tokenId));
+  const [, setSubmittedTransactionDialogIsOpen] = useAtom(submittedTransactionDialogIsOpenAtom);
+  const [, setSubmittedTxId] = useAtom(submittedTransactionAtom);
+  const [updatingCnryIds, setUpdatingCnryIds] = useAtom(currentUpdatingCnrysAtom);
+
   const onFinish = useCallback(
     data => {
-      setPendingTxIds([...pendingTxIds, data.txId]); // adds this txid to the array of pending transactions
-      void userPendingTxAtom(data.txId); // creates an atomFamilyWithQuery to track status
-      setCnryUserPendingTxIds([...cnryUserPendingTxIds, data.txId]); // adds this txid to the array of pending transactions
+      void userPendingTxAtom(data.txId); // track node acknowledgement and transaction status
       setSetCnryNameDialogIsOpen(false);
+      setSubmittedTxId(data.txId); // transaction is submitted, awaiting node acknowledgement
+      const newArray = updatingCnryIds[tokenId] === undefined ? [] : updatingCnryIds[tokenId];
+      newArray.push(data.txId);
+      setUpdatingCnryIds({ ...updatingCnryIds, [tokenId]: newArray }); // add transaction to array to track Cnry updating status
+      setSubmittedTransactionDialogIsOpen(true); // open transaction submitted dialog
     },
-    [cnryUserPendingTxIds, pendingTxIds, setCnryUserPendingTxIds, setPendingTxIds]
+    [
+      setSetCnryNameDialogIsOpen,
+      setSubmittedTransactionDialogIsOpen,
+      setSubmittedTxId,
+      setUpdatingCnryIds,
+      tokenId,
+      updatingCnryIds,
+    ]
   );
 
   const onCancel = useCallback(errorMessage => {
@@ -37,7 +48,7 @@ const useSetCnryName = (tokenId: number, cnryName: string) => {
       void handleContractCall({
         contractAddress,
         contractName,
-        functionName: 'set-name',
+        functionName: SET_NAME_FUNCTION,
         functionArgs: [uintCV(tokenId), stringUtf8CV(cnryName)],
         postConditions: [],
         onFinish,

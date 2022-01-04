@@ -14,6 +14,7 @@ import InstallWalletDialog from '@components/install-wallet-dialog';
 import TransactionSnackbars from '@components/transaction-snackbars';
 import CnryList from '@components/cnry-list';
 import CnryListSkeleton from '@components/cnry-list-skeleton';
+import SubmittedTransactionDialog from '@components/submitted-transaction-dialog';
 
 const CnryItemQueryPopup = () => {
   const tokenId = useIdQuery();
@@ -59,6 +60,9 @@ const CnryApp = () => {
       </SafeSuspense>
       <SafeSuspense fallback={<></>}>
         <TransactionSnackbars />
+      </SafeSuspense>
+      <SafeSuspense fallback={<></>}>
+        <SubmittedTransactionDialog />
       </SafeSuspense>
 
       <InstallWalletDialog />

@@ -11,6 +11,7 @@ import { red } from '@mui/material/colors';
 import { green } from '@mui/material/colors';
 import Card from '@mui/material/Card';
 import Chip from '@mui/material/Chip';
+import LaunchIcon from '@mui/icons-material/Launch';
 import CardHeader from '@mui/material/CardHeader';
 import Badge, { BadgeProps } from '@mui/material/Badge';
 //import CardMedia from '@mui/material/CardMedia';
@@ -29,7 +30,15 @@ import ShareIcon from '@mui/icons-material/Share';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Tooltip from '@mui/material/Tooltip';
 import CircularProgress from '@mui/material/CircularProgress';
-import { cnryGetMetadataAtom, cnryIsAliveAtom, cnryWatchCountAtom } from '@store/cnry';
+import Popper, { PopperPlacementType } from '@mui/material/Popper';
+
+import AutorenewOutlinedIcon from '@mui/icons-material/AutorenewOutlined';
+import {
+  cnryGetMetadataAtom,
+  cnryIsAliveAtom,
+  cnryWatchCountAtom,
+  currentUpdatingCnrysAtom,
+} from '@store/cnry';
 import {
   cnryUserPendingTxIdsAtom,
   userPendingTxAtom,
@@ -43,6 +52,11 @@ import CnryMetadataTable from '@components/cnry-metadata-table';
 import EditCnryIconButton from '@components/edit-cnry-iconbutton';
 import useInstallWalletDialog from '@hooks/use-install-wallet-dialog';
 import { currentPendingTxIdsAtom } from '@store/transactions';
+import { currentChainState, currentStacksExplorerState } from '@utils/helpers';
+import { truncateMiddle } from '@utils/common';
+import Box from '@mui/material/Box';
+import Stack from '@mui/material/Stack';
+import { CnryCardUpdatingPopper } from '@components/cnry-card-updating-popper';
 
 const StyledBadge = styled(Badge)<BadgeProps>(({ theme }: { theme: any }) => ({
   '& .MuiBadge-badge': {
@@ -68,8 +82,8 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
   }),
 }));
 
-const PendingCnryCardFromTxId = ({ txid }: { txid: string }) => {
-  const tx = useAtomValue(userPendingTxAtom(txid));
+const PendingCnryCardFromTxId = ({ txId }: { txId: string }) => {
+  const tx = useAtomValue(userPendingTxAtom(txId));
   const [pendingTxIds, setPendingTxIds] = useAtom(cnryUserPendingTxIdsAtom);
   const [expanded, setExpanded] = React.useState(false);
   const [, setValue] = useAtom(cnryListTabStateAtom);
@@ -78,9 +92,9 @@ const PendingCnryCardFromTxId = ({ txid }: { txid: string }) => {
   // TODO: missing dependencies
   useEffect(() => {
     if (tx.txstatus === 'success') {
-      const txs = pendingTxIds.filter(item => item !== txid);
+      const txs = pendingTxIds.filter(item => item !== txId);
       setPendingTxIds(txs); // remove from array
-      userPendingTxAtom.remove(txid); // remove from queries
+      userPendingTxAtom.remove(txId); // remove from queries
       setValue('two');
     }
   }, [tx]);
@@ -152,8 +166,8 @@ const PendingCnryCardFromTxId = ({ txid }: { txid: string }) => {
 };
 export { PendingCnryCardFromTxId };
 
-const CnryCardFromTxId = ({ txid }: { txid: string }) => {
-  const tx = useAtomValue(cnryContractTransactionAtom(txid));
+const CnryCardFromTxId = ({ txId }: { txId: string }) => {
+  const tx = useAtomValue(cnryContractTransactionAtom(txId));
 
   const tokenIdString =
     tx &&
@@ -187,7 +201,7 @@ const CnryCard = ({ tokenId }: { tokenId: number }) => {
   const daysRemainingUntilExpiry = toRelativeTime(keepaliveTimestamp + keepaliveExpiry);
   const { isSignedIn, handleSignIn, session } = useAuth();
   const { setInstallWalletDialogIsOpen } = useInstallWalletDialog();
-  const [pendingTxIds] = useAtom(currentPendingTxIdsAtom);
+  const [updatingCnryIds] = useAtom(currentUpdatingCnrysAtom);
 
   // useEffect(() => {
   //   // fetch latest data
@@ -196,24 +210,41 @@ const CnryCard = ({ tokenId }: { tokenId: number }) => {
   //   };
   //   refetch();
   // }, [pendingTxIds, dispatchCnryWatchCount]);
+  // {updatingCnryIds[Number(cnryMetadata.index)] === undefined ? '' : 'Updating'}
+
+  useEffect(() => {
+    const txs =
+      updatingCnryIds[Number(cnryMetadata?.index)] === undefined
+        ? []
+        : updatingCnryIds[Number(cnryMetadata?.index)];
+  }, [cnryMetadata?.index, updatingCnryIds]);
 
   const handleCopyToClipboard = ({ link }: { link: string }) => {
     const uri = `${typeof window !== 'undefined' ? window.location.href.split('#')[0] : ''}${link}`;
     navigator.clipboard.writeText(uri);
   };
 
-  // cnry.cnryKeeper ===
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
-
+  const blurMetadata = cnryMetadata
+    ? updatingCnryIds[Number(cnryMetadata.index)] === undefined ||
+      updatingCnryIds[Number(cnryMetadata.index)].length === 0
+      ? false
+      : true
+    : false;
   return cnryMetadata ? (
     <Card sx={{ m: 'auto', width: 292, maxWidth: 292 }}>
       <CardHeader
         avatar={
-          <Avatar sx={{ bgcolor: isAlive ? green[500] : red[500] }} aria-label="profile">
-            {isAlive ? <CheckCircleOutlineIcon /> : <CancelOutlinedIcon />}
-          </Avatar>
+          updatingCnryIds[Number(cnryMetadata.index)] === undefined ||
+          updatingCnryIds[Number(cnryMetadata.index)].length === 0 ? (
+            <Avatar sx={{ bgcolor: isAlive ? green[500] : red[500] }} aria-label="profile">
+              {isAlive ? <CheckCircleOutlineIcon /> : <CancelOutlinedIcon />}
+            </Avatar>
+          ) : (
+            <CnryCardUpdatingPopper key={`${tokenId}-updating-popper`} tokenId={tokenId} />
+          )
         }
         action={
           userStxAddress === cnryMetadata.cnryKeeper ? (
@@ -247,8 +278,20 @@ const CnryCard = ({ tokenId }: { tokenId: number }) => {
             </>
           )
         }
-        title={cnryMetadata.cnryName}
-        subheader={`Hatched on ${hatchedDate}, expiry ${daysRemainingUntilExpiry}`}
+        title={
+          <React.Fragment>
+            <Typography variant='inherit' sx={{ filter: blurMetadata ? 'blur(3px)' : 'none' }}>
+              {cnryMetadata.cnryName}
+            </Typography>
+          </React.Fragment>
+        }
+        subheader={
+          <React.Fragment>
+            <Typography variant='inherit' sx={{ filter: blurMetadata ? 'blur(3px)' : 'none' }}>
+              Hatched on {hatchedDate}, expiry {daysRemainingUntilExpiry}
+            </Typography>
+          </React.Fragment>
+        }
       />
       {/* <CardMedia
         component="img"
@@ -258,7 +301,7 @@ const CnryCard = ({ tokenId }: { tokenId: number }) => {
       /> */}
 
       <CardContent>
-        <Typography variant="body2" color="text.secondary">
+        <Typography variant="body2" color="text.secondary" sx={{ filter: blurMetadata ? 'blur(3px)' : 'none' }}>
           {cnryMetadata.cnryStatement}
         </Typography>
       </CardContent>
@@ -267,7 +310,7 @@ const CnryCard = ({ tokenId }: { tokenId: number }) => {
           <IconButton
             aria-label="watch"
             onClick={() => {
-              isSignedIn ? void handleWatch(tokenId) : handleSignIn({});
+              isSignedIn ? void handleWatch(tokenId) : handleSignIn();
               !session && setInstallWalletDialogIsOpen(true);
             }}
           >

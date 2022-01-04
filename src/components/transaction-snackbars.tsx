@@ -6,7 +6,7 @@ import AlertTitle from '@mui/material/AlertTitle';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import LaunchIcon from '@mui/icons-material/Launch';
-import { currentStacksExplorerState, currentChainState } from '@store/helpers';
+import { currentStacksExplorerState, currentChainState } from '@utils/helpers';
 import { currentPendingTxIdsAtom, userPendingTxAtom } from '@store/transactions';
 import { truncateMiddle } from '@utils/common';
 
@@ -33,7 +33,7 @@ const SingleTransactionSnackbar = ({ txid }: { txid: string }) => {
 
   return (
     <Snackbar
-      key={txid}
+      key={`${txid}-tx-sb`}
       open={
         !dismissed &&
         (tx.txstatus === 'submitted' ||
@@ -67,10 +67,11 @@ const SingleTransactionSnackbar = ({ txid }: { txid: string }) => {
 // TODO: not entirely sure if looping through all pending transactions is the best pattern
 const TransactionSnackbars = () => {
   const [pendingTxIds] = useAtom(currentPendingTxIdsAtom);
+  console.log(pendingTxIds);
   return (
     <div>
       {pendingTxIds.map(item => (
-        <SingleTransactionSnackbar key={item} txid={item} />
+        <SingleTransactionSnackbar key={`${item}-single-tx-sb`} txid={item} />
       ))}
     </div>
   );

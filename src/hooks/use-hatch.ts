@@ -11,7 +11,7 @@ import {
 } from 'micro-stacks/transactions';
 import { networkAtom, userStxAddressesAtom, useTransactionPopup } from '@micro-stacks/react';
 import { ChainID } from 'micro-stacks/common';
-import { currentCnryContractState } from '@store/helpers';
+import { currentCnryContractState } from '@utils/helpers';
 import { HATCH_FUNCTION } from '@utils/constants';
 import { hatchPriceAtom } from '@store/cnry';
 import {

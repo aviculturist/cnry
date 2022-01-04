@@ -29,7 +29,7 @@ const HatchCnryForm = () => {
     },
     validationSchema: validationSchema,
     onSubmit: (values, { setSubmitting }) => {
-      isSignedIn ? void handleHatch(values.name.trim(), values.statement.trim()) : handleSignIn({});
+      isSignedIn ? void handleHatch(values.name.trim(), values.statement.trim()) : handleSignIn();
       setTimeout(() => {
         setSubmitting(false);
       }, 500);
@@ -52,7 +52,7 @@ const HatchCnryForm = () => {
       //         // TODO: fix coming upstream
       //         //() => handleSignIn();
       //         handleSignIn({  onFinish: () => handleHatch(values.name.trim(), values.statement.trim() )  })
-      //         //handleSignIn({}).onFinish().then(() => handleHatch(values.name.trim(), values.statement.trim()));
+      //         //handleSignIn().onFinish().then(() => handleHatch(values.name.trim(), values.statement.trim()));
       //       } catch (_e) {
       //         console.log(_e);
       //       }

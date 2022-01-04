@@ -6,7 +6,7 @@ import { StacksNetwork } from 'micro-stacks/network';
 import { StacksSessionState } from 'micro-stacks/connect';
 import { networkAtom, stacksSessionAtom, userStxAddressesAtom } from '@micro-stacks/react';
 import { fetchReadOnlyFunction } from 'micro-stacks/api';
-import { currentMaintenanceContractState } from '@store/helpers';
+import { currentMaintenanceContractState } from '@utils/helpers';
 import { GET_MAINTENANCE_FUNCTION } from '@utils/constants';
 import { atomFamily } from 'jotai/utils';
 

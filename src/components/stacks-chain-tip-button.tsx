@@ -4,7 +4,7 @@ import { useAtom } from 'jotai';
 import Tooltip from '@mui/material/Tooltip';
 import Button from '@mui/material/Button';
 import { networkInfoAtom } from '@store/networks';
-import { currentStacksExplorerState, currentChainState } from '@store/helpers';
+import { currentStacksExplorerState, currentChainState } from '@utils/helpers';
 import ProgressIcon from '@components/progress-icon';
 import StacksIcon from '@assets/stacks-icon';
 

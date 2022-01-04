@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import { useAtom } from 'jotai';
 import { useTransactionPopup } from '@micro-stacks/react';
-import { currentCnryContractState } from '@store/helpers';
+import { currentCnryContractState } from '@utils/helpers';
 import { HATCH_FUNCTION } from '@utils/constants';
 import { cnryUserPendingTxIdsAtom, currentPendingTxIdsAtom, userPendingTxAtom } from '@store/transactions';
 //import { uintCV, intCV } from 'micro-stacks/clarity';

@@ -62,9 +62,11 @@ const ToggleSelectNetworkDialogButton = () => {
       return Provider;
     };
     const Provider: StacksProvider | undefined = maybeGetStacksProvider();
-    if (Provider && Provider?.getCurrentNetwork) {
-      const index = getNetworkIndex(Provider?.getCurrentNetwork().url);
-      handleSelectNetwork(index);
+    //Object.hasOwn(Provider,getCurrentNetwork)
+
+    if (typeof Provider !== 'undefined' && 'getCurrentNetwork' in Provider) {
+      //const index = getNetworkIndex(Provider.getCurrentNetwork().url);
+      //handleSelectNetwork(index);
     }
   }, []);
 

@@ -10,6 +10,8 @@ import ImageListItem from '@mui/material/ImageListItem';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Skeleton from '@mui/material/Skeleton';
+import InfoIcon from '@mui/icons-material/Info';
+
 import {
   myCnryTokenIdsAtom,
   myWatchingTokenIdsAtom,
@@ -29,6 +31,8 @@ import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import BasicPagination from '@components/pagination';
 import CnryCardSkeleton from '@components/cnry-card-skeleton';
+import ImageListItemBar from '@mui/material/ImageListItemBar';
+import IconButton from '@mui/material/IconButton';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -101,9 +105,9 @@ const CnryList = () => {
       }}
     >
       <Stack component="div" direction="row" spacing={2}>
-        {userPendingTxids.map(txid => (
-          <ImageListItem key={txid}>
-            <PendingCnryCardFromTxId key={txid} txid={txid} />
+        {userPendingTxids.map(txId => (
+          <ImageListItem key={txId}>
+            <PendingCnryCardFromTxId key={txId} txId={txId} />
           </ImageListItem>
         ))}
       </Stack>
@@ -141,6 +145,20 @@ const CnryList = () => {
             <SafeSuspense key={tokenId.toString()} fallback={<CnryCardSkeleton />}>
               <CnryCard key={tokenId.toString()} tokenId={tokenId} />
             </SafeSuspense>
+            {/* <ImageListItemBar
+              title="A Title"
+              subtitle="A Subtitle"
+              position="below"
+
+              actionIcon={
+                <IconButton
+                  sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
+                  aria-label={`info about something`}
+                >
+                  <InfoIcon />
+                </IconButton>
+              }
+            /> */}
           </ImageListItem>
         ))}
       </ImageList>

@@ -12,7 +12,7 @@ const validationSchema = yup.object({
 });
 
 const SetCnryNameForm = ({ tokenId, cnryName }: { tokenId: number; cnryName: string }) => {
-  const handleSetCnryName = useSetCnryName(tokenId, cnryName);
+  const handleSetCnryName = useSetCnryName(tokenId);
   const formik = useFormik({
     initialValues: {
       name: cnryName, //Acme Corp Warrant Canary

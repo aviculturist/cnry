@@ -15,7 +15,7 @@ import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 import LaunchIcon from '@mui/icons-material/Launch';
 import { currentPendingTxIdsAtom, userPendingTxAtom } from '@store/transactions';
-import { currentStacksExplorerState, currentChainState } from '@store/helpers';
+import { currentStacksExplorerState, currentChainState } from '@utils/helpers';
 import { toRelativeTime } from '@utils/time';
 
 const UserPendingTxItem = ({ txid }: { txid: string }) => {

@@ -42,14 +42,15 @@ export const GET_MAINTENANCE_FUNCTION = 'getMaintenanceMode';
 
 export const HATCH_FUNCTION = 'hatch';
 export const WATCH_FUNCTION = 'watch';
-export const METADATA_FUNCTION = 'get-metadata';
 export const KEEPALIVE_FUNCTION = 'keepalive';
 export const LASTID_FUNCTION = 'get-last-token-id';
 export const ISALIVE_FUNCTION = 'is-alive';
+export const GET_METADATA_FUNCTION = 'get-metadata';
 export const GET_HATCHPRICE_FUNCTION = 'get-hatchPrice';
 export const GET_KEEPALIVEPRICE_FUNCTION = 'get-keepalivePrice';
 export const GET_WATCHPRICE_FUNCTION = 'get-watchPrice';
 export const GET_WATCHERCOUNT_FUNCTION = 'get-watcher-count';
+export const SET_NAME_FUNCTION = 'set-name';
 
 export const DEFAULT_NETWORK_LIST: Network[] = [
   {

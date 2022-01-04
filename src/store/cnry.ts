@@ -1,5 +1,5 @@
 import { Atom, atom, Getter, SetStateAction, Setter, WritableAtom } from 'jotai';
-import { atomFamily } from 'jotai/utils';
+import { atomFamily, atomWithStorage } from 'jotai/utils';
 import { atomWithQuery, atomFamilyWithQuery } from 'jotai-query-toolkit';
 import { StacksNetwork } from 'micro-stacks/network';
 import { StacksSessionState } from 'micro-stacks/connect';
@@ -13,11 +13,11 @@ import {
 import type { ContractCallTransaction } from '@stacks/stacks-blockchain-api-types';
 import { accountsClientAtom } from '@store/api';
 import { myNftTransactionsAtom } from '@store/transactions';
-import { currentCnryContractState, currentWatcherContractState } from '@store/helpers';
+import { currentCnryContractState, currentWatcherContractState } from '@utils/helpers';
 import {
   WATCH_FUNCTION,
   LASTID_FUNCTION,
-  METADATA_FUNCTION,
+  GET_METADATA_FUNCTION,
   ISALIVE_FUNCTION,
   GET_HATCHPRICE_FUNCTION,
   GET_KEEPALIVEPRICE_FUNCTION,
@@ -171,6 +171,16 @@ export const cnryWatchCountQueryAtom = atomFamilyWithQuery<
 
 // tokenId can be undefined because query params that may not be valid numbers will return undefined
 // TODO: perhaps there's a cleaner way to handle this case
+// tokenId can be undefined because query params that may not be valid numbers will return undefined
+// TODO: perhaps there's a cleaner way to handle this case
+// export const cnryGetMetadataAtom = atomFamily<number | undefined, Atom<CnryMetadata | undefined>>(
+//   tokenId =>
+//     atom<CnryMetadata | undefined>(get => {
+//       const network = get(networkAtom);
+//       const session = get(stacksSessionAtom);
+//       return get(cnryGetMetadataQueryAtom([tokenId, network, session]));
+//     })
+// );
 export const cnryGetMetadataAtom = atomFamily<number | undefined, Atom<CnryMetadata | undefined>>(
   tokenId =>
     atom<CnryMetadata | undefined>(get => {
@@ -198,7 +208,7 @@ export const cnryGetMetadataQueryAtom = atomFamilyWithQuery<
           network,
           contractName,
           contractAddress,
-          functionName: METADATA_FUNCTION,
+          functionName: GET_METADATA_FUNCTION,
           functionArgs: [uintCV(tokenId)],
           senderAddress,
         },
@@ -433,3 +443,62 @@ export const cnryIsAliveQueryAtom = atomFamilyWithQuery<
   },
   { refetchInterval: 86400000 } // one day in milliseconds (5000 = 5 seconds)
 );
+
+// per-node/address tracking of update statuses based on one or more transactions
+const anyUpdatingCnrysAtom = atomWithStorage(
+  'anyUpdatingCnrys',
+  // key -> {tokenId: [txId1, txId2, etc], tokenId2 : [txId3, txId4, etc] }
+  <{ [key: string]: { [key: number]: Array<string> } }>{}
+);
+
+const anyUpdatingCnrysAtomFamily = atomFamily<
+  [StacksNetwork, StacksSessionState | null],
+  WritableAtom<{ [key: number]: Array<string> }, { [key: number]: Array<string> }>
+>(param =>
+  atom(
+    get => {
+      const [network, session] = param;
+      // index is a concatination of the api url and user address
+      const idx = session
+        ? network.getCoreApiUrl() +
+          '-' +
+          session.addresses[network.isMainnet() ? 'mainnet' : 'testnet']
+        : network.getCoreApiUrl();
+      const updatingCnrysList = get(anyUpdatingCnrysAtom);
+      const updatingList = updatingCnrysList[idx] === undefined ? [] : updatingCnrysList[idx];
+      return updatingList;
+    },
+    (get, set, newObject: { [key: number]: Array<string> }) => {
+      const [network, session] = param;
+      // index is a concatination of the api url and user address
+      const idx = session
+        ? network.getCoreApiUrl() +
+          '-' +
+          session.addresses[network.isMainnet() ? 'mainnet' : 'testnet']
+        : network.getCoreApiUrl();
+      const prev = get(anyUpdatingCnrysAtom);
+      set(anyUpdatingCnrysAtom, { ...prev, [idx]: newObject });
+    }
+  )
+);
+
+export const currentUpdatingCnrysAtom = atom<
+  { [key: number]: Array<string> },
+  { [key: number]: Array<string> }
+>(
+  get => {
+    const network = get(networkAtom);
+    const session = get(stacksSessionAtom);
+    return get(anyUpdatingCnrysAtomFamily([network, session]));
+  },
+  (get, set, newObject: { [key: number]: Array<string> }) => {
+    const network = get(networkAtom);
+    const session = get(stacksSessionAtom);
+    set(anyUpdatingCnrysAtomFamily([network, session]), newObject);
+  }
+);
+
+export const currentUpdatingCnrysCountAtom = atom(get => {
+  const currentUpdatingCnrys = get(currentUpdatingCnrysAtom);
+  return Object.keys(currentUpdatingCnrys).length;
+});

@@ -5,7 +5,7 @@ import { useNetwork } from '@micro-stacks/react';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import { networkInfoAtom } from '@store/networks';
-import { currentBitcoinExplorerState } from '@store/helpers';
+import { currentBitcoinExplorerState } from '@utils/helpers';
 import { DEFAULT_LOCALNET_SERVER } from '@utils/constants';
 import ProgressIcon from '@components/progress-icon';
 import BitcoinIcon from '@assets/bitcoin-icon';

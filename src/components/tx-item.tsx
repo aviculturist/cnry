@@ -22,7 +22,7 @@ import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 import LaunchIcon from '@mui/icons-material/Launch';
 import { cnryContractTransactionAtom } from '@store/transactions';
-import { currentStacksExplorerState, currentChainState } from '@store/helpers';
+import { currentStacksExplorerState, currentChainState } from '@utils/helpers';
 import { toRelativeTime } from '@utils/time';
 
 const TransactionTypeSelector = ({ tx }: { tx: Transaction | MempoolTransaction }) => {

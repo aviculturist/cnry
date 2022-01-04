@@ -8,7 +8,7 @@ import {
 } from 'micro-stacks/transactions';
 import { networkAtom, userStxAddressesAtom, useTransactionPopup } from '@micro-stacks/react';
 import { ChainID } from 'micro-stacks/common';
-import { currentCnryContractState } from '@store/helpers';
+import { currentCnryContractState } from '@utils/helpers';
 import { KEEPALIVE_FUNCTION } from '@utils/constants';
 import { keepalivePriceAtom } from '@store/cnry';
 import { currentPendingTxIdsAtom, userPendingTxAtom } from '@store/transactions';

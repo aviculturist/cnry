@@ -32,7 +32,6 @@ import { anyNetworkStatusAtom, anyNetworkIsLoadingFamily } from '@store/networks
 import { networkDialogIsOpenAtom } from '@store/ui/network-dialog-is-open';
 import { addNetworkDialogIsOpenAtom } from '@store/ui/add-network-dialog-is-open';
 import SafeSuspense from '@components/safe-suspense';
-import { cnryLastIdAtom, watcherLastIdAtom } from '@store/cnry';
 
 interface NetworkStatusCircularProgressProps {
   color: 'success' | 'warning';

@@ -47,6 +47,7 @@ async function fetchPrivate(input: RequestInfo, init: RequestInit = {}): Promise
   return fetch(input, { ...DEFAULT_FETCH_OPTIONS, ...init });
 }
 
+// TODO: refactor, what are options for and why are theu using state, same for input value and value
 const AutocompleteSearch = () => {
   const [value, setValue] = React.useState<ResultType>({} as ResultType);
   const [inputValue, setInputValue] = React.useState('');
@@ -187,9 +188,8 @@ const AutocompleteSearch = () => {
       };
       setSearchHistory({ ...searchHistory, ...newHistoryEntry });
     }
-
     setOptions(newOptions);
-  }, [value, inputValue, searchResult]);
+  }, [value, inputValue, searchResult, setQ, setSearchHistory, searchHistory]);
 
   return (
     <Stack sx={{ width: '100%' }}>
