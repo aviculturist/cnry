@@ -53,7 +53,8 @@
     "@mui/styled-engine": "npm:@mui/styled-engine-sc@next",
     "jotai": "npm:jotai@1.5.0",
     "cli-table": "0.3.1",
-    "@oclif/plugin-help": "3.2.14"
+    "@oclif/plugin-help": "3.2.14",
+		"resolve": "1.20.0"
   },
   "eslintConfig": {
     "extends": [
@@ -68,7 +69,7 @@
   },
   "prettier": "@stacks/prettier-config",
   "devDependencies": {
-    "@babel/plugin-transform-react-jsx-source": "^7.14.5",
+    "@babel/plugin-transform-react-jsx-source": "7.16.5",
     "@clarigen/cli": "0.3.4",
     "@clarigen/node": "0.3.4",
     "@clarigen/test": "0.3.4",

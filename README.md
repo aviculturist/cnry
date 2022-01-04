@@ -184,6 +184,11 @@ Broken lingui
 "@oclif/plugin-help": "3.2.14"
 https://github.com/netlify/cli/issues/3788#issuecomment-990914667
 
+ModuleBuildError: Module build failed (from ./node_modules/next/dist/build/babel/loader/index.js):
+TypeError: Cannot read property 'uid' of undefined
+    at Object.statSync 
+https://github.com/nuxt/framework/issues/2599#issuecomment-1004732080
+
 ## Design Caveats
 
 - The `cnry` and `watcher` are NFTs. But don't ape in with any expectation that they will increase in value. In fact, the current `testnet` contracts have the `transfer` function disabled  ... because ... well, I still need to work out if there's any way to preserve those functions given the way the contracts interact.
