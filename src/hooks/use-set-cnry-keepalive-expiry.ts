@@ -19,10 +19,10 @@ const useSetCnryKeepaliveExpiry = (tokenId: number, cnryKeepaliveExpiry: number)
   );
   const onFinish = useCallback(
     data => {
-      //setPendingTxIds([...pendingTxIds, data.txId]); // adds this txid to the array of pending transactions
-      setPendingTxIds([...pendingTxIds, data.txId]); // adds this txid to the array of pending transactions
-      void userPendingTxAtom(data.txId); // creates an atomFamilyWithQuery to track status
-      setCnryUserPendingTxIds([...cnryUserPendingTxIds, data.txId]); // adds this txid to the array of pending transactions
+      //setPendingTxIds([...pendingTxIds, data.txid]); // adds this txid to the array of pending transactions
+      setPendingTxIds([...pendingTxIds, data.txid]); // adds this txid to the array of pending transactions
+      void userPendingTxAtom(data.txid); // creates an atomFamilyWithQuery to track status
+      setCnryUserPendingTxIds([...cnryUserPendingTxIds, data.txid]); // adds this txid to the array of pending transactions
       setSetCnryKeepaliveExpiryDialogIsOpen(false);
     },
     [cnryUserPendingTxIds, setCnryUserPendingTxIds, setPendingTxIds, setSetCnryKeepaliveExpiryDialogIsOpen]

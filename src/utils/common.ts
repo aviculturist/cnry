@@ -10,6 +10,7 @@ export function shortenHex(hex: string, length = 4) {
  */
 export const truncateMiddle = (input: string, offset = 5): string => {
   if (!input) return '';
+  console.log(input);
   // hashes
   if (input.startsWith('0x')) {
     return shortenHex(input, offset);

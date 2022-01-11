@@ -65,8 +65,8 @@ const ToggleSelectNetworkDialogButton = () => {
 
     // This relies on a version of micro-stacks that hasn't yet been released
     if (typeof Provider !== 'undefined' && 'getCurrentNetwork' in Provider) {
-      const index = getNetworkIndex(Provider.getCurrentNetwork().url);
-      handleSelectNetwork(index);
+      //const index = getNetworkIndex(Provider.getCurrentNetwork().url);
+      //handleSelectNetwork(index);
     }
   }, []);
 

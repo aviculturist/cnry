@@ -66,12 +66,13 @@ const SingleTransactionSnackbar = ({ txid }: { txid: string }) => {
 
 // TODO: not entirely sure if looping through all pending transactions is the best pattern
 const TransactionSnackbars = () => {
-  const [pendingTxIds] = useAtom(currentPendingTxIdsAtom);
-  console.log(pendingTxIds);
+  const [currentPendingTxIds] = useAtom(currentPendingTxIdsAtom);
+  console.log('TransactionSnackbars');
+  console.log(currentPendingTxIds);
   return (
     <div>
-      {pendingTxIds.map(item => (
-        <SingleTransactionSnackbar key={`${item}-single-tx-sb`} txid={item} />
+      {currentPendingTxIds.map(txid => (
+        <SingleTransactionSnackbar key={`${txid}-single-tx-sb`} txid={txid} />
       ))}
     </div>
   );

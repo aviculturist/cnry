@@ -20,8 +20,8 @@ import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import { networkAtom, stacksSessionAtom } from '@micro-stacks/react';
 
-const CnryUpdate = ({ txId, tokenId }: { txId: string; tokenId: number }) => {
-  const tx = useAtomValue(userPendingTxAtom(txId));
+const CnryUpdate = ({ txid, tokenId }: { txid: string; tokenId: number }) => {
+  const tx = useAtomValue(userPendingTxAtom(txid));
   const timer = React.useRef<number>();
   const [explorer] = useAtom(currentStacksExplorerState);
   const [chain] = useAtom(currentChainState);
@@ -45,7 +45,7 @@ const CnryUpdate = ({ txId, tokenId }: { txId: string; tokenId: number }) => {
         refetch();
       }, 2000);
     }
-  }, [dispatchCnryMetadata, setUpdatingCnryIds, tokenId, tx, txId, updatingCnryIds]);
+  }, [dispatchCnryMetadata, setUpdatingCnryIds, tokenId, tx, txid, updatingCnryIds]);
 
   // useEffect(() => {
     //   // fetch latest data
@@ -59,10 +59,10 @@ const CnryUpdate = ({ txId, tokenId }: { txId: string; tokenId: number }) => {
   return (
     <>
       <Typography variant="caption">
-        {truncateMiddle(txId)}
+        {truncateMiddle(txid)}
         <IconButton
           target="_blank"
-          href={`${explorer}/txid/${txId}?chain=${chain}`}
+          href={`${explorer}/txid/${txid}?chain=${chain}`}
           aria-label="go"
         >
           <LaunchIcon fontSize="small" />
@@ -100,8 +100,8 @@ export const CnryCardUpdatingPopper = ({ tokenId }: { tokenId: number }) => {
             <Box sx={{ border: 1, p: 1, bgcolor: 'background.paper' }}>
               <Typography sx={{ m: 'auto' }}>Pending updates</Typography>
               <Stack spacing={2}>
-                {updatingCnryIds[Number(tokenId)].map((txId, key) => (
-                  <CnryUpdate key={key} txId={txId} tokenId={tokenId} />
+                {updatingCnryIds[Number(tokenId)].map((txid, key) => (
+                  <CnryUpdate key={key} txid={txid} tokenId={tokenId} />
                 ))}
               </Stack>
             </Box>

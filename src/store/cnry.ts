@@ -447,7 +447,7 @@ export const cnryIsAliveQueryAtom = atomFamilyWithQuery<
 // per-node/address tracking of update statuses based on one or more transactions
 const anyUpdatingCnrysAtom = atomWithStorage(
   'anyUpdatingCnrys',
-  // key -> {tokenId: [txId1, txId2, etc], tokenId2 : [txId3, txId4, etc] }
+  // key -> {tokenId: [txid1, txid2, etc], tokenId2 : [txid3, txid4, etc] }
   <{ [key: string]: { [key: number]: Array<string> } }>{}
 );
 

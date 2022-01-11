@@ -105,9 +105,9 @@ const CnryList = () => {
       }}
     >
       <Stack component="div" direction="row" spacing={2}>
-        {userPendingTxids.map(txId => (
-          <ImageListItem key={txId}>
-            <PendingCnryCardFromTxId key={txId} txId={txId} />
+        {userPendingTxids.map(txid => (
+          <ImageListItem key={txid}>
+            <PendingCnryCardFromTxId key={txid} txid={txid} />
           </ImageListItem>
         ))}
       </Stack>

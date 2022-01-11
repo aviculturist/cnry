@@ -42,7 +42,7 @@ export interface UserTransaction {
   txstatus: 'submitted' | 'pending' | 'aborted' | 'dropped' | 'success'; // "submitted" is before node accepts
 }
 
-export const submittedTransactionAtom = atom(<string | undefined>(undefined));
+export const submittedTransactionAtom = atom(<string | undefined>undefined);
 
 const anyPendingTxIdsAtom = atomWithStorage(
   'anyPendingTransactions',
@@ -122,7 +122,7 @@ export const userPendingTxAtom = atomFamilyWithQuery<string, UserTransaction>(
       // such as a network change
       if ('error' in tx) {
         return {
-          txid,
+          txid: txid,
           sender: 'error in tx',
           timestamp: Math.floor(Date.now() / 1000),
           txstatus: 'submitted',
@@ -130,7 +130,7 @@ export const userPendingTxAtom = atomFamilyWithQuery<string, UserTransaction>(
       }
 
       return {
-        txid,
+        txid: txid,
         sender: tx.sender_address,
         function: (tx as ContractCallTransaction).contract_call.function_name
           ? (tx as ContractCallTransaction).contract_call.function_name
@@ -153,7 +153,7 @@ export const userPendingTxAtom = atomFamilyWithQuery<string, UserTransaction>(
     }
     // TODO: When there's an error, does this even return?
     return {
-      txid,
+      txid: txid,
       sender: '',
       function: 'error?',
       timestamp: Math.floor(Date.now() / 1000),

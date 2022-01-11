@@ -33,9 +33,10 @@ const useHatch = () => {
 
   const onFinish = useCallback(
     data => {
-      setPendingTxIds([...pendingTxIds, data.txId]); // adds this txid to the array of pending transactions
-      void userPendingTxAtom(data.txId); // creates an atomFamilyWithQuery to track status
-      setCnryUserPendingTxIds([...cnryUserPendingTxIds, data.txId]); // adds this txid to the array of pending transactions
+      console.log(data);
+      setPendingTxIds([...pendingTxIds, data.txid]); // adds this txid to the array of pending transactions
+      void userPendingTxAtom(data.txid); // creates an atomFamilyWithQuery to track status
+      setCnryUserPendingTxIds([...cnryUserPendingTxIds, data.txid]); // adds this txid to the array of pending transactions
     },
     [cnryUserPendingTxIds, pendingTxIds, setCnryUserPendingTxIds, setPendingTxIds]
   );

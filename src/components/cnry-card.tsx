@@ -82,8 +82,8 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
   }),
 }));
 
-const PendingCnryCardFromTxId = ({ txId }: { txId: string }) => {
-  const tx = useAtomValue(userPendingTxAtom(txId));
+const PendingCnryCardFromTxId = ({ txid }: { txid: string }) => {
+  const tx = useAtomValue(userPendingTxAtom(txid));
   const [pendingTxIds, setPendingTxIds] = useAtom(cnryUserPendingTxIdsAtom);
   const [expanded, setExpanded] = React.useState(false);
   const [, setValue] = useAtom(cnryListTabStateAtom);
@@ -92,9 +92,9 @@ const PendingCnryCardFromTxId = ({ txId }: { txId: string }) => {
   // TODO: missing dependencies
   useEffect(() => {
     if (tx.txstatus === 'success') {
-      const txs = pendingTxIds.filter(item => item !== txId);
+      const txs = pendingTxIds.filter(item => item !== txid);
       setPendingTxIds(txs); // remove from array
-      userPendingTxAtom.remove(txId); // remove from queries
+      userPendingTxAtom.remove(txid); // remove from queries
       setValue('two');
     }
   }, [tx]);
@@ -166,8 +166,8 @@ const PendingCnryCardFromTxId = ({ txId }: { txId: string }) => {
 };
 export { PendingCnryCardFromTxId };
 
-const CnryCardFromTxId = ({ txId }: { txId: string }) => {
-  const tx = useAtomValue(cnryContractTransactionAtom(txId));
+const CnryCardFromTxId = ({ txid }: { txid: string }) => {
+  const tx = useAtomValue(cnryContractTransactionAtom(txid));
 
   const tokenIdString =
     tx &&

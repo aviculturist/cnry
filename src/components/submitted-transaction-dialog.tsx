@@ -20,15 +20,15 @@ import { truncateMiddle } from '@utils/common';
 import { Typography } from '@mui/material';
 
 const SubmittedTransactionDialog = () => {
-  const [txId] = useAtom(submittedTransactionAtom);
-  return txId ? <SubmittedTransactionDialogInner txId={txId} /> : <></>;
+  const [txid] = useAtom(submittedTransactionAtom);
+  return txid ? <SubmittedTransactionDialogInner txid={txid} /> : <></>;
 };
 export default SubmittedTransactionDialog;
 
-const SubmittedTransactionDialogInner = ({ txId }: { txId: string }) => {
+const SubmittedTransactionDialogInner = ({ txid }: { txid: string }) => {
   const [, setSubmittedTxId] = useAtom(submittedTransactionAtom);
   const [pendingTxIds, setPendingTxIds] = useAtom(currentPendingTxIdsAtom);
-  const tx = useAtomValue(userPendingTxAtom(txId));
+  const tx = useAtomValue(userPendingTxAtom(txid));
   const [submittedTransactionDialogIsOpen, setSubmittedTransactionDialogIsOpen] = useAtom(
     submittedTransactionDialogIsOpenAtom
   );
@@ -41,19 +41,19 @@ const SubmittedTransactionDialogInner = ({ txId }: { txId: string }) => {
     if (tx.txstatus === 'pending') {
       // TODO: this timer is mostly for dev testing
       timer.current = window.setTimeout(() => {
-        const newPendingTxIds = [...pendingTxIds, txId];
+        const newPendingTxIds = [...pendingTxIds, txid];
         const deduplicatedPendingTxIds = [...new Set(newPendingTxIds)];
         setPendingTxIds(deduplicatedPendingTxIds); // adds this txid to the array of pending transactions
         setSubmittedTxId(undefined); // clears submittedTransactionAtom
       }, 2000);
     }
-  }, [pendingTxIds, setPendingTxIds, setSubmittedTxId, tx, txId]);
+  }, [pendingTxIds, setPendingTxIds, setSubmittedTxId, tx, txid]);
 
   const handleClose = () => {
     setSubmittedTransactionDialogIsOpen(false);
   };
 
-  return txId ? (
+  return txid ? (
     <>
       <Dialog
         sx={{ m: 'auto' }}
@@ -66,10 +66,10 @@ const SubmittedTransactionDialogInner = ({ txId }: { txId: string }) => {
         <Stack spacing={2} maxWidth="xs" sx={{ m: 'auto', p: 6 }}>
           <CircularProgress size={60} sx={{ m: 'auto' }} />
           <Typography>
-            Awaiting acknowledgement receipt for transaction <strong>{truncateMiddle(txId)}</strong>
+            Awaiting acknowledgement receipt for transaction <strong>{truncateMiddle(txid)}</strong>
             <IconButton
               target="_blank"
-              href={`${explorer}/txid/${txId}?chain=${chain}`}
+              href={`${explorer}/txid/${txid}?chain=${chain}`}
               aria-label="go"
             >
               <LaunchIcon fontSize="small" />
