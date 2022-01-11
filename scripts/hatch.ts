@@ -27,9 +27,9 @@ async function run() {
   })) as TransactionReceipt<bigint, bigint>;
 
   console.log(result);
-  // console.log(`curl -s 'http://localhost:3999/extended/v1/tx/0x${result.txid}' | jq -r .`);
+  // console.log(`curl -s 'http://localhost:3999/extended/v1/tx/0x${result.txId}' | jq -r .`);
   // console.log(
-  //   `stx -I http://localhost:3999 -H http://localhost:3999 get_confirmations ${result.txid}`
+  //   `stx -I http://localhost:3999 -H http://localhost:3999 get_confirmations ${result.txId}`
   // );
 }
 
