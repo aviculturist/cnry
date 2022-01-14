@@ -18,7 +18,10 @@ import {
   cnryUserPendingTxIdsAtom,
   currentPendingTxIdsAtom,
   userPendingTxAtom,
+  submittedTransactionAtom,
 } from '@store/transactions';
+import { submittedTransactionDialogIsOpenAtom } from '@store/ui/submitted-transaction-dialog-is-open';
+
 const useHatch = () => {
   const [cnryContract] = useAtom(currentCnryContractState);
   const [contractAddress, contractName] = cnryContract.split('.');
@@ -30,15 +33,19 @@ const useHatch = () => {
   const { handleContractCall } = useTransactionPopup();
   const [cnryUserPendingTxIds, setCnryUserPendingTxIds] = useAtom(cnryUserPendingTxIdsAtom);
   const [pendingTxIds, setPendingTxIds] = useAtom(currentPendingTxIdsAtom);
+  const [, setSubmittedTxId] = useAtom(submittedTransactionAtom);
+  const [, setSubmittedTransactionDialogIsOpen] = useAtom(submittedTransactionDialogIsOpenAtom);
 
   const onFinish = useCallback(
     data => {
       console.log(data);
-      setPendingTxIds([...pendingTxIds, data.txid]); // adds this txid to the array of pending transactions
-      void userPendingTxAtom(data.txid); // creates an atomFamilyWithQuery to track status
-      setCnryUserPendingTxIds([...cnryUserPendingTxIds, data.txid]); // adds this txid to the array of pending transactions
+      void userPendingTxAtom(data.txId); // track node acknowledgement and transaction status
+      setSubmittedTxId(data.txId); // transaction is submitted, awaiting node acknowledgement
+      setSubmittedTransactionDialogIsOpen(true); // open transaction submitted dialog
+      //setPendingTxIds([...pendingTxIds, data.txId]); // adds this txid to the array of pending transactions
+      //setCnryUserPendingTxIds([...cnryUserPendingTxIds, data.txid]); // adds this txid to the array of pending transactions
     },
-    [cnryUserPendingTxIds, pendingTxIds, setCnryUserPendingTxIds, setPendingTxIds]
+    [setSubmittedTransactionDialogIsOpen, setSubmittedTxId]
   );
 
   const onCancel = useCallback(errorMessage => {

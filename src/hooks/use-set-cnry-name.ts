@@ -20,12 +20,16 @@ const useSetCnryName = (tokenId: number) => {
 
   const onFinish = useCallback(
     data => {
-      void userPendingTxAtom(data.txid); // track node acknowledgement and transaction status
+      void userPendingTxAtom(data.txId); // track node acknowledgement and transaction status
       setSetCnryNameDialogIsOpen(false);
-      setSubmittedTxId(data.txid); // transaction is submitted, awaiting node acknowledgement
-      const newArray = updatingCnryIds[tokenId] === undefined ? [] : updatingCnryIds[tokenId];
-      newArray.push(data.txid);
-      setUpdatingCnryIds({ ...updatingCnryIds, [tokenId]: newArray }); // add transaction to array to track Cnry updating status
+      setSubmittedTxId(data.txId); // transaction is submitted, awaiting node acknowledgement
+
+      // Tracking update transactions per Cnry
+      const updatingTxs = updatingCnryIds[tokenId] === undefined ? [] : updatingCnryIds[tokenId];
+      updatingTxs.push(data.txId);
+      setUpdatingCnryIds({ ...updatingCnryIds, [tokenId]: updatingTxs }); // add transaction to array to track Cnry updating status
+      console.log('updatingCnryIds');
+      console.log(updatingCnryIds);
       setSubmittedTransactionDialogIsOpen(true); // open transaction submitted dialog
     },
     [

@@ -183,6 +183,22 @@ const CnryCardFromTxId = ({ txid }: { txid: string }) => {
   return tokenId === undefined ? <></> : <CnryCard key={tokenId.toString()} tokenId={tokenId} />;
 };
 export { CnryCardFromTxId };
+// {updatingCnryIds[tokenId].map(txid => (
+//   <CnryUpdateTransaction key={txid} txid={txid} />
+// ))}
+// const CnryUpdateTransaction = ({ txid }: { txid: string }) => {
+//   const tx;
+//   useEffect(() => {
+//     if (tx.txstatus === 'success') {
+//       const txs = pendingTxIds.filter(item => item !== txid);
+//       setPendingTxIds(txs); // remove from array
+//       userPendingTxAtom.remove(txid); // remove from queries
+//       setValue('two');
+//     }
+//   }, [tx]);
+
+//   return <></>;
+// };
 
 const CnryCard = ({ tokenId }: { tokenId: number }) => {
   const [expanded, setExpanded] = React.useState(false);
@@ -213,11 +229,11 @@ const CnryCard = ({ tokenId }: { tokenId: number }) => {
   // {updatingCnryIds[Number(cnryMetadata.index)] === undefined ? '' : 'Updating'}
 
   useEffect(() => {
-    const txs =
-      updatingCnryIds[Number(cnryMetadata?.index)] === undefined
-        ? []
-        : updatingCnryIds[Number(cnryMetadata?.index)];
-  }, [cnryMetadata?.index, updatingCnryIds]);
+    const txs = updatingCnryIds[tokenId] === undefined ? [] : updatingCnryIds[tokenId];
+    // updatingCnryIds[Number(cnryMetadata?.index)] === undefined
+    //   ? []
+    //   : updatingCnryIds[Number(cnryMetadata?.index)];
+  }, [tokenId, updatingCnryIds]);
 
   const handleCopyToClipboard = ({ link }: { link: string }) => {
     const uri = `${typeof window !== 'undefined' ? window.location.href.split('#')[0] : ''}${link}`;
@@ -227,9 +243,9 @@ const CnryCard = ({ tokenId }: { tokenId: number }) => {
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
+
   const blurMetadata = cnryMetadata
-    ? updatingCnryIds[Number(cnryMetadata.index)] === undefined ||
-      updatingCnryIds[Number(cnryMetadata.index)].length === 0
+    ? updatingCnryIds[tokenId] === undefined || updatingCnryIds[tokenId].length === 0
       ? false
       : true
     : false;
@@ -237,8 +253,7 @@ const CnryCard = ({ tokenId }: { tokenId: number }) => {
     <Card sx={{ m: 'auto', width: 292, maxWidth: 292 }}>
       <CardHeader
         avatar={
-          updatingCnryIds[Number(cnryMetadata.index)] === undefined ||
-          updatingCnryIds[Number(cnryMetadata.index)].length === 0 ? (
+          updatingCnryIds[tokenId] === undefined || updatingCnryIds[tokenId].length === 0 ? (
             <Avatar sx={{ bgcolor: isAlive ? green[500] : red[500] }} aria-label="profile">
               {isAlive ? <CheckCircleOutlineIcon /> : <CancelOutlinedIcon />}
             </Avatar>
@@ -260,7 +275,7 @@ const CnryCard = ({ tokenId }: { tokenId: number }) => {
                   variant="outlined"
                 />
               </Typography>
-              <EditCnryIconButton tokenId={Number(cnryMetadata.index)} />
+              <EditCnryIconButton tokenId={tokenId} />
             </>
           ) : (
             <>
@@ -280,14 +295,14 @@ const CnryCard = ({ tokenId }: { tokenId: number }) => {
         }
         title={
           <React.Fragment>
-            <Typography variant='inherit' sx={{ filter: blurMetadata ? 'blur(3px)' : 'none' }}>
+            <Typography variant="inherit" sx={{ filter: blurMetadata ? 'blur(3px)' : 'none' }}>
               {cnryMetadata.cnryName}
             </Typography>
           </React.Fragment>
         }
         subheader={
           <React.Fragment>
-            <Typography variant='inherit' sx={{ filter: blurMetadata ? 'blur(3px)' : 'none' }}>
+            <Typography variant="inherit" sx={{ filter: blurMetadata ? 'blur(3px)' : 'none' }}>
               Hatched on {hatchedDate}, expiry {daysRemainingUntilExpiry}
             </Typography>
           </React.Fragment>
@@ -301,7 +316,11 @@ const CnryCard = ({ tokenId }: { tokenId: number }) => {
       /> */}
 
       <CardContent>
-        <Typography variant="body2" color="text.secondary" sx={{ filter: blurMetadata ? 'blur(3px)' : 'none' }}>
+        <Typography
+          variant="body2"
+          color="text.secondary"
+          sx={{ filter: blurMetadata ? 'blur(3px)' : 'none' }}
+        >
           {cnryMetadata.cnryStatement}
         </Typography>
       </CardContent>
@@ -324,12 +343,7 @@ const CnryCard = ({ tokenId }: { tokenId: number }) => {
           </IconButton>
         </Tooltip>
         <Tooltip title={t`Open in new tab`}>
-          <IconButton
-            size="small"
-            target="_blank"
-            href={`./?id=${cnryMetadata.index}`}
-            aria-label="share"
-          >
+          <IconButton size="small" target="_blank" href={`./?id=${tokenId}`} aria-label="share">
             <ShareIcon fontSize="small" />
           </IconButton>
         </Tooltip>
@@ -337,7 +351,7 @@ const CnryCard = ({ tokenId }: { tokenId: number }) => {
           <IconButton
             size="small"
             aria-label="copy"
-            onClick={() => handleCopyToClipboard({ link: `./?id=${cnryMetadata.index}` })}
+            onClick={() => handleCopyToClipboard({ link: `./?id=${tokenId}` })}
           >
             <ContentCopyOutlinedIcon fontSize="small" />
           </IconButton>
@@ -346,7 +360,7 @@ const CnryCard = ({ tokenId }: { tokenId: number }) => {
           <Tooltip title={t`Publish keepalive`}>
             <IconButton
               aria-label="keepalive"
-              onClick={() => handleKeepalive({ tokenId: cnryMetadata.index })}
+              onClick={() => handleKeepalive({ tokenId: tokenId })}
             >
               <RestoreIcon />
             </IconButton>

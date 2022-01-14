@@ -31,6 +31,7 @@ const CnryUpdate = ({ txid, tokenId }: { txid: string; tokenId: number }) => {
   const [cnryMetadata, dispatchCnryMetadata] = useAtom(cnryGetMetadataQueryAtom([tokenId, network, session]));
 
   useEffect(() => {
+    console.log('within CnryUpdate');
     const refetch = () => {
       dispatchCnryMetadata({ type: 'refetch' });
     };
@@ -100,7 +101,7 @@ export const CnryCardUpdatingPopper = ({ tokenId }: { tokenId: number }) => {
             <Box sx={{ border: 1, p: 1, bgcolor: 'background.paper' }}>
               <Typography sx={{ m: 'auto' }}>Pending updates</Typography>
               <Stack spacing={2}>
-                {updatingCnryIds[Number(tokenId)].map((txid, key) => (
+                {updatingCnryIds[tokenId].map((txid, key) => (
                   <CnryUpdate key={key} txid={txid} tokenId={tokenId} />
                 ))}
               </Stack>
