@@ -5,7 +5,7 @@
 
 Cnry makes it easy to publish and keep track of warrant canaries.
 
-A [warrant canary](https://en.wikipedia.org/wiki/Warrant_canary) is a method by which a service provider can inform users that they been served with a government subpoena despite legal prohibitions on revealing the existence of the subpoena.
+A [warrant canary](https://en.wikipedia.org/wiki/Warrant_canary) is a method by which a service provider can inform users that they've been served with a government subpoena despite legal prohibitions on revealing the existence of the subpoena. The idea of using negative pronouncements to thwart the nondisclosure requirements of court orders and served secret warrants was first proposed by Steven Schear on the [cypherpunks mailing list](https://web.archive.org/web/20131103121048/http:/groups.yahoo.com/neo/groups/cypherpunks-lne-archive/conversations/topics/5869).
 
 Even if you don't need a warrant canary, you can publish a Cnry as a pet that you need to feed once in a while (via the `keepalive` function) or it will expire. How often you need to feed it is configurable in the contract.
 
