@@ -1,0 +1,22 @@
+{
+  "importMap": "import_map.json",
+  "fmt": {
+    "options": {
+      "singleQuote": true
+    },
+    "files": {
+      "include": ["tests/", "scripts/"],
+      "exclude": ["src/"]
+    }
+  },
+  "lint": {
+    "files": {
+      "include": ["tests/", "scripts/"]
+    },
+    "rules": {
+      "tags": ["recommended"],
+      "exclude": ["no-explicit-any", "no-empty", "no-unused-vars"],
+      "include": ["eqeqeq", "no-const-assign", "no-throw-literal"]
+    }
+  }
+}

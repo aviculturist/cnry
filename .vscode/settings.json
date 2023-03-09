@@ -1,4 +1,22 @@
-
 {
-    "deno.enable": true,
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": null,
+  "deno.enable": true,
+  "deno.importMap": "./import_map.json",
+  "deno.config": "./deno.json",
+  "deno.enablePaths": ["scripts", "tests"],
+  "deno.suggest.imports.autoDiscover": true,
+  "deno.lint": false,
+  "[jsonc][json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescript][typescriptreact][javascript]": {
+    "editor.formatOnSave": false,
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.codeActionsOnSave": ["source.formatDocument", "source.fixAll.eslint"]
+  },
+  "[toml]": {
+    "editor.defaultFormatter": "bungcip.better-toml"
+  },
+  "[clarity]": { "editor.defaultFormatter": "hirosystems.clarity-lsp" }
 }

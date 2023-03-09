@@ -18,6 +18,7 @@ import NoSsr from '@mui/material/NoSsr';
 import { StyleSheetManager } from 'styled-components';
 import rtlPlugin from 'stylis-plugin-rtl';
 import { StylisPlugin } from 'styled-components';
+import { ClientProvider } from '@micro-stacks/react';
 
 // https://dev.to/pffigueiredo/bullet-proof-rtl-rtl-in-a-web-platform-3-6-4bne
 // TODO: these props/children ?
@@ -74,6 +75,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
 function CnryApp(props: AppProps) {
   const { Component, pageProps } = props;
   return (
+    
     <Provider>
       <Head>
         <title>Cnry</title>
@@ -87,7 +89,11 @@ function CnryApp(props: AppProps) {
             <DirectionProvider>
               <DarkModeProvider>
                 <CssBaseline />
-                <Component {...pageProps} />
+                <ClientProvider
+                appName="Cnry"
+                appIconUrl="/vercel.png"
+                ><Component {...pageProps} />
+                </ClientProvider>
               </DarkModeProvider>
             </DirectionProvider>
           </LanguageProvider>

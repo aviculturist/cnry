@@ -1,8 +1,11 @@
 {
   "recommendations": [
     "hirosystems.clarity-lsp",
-    "2gua.rainbow-brackets",
+    "denoland.vscode-deno",
     "bungcip.better-toml",
-    "editorconfig.editorconfig"
+    "editorconfig.editorconfig",
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "rohit-gohri.format-code-action"
   ]
 }

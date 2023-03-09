@@ -11,9 +11,17 @@ depends_on = []
 path = "contracts/watcher.clar"
 depends_on = ["nft-trait"]
 
+# [contracts.watcher-v1]
+# path = "contracts/watcher.clar"
+# depends_on = ["nft-trait"]
+
 [contracts.cnry]
 path = "contracts/cnry.clar"
 depends_on = ["nft-trait", "watcher"]
+
+# [contracts.cnry-v1]
+# path = "contracts/cnry-v1.clar"
+# depends_on = ["cnry", "nft-trait", "watcher-v1"]
 
 [contracts.maintenance]
 path = "contracts/maintenance.clar"

@@ -1,0 +1,8 @@
+{
+  "imports": {
+    "lodash": "https://esm.sh/lodash@4.17.21",
+    "@utils/clarigen": "./src/utils/clarigen.ts",
+    "@clarigen/core": "npm:@clarigen/core",
+    "@stacks/transactions": "npm:@stacks/transactions"
+  }
+}

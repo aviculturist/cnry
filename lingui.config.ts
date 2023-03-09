@@ -1,4 +1,5 @@
-module.exports = {
+import { formatter } from '@lingui/format-json';
+export default {
   catalogs: [
     {
       path: '<rootDir>/locale/{locale}',
@@ -9,7 +10,7 @@ module.exports = {
   // compileNamespace: 'ts',
   // extractBabelOptions: {},
   fallbackLocales: {},
-  format: 'minimal',
+  format: formatter({ style: 'minimal' }),
   formatOptions: { origins: false, lineNumbers: false },
   sourceLocale: 'en',
   locales: ['en', 'ar', 'it', 'ru'],

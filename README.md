@@ -60,39 +60,51 @@ As your transaction moves from submitted to pending and finally succeeds, you ca
 
 ## Testing
 
-To run the tests (both `@clarigen/test` and Clarinet examples are included), try:
+To run the tests (both [Clarigen](https://clarigen.dev/docs/deno) and [Clarinet](https://www.hiro.so/clarinet) examples are included), try:
 
 ```bash
-$ $ yarn test
-yarn run v1.22.10
-$ jest && clarinet test tests/*.ts
- PASS  tests/clarigen/cnry.test.ts
-  Cnry contract
-    ✓ Cnry token holder #2 (Alice) can hatch a Cnry and the first Cnry has tokenId 0 (39 ms)
-    ✓ Alice can update the Cnry Uri (64 ms)
-    ✓ Alice can update the Cnry keepalive-timestamp (86 ms)
-    ✓ Cnry token holder #2 (Bob) can hatch a Cnry and the second Cnry has tokenId 1 (36 ms)
-    ✓ Cnry token holders cannot update a different holder's Cnry (29 ms)
-    ✓ Anyone can watch a Cnry (61 ms)
+$ yarn test
+yarn run v1.22.19
+$ clarinet test --import-map=import_map.json
+./tests/clarigen/cnry.test.ts => Clarigen tests that wallet_1 (Alice) can hatch a Cnry and the first Cnry has tokenId 1 ... ok (9ms)
+./tests/clarigen/cnry.test.ts => Clarigen tests that Alice can update the Cnry Uri ... ok (8ms)
+./tests/clarigen/cnry.test.ts => Clarigen tests that wallet_2 (Bob) can hatch a Cnry and the second Cnry has tokenId 2 ... ok (4ms)
+./tests/clarigen/cnry.test.ts => Clarigen tests that Bob cannot update Alice's Cnry ... ok (4ms)
+./tests/clarigen/cnry.test.ts => Clarigen tests that Bob can watch Alice's Cnry ... ok (4ms)
+./tests/clarigen/cnry.test.ts => Clarigen tests that Alice can update the Cnry keepalive-timestamp ... ok (4ms)
+./tests/cnry_test.ts => wallet_1 can hatch a Cnry ... ok (8ms)
+./tests/cnry_test.ts => wallet_2 account can hatch Cnry ... ok (5ms)
+./tests/cnry_test.ts => it allows the deployer to update the contract base-uri ... ok (4ms)
+./tests/cnry_test.ts => it fails when a non-deployer account updates the contract metadata ... ok (5ms)
+./tests/cnry_test.ts => it lets another account watch the same Cnry ... ok (8ms)
 
-Test Suites: 1 passed, 1 total
-Tests:       6 passed, 6 total
-Snapshots:   0 total
-Time:        4.085 s, estimated 6 s
-Ran all test suites.
+ok | 10 passed | 0 failed (479ms)
+----------------------------
+Check out the pro tips to improve your testing process:
 
-Running file:///Projects/cnry/tests/cnry_test.ts
-* it adds the cnry contract to watcher watched-contract storage ... ok (17ms)
-* deployer can hatch a Cnry ... ok (21ms)
-* non-depoyer account can hatch Cnry ... ok (17ms)
-* it allows the deployer to update the contract base-uri ... ok (16ms)
-* it fails when a non-deployer account updates the contract metadata ... ok (23ms)
-* it lets an account watch a Cnry ... ok (26ms)
+  $ clarinet test --watch
+    Watch for file changes an re-run all tests.
 
-test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out (1877ms)
+  $ clarinet test --costs
+    Run a cost analysis of the contracts covered by tests.
+
+  $ clarinet test --coverage
+    Measure test coverage with the LCOV tooling suite.
+
+Once you are ready to test your contracts on a local developer network, run the following:
+
+  $ clarinet integrate
+    Deploy all contracts to a local dockerized blockchain setup (Devnet).
+
+Find more information on testing with Clarinet here: https://docs.hiro.so/clarinet/how-to-guides/how-to-set-up-local-development-environment#testing-with-clarinet
+And learn more about local integration testing here: https://docs.hiro.so/clarinet/how-to-guides/how-to-run-integration-environment
+Disable these hints with the env var CLARINET_DISABLE_HINTS=1
+----------------------------
+✨  Done in 0.78s.
+
 ```
 
-Each testing framework can also be run independently `npx jest` for the Clarigen test and `clarinet test tests/cnry_test.ts` for the Clarinet one.
+Each testing framework can also be run independently `clarinet test tests/clarigen/cnry.test.ts` for the Clarigen tests and `clarinet test tests/cnry_test.ts` for the Clarinet ones.
 
 ## Scripts
 

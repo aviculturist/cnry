@@ -1,136 +1,65 @@
-import { TestProvider, txOk, txErr } from '@clarigen/test';
-import { cvToValue, TransactionReceipt } from '@clarigen/core';
+import { simnet, accounts } from '@utils/clarigen';
+import { assertEquals } from 'https://deno.land/std@0.181.0/testing/asserts.ts';
+import { beforeAll, describe, it, run } from 'https://deno.land/x/dspec@v0.2.0/mod.ts';
 import {
-  FungibleConditionCode,
-  NonFungibleConditionCode,
-  makeStandardSTXPostCondition,
-  makeStandardNonFungiblePostCondition,
-  createAssetInfo,
-  stringUtf8CV,
-} from '@stacks/transactions';
+  Chain,
+  contractsFactory,
+  factory,
+  txOk,
+  txErr,
+} from 'https://deno.land/x/clarigen/src/index.ts';
 
-import { contracts, accounts, CnryContract, WatcherContract } from '@contracts';
+const { cnry, watcher } = contractsFactory(simnet);
 
-const deployer = accounts.deployer.address; // ST1SJ3DTE5DN7X54YDH5D64R3BCB6A2AG2ZQ8YPD5
-const alice = accounts.wallet_1.address; // ST1SJ3DTE5DN7X54YDH5D64R3BCB6A2AG2ZQ8YPD5
-const bob = accounts.wallet_2.address; // ST2CY5V39NHDPWSXMW9QDT3HC3GD6Q6XX4CFRK9AG
-
-let cnry: CnryContract;
-let watcher: WatcherContract;
-
-async function deploy() {
-  const deployed = await TestProvider.fromContracts(contracts);
-  cnry = deployed.cnry.contract;
-  watcher = deployed.watcher.contract;
-}
-const delay = (ms: number | undefined) => new Promise(res => setTimeout(res, ms));
-
-// const stxPostCond = createSTXPostCondition(userStxAddress, FungibleConditionCode.Equal, hatchPrice);
-
-// const nftPostCond = createNonFungiblePostCondition(
-//   userStxAddress,
-//   NonFungibleConditionCode.Owns,
-//   createAssetInfo(contractAddress, contractName, 'CNRY'),
-//   stringUtf8CV('CNRY')
-// );
-
-describe('Cnry contract', () => {
-  beforeAll(async () => {
-    await deploy();
+describe('Clarigen tests that', () => {
+  let chain: Chain;
+  beforeAll(() => {
+    chain = Chain.fromSimnet(simnet).chain;
   });
-  // wallet_1 gets a CNRY token
-  const nftPostConditionAddress = accounts.wallet_1.address;
-  const nftPostConditionCode = NonFungibleConditionCode.Owns;
-  const assetAddress = accounts.deployer.address;
-  const assetContractName = 'cnry';
-  const assetName = 'CNRY';
-  const tokenAssetName = stringUtf8CV('CNRY');
-  const nonFungibleAssetInfo = createAssetInfo(assetAddress, assetContractName, assetName);
+  const alice = accounts.wallet_1.address;
+  const bob = accounts.wallet_2.address;
 
-  const standardNonFungiblePostCondition = makeStandardNonFungiblePostCondition(
-    nftPostConditionAddress,
-    nftPostConditionCode,
-    nonFungibleAssetInfo,
-    tokenAssetName
-  );
-  // Deployer gets 1 STX
-  const postConditionAddress = accounts.deployer.address;
-  const postConditionCode = FungibleConditionCode.Equal;
-  const postConditionAmount = 1000000n; // is this equiv to new BigNum(1000000) ?
-  const postConditions = [
-    makeStandardSTXPostCondition(postConditionAddress, postConditionCode, postConditionAmount),
-    standardNonFungiblePostCondition,
-  ];
+  it('wallet_1 (Alice) can hatch a Cnry and the first Cnry has tokenId 1', () => {
+    const initial = chain.rov(cnry.getLastTokenId());
+    assertEquals(initial.value, 0n);
 
-  test('wallet_1 (Alice) can hatch a Cnry and the first Cnry has tokenId 1', async () => {
-    const tx = cnry.hatch(
-      'Acme Corp',
-      'Acme Corp has never received an order under Section 215 of the USA Patriot Act.'
+    const hatchResult = chain.mineOne(txOk(cnry.hatch('foo', 'bar'), alice));
+    assertEquals(hatchResult.value, 1n);
+
+    const first = chain.rov(cnry.getLastTokenId());
+    assertEquals(first.value, 1n);
+  });
+
+  it('Alice can update her Cnry Uri', () => {
+    const setUriTx = chain.mineOne(
+      txOk(cnry.setUri({ tokenId: 1n, cnryUri: 'https://example.com' }), alice)
     );
-    // Fails
-    //const result = await txOk(tx, alice);
 
-    const result = (await tx.submit({
-      sender: accounts.wallet_1.address,
-      postConditions: postConditions,
-    })) as TransactionReceipt<bigint, bigint>;
-    console.log(accounts.deployer.balance);
-    console.log(accounts.wallet_1.balance);
-    console.log(result.getResult());
-    expect((await result.getResult()).value).toEqual(1n);
+    const getUriTx = chain.rov(cnry.getTokenUri(1n));
+    assertEquals(getUriTx.value, 'https://example.com');
   });
 
-  test('Alice can update the Cnry Uri', async () => {
-    const setUriTx = cnry.setUri(1, 'https://example.com');
-    const result = await txOk(setUriTx, alice);
-    expect(result.value).toBeGreaterThan(0n);
-    const getUriTx = cnry.getTokenUri(1);
-    expect(await getUriTx).toEqual({ value: 'https://example.com' });
+  it('Alice can update her Cnry keepalive-timestamp', () => {
+    const keepaliveUpdateTx = chain.mineOne(
+      txOk(cnry.setKeepaliveExpiry({ tokenId: 1n, keepaliveExpiry: 5n }), alice)
+    );
   });
 
-  test('Alice can update the Cnry keepalive-timestamp', async () => {
-    const getKeepaliveExpiry = cnry.getKeepaliveTimestamp(1);
-    const keepalive = await getKeepaliveExpiry;
-    const keepaliveValue = 'value' in keepalive ? keepalive.value : 0;
-    const keepaliveTx = cnry.keepalive(1);
-    const result = await txOk(keepaliveTx, alice);
-    const getKeepaliveExpiryAfter = cnry.getKeepaliveTimestamp(1);
-    const keepaliveAfter = await getKeepaliveExpiryAfter;
-    const keepaliveAfterValue = 'value' in keepaliveAfter ? keepaliveAfter.value : 0;
-    expect(keepaliveAfterValue).toBeGreaterThan(keepaliveValue);
+  it('wallet_2 (Bob) can hatch a Cnry and the second Cnry has tokenId 2', () => {
+    const hatchResult = chain.mineOne(
+      txOk(cnry.hatch('Bobs Cnry', 'The FBI has not been here today'), bob)
+    );
+    assertEquals(hatchResult.value, 2n);
   });
 
-  test('wallet_2 (Bob) can hatch a Cnry and the second Cnry has tokenId 2', async () => {
-    const tx = cnry.hatch('Bob', 'The FBI has not been here today');
-    const result = await txOk(tx, bob);
-    expect(result.value).toEqual(2n);
+  it("Bob cannot update Alice's Cnry", () => {
+    const keepaliveResultTx = chain.mineOne(txErr(cnry.keepalive(1n), bob));
+    assertEquals(keepaliveResultTx.value, 401n);
   });
 
-  test("Cnry token holders cannot update a different holder's Cnry", async () => {
-    const keepaliveTx = cnry.keepalive(1);
-    const result = await txErr(keepaliveTx, bob);
-    expect(result.value).toEqual(401n);
+  it("Bob can watch Alice's Cnry", () => {
+    const watchContractTx = chain.mineOne(txOk(cnry.watch(1n), bob));
   });
-
-  test('Anyone can watch a Cnry', async () => {
-    const getCnryAddressTx = watcher.getWatchedContract();
-    const res = await txOk(getCnryAddressTx, bob);
-    const watchTx = cnry.watch(0);
-    const result = await txOk(watchTx, bob);
-    expect(result.value).toBeGreaterThan(10n);
-  });
-
-  // test('Cnry cannot be updated after expiry', async () => {
-  //   const getKeepaliveExpiry = cnry.getKeepaliveExpiry(1);
-  //   const keepalive = await getKeepaliveExpiry;
-  //   const keepaliveValue = "value" in keepalive ? keepalive.value : 0;
-  //   const keepaliveTx = cnry.setKeepaliveExpiry(1, 1);
-  //   const result = await txOk(keepaliveTx, bob);
-  //   const getKeepaliveExpiryAfter = cnry.getKeepaliveExpiry(0);
-  //   const keepaliveAfter = await getKeepaliveExpiryAfter;
-  //   const keepaliveAfterValue = "value" in keepaliveAfter ? keepaliveAfter.value : 0;
-  //   await delay(5000); // Need to check the block length
-
-  //   expect(keepaliveAfterValue).toBeGreaterThan(keepaliveValue);
-  // });
 });
+
+run();

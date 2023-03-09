@@ -5,24 +5,9 @@ import {
   Chain,
   Account,
   types,
-  // @ts-ignore
-} from 'https://deno.land/x/clarinet@v0.18.3/index.ts';
-// @ts-ignore
-import { assertEquals } from 'https://deno.land/std@0.90.0/testing/asserts.ts';
+} from 'https://deno.land/x/clarinet@v1.5.2/index.ts';
 
-// Clarinet.test({
-//   name: 'it adds the cnry contract to watcher watched-contract storage',
-//   async fn(chain: Chain, accounts: Map<string, Account>) {
-//     const deployer = accounts.get('deployer')!;
-
-//     const call = chain.callReadOnlyFn('watcher', 'get-watched-contract', [], deployer.address);
-
-//     call.result
-//       .expectOk()
-//       .expectSome()
-//       .expectPrincipal('ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.cnry');
-//   },
-// });
+import { assertEquals } from 'https://deno.land/std@0.181.0/testing/asserts.ts';
 
 Clarinet.test({
   name: 'wallet_1 can hatch a Cnry',
@@ -106,23 +91,6 @@ Clarinet.test({
   },
 });
 
-// Clarinet.test({
-//   name: 'it lets an account watch a Cnry',
-//   async fn(chain: Chain, accounts: Map<string, Account>) {
-//     const account = accounts.get('wallet_1')!;
-
-//     // wallet_1 calls the watch function
-//     const block = chain.mineBlock([
-//       Tx.contractCall('cnry', 'watch', [types.uint(0)], account.address),
-//     ]);
-
-//     // contract returns (ok true)
-//     const result = block.receipts[0].result;
-
-//     result.expectOk().expectUint(1);
-//   },
-// });
-
 Clarinet.test({
   name: 'it lets another account watch the same Cnry',
   async fn(chain: Chain, accounts: Map<string, Account>) {
@@ -147,7 +115,6 @@ Clarinet.test({
 
     // contract returns (ok true)
     const result_2 = block_2.receipts[0].result;
-    console.log(result_2);
     result_2.expectOk().expectUint(2);
   },
 });
@@ -167,5 +134,36 @@ Clarinet.test({
 //     const result = block.receipts[0].result;
 
 //     result.expectOk();
+//   },
+// });
+
+// Clarinet.test({
+//   name: 'it lets an account watch a Cnry',
+//   async fn(chain: Chain, accounts: Map<string, Account>) {
+//     const account = accounts.get('wallet_1')!;
+
+//     // wallet_1 calls the watch function
+//     const block = chain.mineBlock([
+//       Tx.contractCall('cnry', 'watch', [types.uint(0)], account.address),
+//     ]);
+
+//     // contract returns (ok true)
+//     const result = block.receipts[0].result;
+
+//     result.expectOk().expectUint(1);
+//   },
+// });
+
+// Clarinet.test({
+//   name: 'it adds the cnry contract to watcher watched-contract storage',
+//   async fn(chain: Chain, accounts: Map<string, Account>) {
+//     const deployer = accounts.get('deployer')!;
+
+//     const call = chain.callReadOnlyFn('watcher', 'get-watched-contract', [], deployer.address);
+
+//     call.result
+//       .expectOk()
+//       .expectSome()
+//       .expectPrincipal('ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.cnry');
 //   },
 // });

@@ -20,9 +20,15 @@
 /build
 
 # clarinet
-settings/Mainnet.toml
-settings/Testnet.toml
+**/settings/Mainnet.toml
+**/settings/Testnet.toml
+.cache/**
 history.txt
+deployments
+
+# clarigen
+/src/esm
+/tests/clarigen.ts
 
 # misc
 .DS_Store

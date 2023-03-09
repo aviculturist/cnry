@@ -1,13 +1,13 @@
-const withTM = require('next-transpile-modules')(['@mui/material', '@mui/system']); // pass the modules you would like to see transpiled
-
 /** @type {import('next').NextConfig} */
-module.exports = withTM({
+module.exports = {
   // experimental: {
   //   esmExternals: true,
   // },
   // https://github.com/Velenir/nextjs-ipfs-example/
   assetPrefix: './',
   trailingSlash: true,
+  // https://medium.com/@yashashr/next-js-optimization-for-better-performance-part-1-material-ui-mui-configs-plugins-6fdc48a4e984
+  transpilePackages: ["@mui/system", "@mui/material", "@mui/icons-material"],
   reactStrictMode: true,
   webpack(config, { isServer }) {
     const fallback = config.resolve.fallback || (config.resolve.fallback = {});
@@ -26,4 +26,4 @@ module.exports = withTM({
     };
     return config;
   },
-});
+};
