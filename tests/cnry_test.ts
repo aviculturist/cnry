@@ -23,7 +23,7 @@ Clarinet.test({
       ),
     ]);
     const result = block.receipts[0].result;
-
+    console.log(result);
     result.expectOk();
   },
 });
@@ -41,10 +41,30 @@ Clarinet.test({
         account.address
       ),
     ]);
-
     const result = block.receipts[0].result;
-
+    console.log(result);
     result.expectOk();
+  },
+});
+
+Clarinet.test({
+  name: 'wallet_2 can update the contract uri',
+  async fn(chain: Chain, accounts: Map<string, Account>) {
+    const account = accounts.get('wallet_2')!;
+
+    // deployer account attempts to update the base-uri
+    const block = chain.mineBlock([
+      Tx.contractCall(
+        'cnry',
+        'set-uri',
+        [types.uint(1), types.ascii('https://example.com')],
+        account.address
+      ),
+    ]);
+
+    // contract returns (ok true)
+    const result = block.receipts[0].result;
+    result.expectOk().expectBool(true);
   },
 });
 
