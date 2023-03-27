@@ -6,24 +6,19 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import { networkInfoAtom } from '@store/networks';
 import { currentBitcoinExplorerState } from '@utils/helpers';
-import { DEFAULT_LOCALNET_SERVER } from '@utils/constants';
+import { DEFAULT_DEVNET_SERVER } from '@utils/constants';
 import ProgressIcon from '@components/progress-icon';
 import BitcoinIcon from '@assets/bitcoin-icon';
 
 const BitcoinBlockHeightButtonSkeleton = () => {
   return (
     <Tooltip title={t`Bitcoin Block Height`}>
-      <Button
-        startIcon={<BitcoinIcon />}
-        variant="text"
-        size="small"
-        color={'success'}
-      >
+      <Button startIcon={<BitcoinIcon />} variant="text" size="small" color={'success'}>
         ????
       </Button>
     </Tooltip>
   );
-}
+};
 export { BitcoinBlockHeightButtonSkeleton };
 
 const BitcoinBlockHeightButton = () => {
@@ -37,7 +32,7 @@ const BitcoinBlockHeightButton = () => {
           networkInfo.burn_block_height === undefined
             ? '#'
             : `${currentBitcoinExplorer}/block${
-                network.getCoreApiUrl() === DEFAULT_LOCALNET_SERVER ? '-height' : ''
+                network.getCoreApiUrl() === DEFAULT_DEVNET_SERVER ? '-height' : ''
               }/${networkInfo.burn_block_height}`
         }
         target="_blank"

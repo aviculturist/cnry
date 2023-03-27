@@ -23,7 +23,7 @@ To access Cnry, use an IPFS gateway link from the
 [latest release](https://github.com/aviculturist/cnry/releases/latest),
 or visit [testnet.cnry.org](https://testnet.cnry.org).
 
-> NOTE: `testnet` is the default network and `localnet`
+> NOTE: `testnet` is the default network and `devnet`
 > only works in development mode on some browsers due to
 > security limitations (CORS and mixed content). You can
 > also add your own network within the ui.
@@ -38,7 +38,7 @@ or visit [testnet.cnry.org](https://testnet.cnry.org).
 
 2. Install [Clarinet](https://github.com/hirosystems/clarinet).
 
-3. Clone this repository and bootstrap your `localnet` which consists of a Bitcoin node, Stacks node, Stacks API server, and Stacks and Bitcoin explorers:
+3. Clone this repository and bootstrap your `devnet` which consists of a Bitcoin node, Stacks node, Stacks API server, and Stacks and Bitcoin explorers:
 
 ```bash
 cd cnry
@@ -52,9 +52,9 @@ clarinet publish --devnet
 yarn && yarn run dev
 ```
 
-5. In your browser, install the [Hiro Wallet](https://www.hiro.so/wallet/install-web) and select `Change Network -> Localnet`.
+5. In your browser, install the [Hiro Wallet](https://www.hiro.so/wallet/install-web) and select `Change Network -> Devnet`.
 
-6. Open [http://localhost:3000](http://localhost:3000) with your browser to load the app. Click on `Connect Stacks Wallet` and make sure you are connected to `Localnet`, then publish your first Cnry. Open the [Chrome DevTools](https://developer.chrome.com/docs/devtools/) to view the console and network queries.
+6. Open [http://localhost:3000](http://localhost:3000) with your browser to load the app. Click on `Connect Stacks Wallet` and make sure you are connected to `Devnet`, then publish your first Cnry. Open the [Chrome DevTools](https://developer.chrome.com/docs/devtools/) to view the console and network queries.
 
 As your transaction moves from submitted to pending and finally succeeds, you can track its progress via the notifications or using the activity drawer (the bell icon in the header).
 

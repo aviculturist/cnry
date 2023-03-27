@@ -4,29 +4,29 @@ import { networkAtom } from '@micro-stacks/react';
 import {
   DEFAULT_MAINNET_SERVER,
   DEFAULT_TESTNET_SERVER,
-  DEFAULT_LOCALNET_SERVER,
+  DEFAULT_DEVNET_SERVER,
   DEFAULT_MAINNET_EXPLORER,
   DEFAULT_TESTNET_EXPLORER,
-  DEFAULT_LOCALNET_EXPLORER,
-  DEFAULT_LOCALNET_BITCOIN_EXPLORER,
+  DEFAULT_DEVNET_EXPLORER,
+  DEFAULT_DEVNET_BITCOIN_EXPLORER,
   DEFAULT_TESTNET_BITCOIN_EXPLORER,
   DEFAULT_MAINNET_BITCOIN_EXPLORER,
   DEFAULT_MAINNET_CNRY_CONTRACT,
   DEFAULT_TESTNET_CNRY_CONTRACT,
-  DEFAULT_LOCALNET_CNRY_CONTRACT,
+  DEFAULT_DEVNET_CNRY_CONTRACT,
   DEFAULT_MAINNET_WATCHER_CONTRACT,
   DEFAULT_TESTNET_WATCHER_CONTRACT,
-  DEFAULT_LOCALNET_WATCHER_CONTRACT,
+  DEFAULT_DEVNET_WATCHER_CONTRACT,
   DEFAULT_MAINNET_MAINTENANCE_CONTRACT,
   DEFAULT_TESTNET_MAINTENANCE_CONTRACT,
-  DEFAULT_LOCALNET_MAINTENANCE_CONTRACT,
+  DEFAULT_DEVNET_MAINTENANCE_CONTRACT,
 } from '@utils/constants';
 
 export const currentCnryContractState = atom(get => {
   const network = get(networkAtom);
   const cnryContract =
-    network.getCoreApiUrl() === DEFAULT_LOCALNET_SERVER
-      ? DEFAULT_LOCALNET_CNRY_CONTRACT
+    network.getCoreApiUrl() === DEFAULT_DEVNET_SERVER
+      ? DEFAULT_DEVNET_CNRY_CONTRACT
       : network.getCoreApiUrl() === DEFAULT_TESTNET_SERVER
       ? DEFAULT_TESTNET_CNRY_CONTRACT
       : DEFAULT_MAINNET_CNRY_CONTRACT;
@@ -36,8 +36,8 @@ export const currentCnryContractState = atom(get => {
 export const currentWatcherContractState = atom(get => {
   const network = get(networkAtom);
   const watcherContract =
-    network.getCoreApiUrl() === DEFAULT_LOCALNET_SERVER
-      ? DEFAULT_LOCALNET_WATCHER_CONTRACT
+    network.getCoreApiUrl() === DEFAULT_DEVNET_SERVER
+      ? DEFAULT_DEVNET_WATCHER_CONTRACT
       : network.getCoreApiUrl() === DEFAULT_TESTNET_SERVER
       ? DEFAULT_TESTNET_WATCHER_CONTRACT
       : DEFAULT_MAINNET_WATCHER_CONTRACT;
@@ -47,8 +47,8 @@ export const currentWatcherContractState = atom(get => {
 export const currentMaintenanceContractState = atom(get => {
   const network = get(networkAtom);
   const maintenanceContract =
-    network.getCoreApiUrl() === DEFAULT_LOCALNET_SERVER
-      ? DEFAULT_LOCALNET_MAINTENANCE_CONTRACT
+    network.getCoreApiUrl() === DEFAULT_DEVNET_SERVER
+      ? DEFAULT_DEVNET_MAINTENANCE_CONTRACT
       : network.getCoreApiUrl() === DEFAULT_TESTNET_SERVER
       ? DEFAULT_TESTNET_MAINTENANCE_CONTRACT
       : DEFAULT_MAINNET_MAINTENANCE_CONTRACT;
@@ -58,8 +58,8 @@ export const currentMaintenanceContractState = atom(get => {
 export const currentStacksExplorerState = atom(get => {
   const network = get(networkAtom);
   const defaultStacksExplorer =
-    network.getCoreApiUrl() === DEFAULT_LOCALNET_SERVER
-      ? DEFAULT_LOCALNET_EXPLORER
+    network.getCoreApiUrl() === DEFAULT_DEVNET_SERVER
+      ? DEFAULT_DEVNET_EXPLORER
       : network.getCoreApiUrl() === DEFAULT_TESTNET_SERVER
       ? DEFAULT_TESTNET_EXPLORER
       : DEFAULT_MAINNET_EXPLORER;
@@ -69,8 +69,8 @@ export const currentStacksExplorerState = atom(get => {
 export const currentBitcoinExplorerState = atom(get => {
   const network = get(networkAtom);
   const defaultBitcoinExplorer =
-    network.getCoreApiUrl() === DEFAULT_LOCALNET_SERVER
-      ? DEFAULT_LOCALNET_BITCOIN_EXPLORER
+    network.getCoreApiUrl() === DEFAULT_DEVNET_SERVER
+      ? DEFAULT_DEVNET_BITCOIN_EXPLORER
       : network.getCoreApiUrl() === DEFAULT_TESTNET_SERVER
       ? DEFAULT_TESTNET_BITCOIN_EXPLORER
       : DEFAULT_MAINNET_BITCOIN_EXPLORER;

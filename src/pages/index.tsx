@@ -6,7 +6,7 @@ import { StacksMainnet, StacksTestnet, StacksMocknet } from 'micro-stacks/networ
 import {
   DEFAULT_MAINNET_SERVER,
   DEFAULT_TESTNET_SERVER,
-  DEFAULT_LOCALNET_SERVER,
+  DEFAULT_DEVNET_SERVER,
   ENV,
 } from '@utils/constants';
 import Header from '@components/header';
@@ -71,10 +71,10 @@ export const getStaticProps = getStaticQueryProps(getQueries)(async _ctx => {
 });
 
 // .env.development and .env.production are source of truth for NEXT_PUBLIC_ENV
-// in development, default to localnet, in production, mainnet
+// in development, default to devnet, in production, mainnet
 const initialNetwork =
   ENV === 'development'
-    ? new StacksMocknet({ url: DEFAULT_LOCALNET_SERVER })
+    ? new StacksMocknet({ url: DEFAULT_DEVNET_SERVER })
     : new StacksTestnet({ url: DEFAULT_TESTNET_SERVER });
 
 const withMicroStacks = wrapWithMicroStacks({
