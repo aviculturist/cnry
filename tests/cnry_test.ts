@@ -13,7 +13,6 @@ Clarinet.test({
   name: 'wallet_1 can hatch a Cnry',
   async fn(chain: Chain, accounts: Map<string, Account>) {
     const account = accounts.get('wallet_1')!;
-    // wallet_1 calls the mint function
     const block = chain.mineBlock([
       Tx.contractCall(
         'cnry',
@@ -23,6 +22,7 @@ Clarinet.test({
       ),
     ]);
     const result = block.receipts[0].result;
+    console.log('wallet_1');
     console.log(result);
     result.expectOk();
   },
@@ -32,7 +32,6 @@ Clarinet.test({
   name: 'wallet_2 account can hatch Cnry',
   async fn(chain: Chain, accounts: Map<string, Account>) {
     const account = accounts.get('wallet_2')!;
-    // wallet_1 calls the mint function
     const block = chain.mineBlock([
       Tx.contractCall(
         'cnry',
@@ -42,6 +41,7 @@ Clarinet.test({
       ),
     ]);
     const result = block.receipts[0].result;
+    console.log('wallet_2');
     console.log(result);
     result.expectOk();
   },
@@ -57,7 +57,7 @@ Clarinet.test({
       Tx.contractCall(
         'cnry',
         'set-uri',
-        [types.uint(1), types.ascii('https://example.com')],
+        [types.uint(2), types.ascii('https://example.com')],
         account.address
       ),
     ]);
@@ -112,7 +112,7 @@ Clarinet.test({
 });
 
 Clarinet.test({
-  name: 'it lets another account watch the same Cnry',
+  name: 'it lets an account watch a Cnry',
   async fn(chain: Chain, accounts: Map<string, Account>) {
     const wallet_1 = accounts.get('wallet_1')!;
 

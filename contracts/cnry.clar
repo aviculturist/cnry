@@ -28,6 +28,7 @@
 (define-constant ERR_CONTRACT_CALL (err u503)) ;; internal error
 (define-constant ERR_FAILED_TO_TRANSFER (err u504)) ;; failed to transfer
 (define-constant ERR_INSUFFICIENT_BALANCE (err u505)) ;; insufficient balance
+(define-constant ERR_INVALID_KEEPALIVE_EXPIRY (err u506)) ;; invalid keepalive expiry value
 
 ;; VARIABLES (lowercase)
 (define-data-var base-uri (string-ascii 210) "https://cnry.org/?id={id}")
@@ -101,7 +102,12 @@
    (unwrap-panic (get-block-info? time (- block-height u1))))
 
 (define-private (is-within-keepaliveExpiry (keepaliveTimestamp uint) (keepaliveExpiry uint) (tokenId uint))
-  (> (to-int keepaliveTimestamp) (to-int (- (get-time) keepaliveExpiry))))
+  (> (to-int (+ keepaliveTimestamp keepaliveExpiry)) (to-int (get-time) )))
+
+;; sanatize user input, avoid overflows
+(define-private (is-valid-keepaliveExpiry (keepaliveExpiry uint ))
+  (< (to-int keepaliveExpiry) 94670857) ;; 94670857 = three years plus one second
+)
 
 (define-private (get-base-uri (id uint))
   (var-get base-uri))
@@ -269,6 +275,7 @@
     )
     (asserts! (is-owner tokenId) ERR_NOT_AUTHORIZED)
     (asserts! (is-within-keepaliveExpiry (get keepaliveTimestamp cnry) (get keepaliveExpiry cnry) tokenId) ERR_CNRY_EXPIRED)
+    (asserts! (is-valid-keepaliveExpiry (get keepaliveExpiry cnry)) ERR_INVALID_KEEPALIVE_EXPIRY)
     (begin
       (map-set cnrys {tokenId: tokenId}
         (merge cnry { keepaliveTimestamp: now }) ;; reset keepalive to now

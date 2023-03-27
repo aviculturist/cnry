@@ -11,7 +11,7 @@ import {
 
 const { cnry, watcher } = contractsFactory(simnet);
 
-describe('Clarigen tests that', () => {
+describe('Clarigen testing that', () => {
   let chain: Chain;
   beforeAll(() => {
     chain = Chain.fromSimnet(simnet).chain;
@@ -34,14 +34,33 @@ describe('Clarigen tests that', () => {
     const setUriTx = chain.mineOne(
       txOk(cnry.setUri({ tokenId: 1n, cnryUri: 'https://example.com' }), alice)
     );
+    //const first = chain.rov(cnry.getLastTokenId());
 
     const getUriTx = chain.rov(cnry.getTokenUri(1n));
     assertEquals(getUriTx.value, 'https://example.com');
   });
 
   it('Alice can update her Cnry keepalive-timestamp', () => {
+    const initialKeepAliveExpiry = chain.rov(cnry.getKeepaliveExpiry(1n));
+    assertEquals(initialKeepAliveExpiry.value, 86400n);
+
     const keepaliveUpdateTx = chain.mineOne(
       txOk(cnry.setKeepaliveExpiry({ tokenId: 1n, keepaliveExpiry: 5n }), alice)
+    );
+  });
+
+  it('Alice can not update her Cnry keepalive-timestamp with an invalid expiry', () => {
+    const initialKeepAliveExpiry = chain.rov(cnry.getKeepaliveExpiry(1n));
+    assertEquals(initialKeepAliveExpiry.value, 5n);
+
+    const keepaliveUpdateTx = chain.mineOne(
+      txErr(
+        cnry.setKeepaliveExpiry({
+          tokenId: 1n,
+          keepaliveExpiry: 170141183460469231731687303715884105729n,
+        }),
+        alice
+      )
     );
   });
 
