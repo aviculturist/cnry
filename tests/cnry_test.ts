@@ -119,6 +119,7 @@ describe('Clarinet testing that ... ', () => {
     // TODO: why is metadata.result wrapped in double quotes?
     assertEquals(metadata.result, '"https://www.example.com?id={id}"');
   });
+
   it('non-deployer cannot update the base-uri', () => {
     const account = accounts.get('wallet_1')!;
 

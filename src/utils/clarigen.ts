@@ -143,9 +143,9 @@ export type ErrType<R> = R extends ResponseErr<unknown, infer V> ? V : never;
 export const contracts = {
   cnry: {
   "functions": {
-    getBaseUri: {"name":"get-base-uri","access":"private","args":[{"name":"id","type":"uint128"}],"outputs":{"type":{"string-ascii":{"length":210}}}} as TypedAbiFunction<[id: TypedAbiArg<number | bigint, "id">], string>,
     getTime: {"name":"get-time","access":"private","args":[],"outputs":{"type":"uint128"}} as TypedAbiFunction<[], bigint>,
     isOwner: {"name":"is-owner","access":"private","args":[{"name":"tokenId","type":"uint128"}],"outputs":{"type":"bool"}} as TypedAbiFunction<[tokenId: TypedAbiArg<number | bigint, "tokenId">], boolean>,
+    isValidKeepaliveExpiry: {"name":"is-valid-keepaliveExpiry","access":"private","args":[{"name":"keepaliveExpiry","type":"uint128"}],"outputs":{"type":"bool"}} as TypedAbiFunction<[keepaliveExpiry: TypedAbiArg<number | bigint, "keepaliveExpiry">], boolean>,
     isWithinKeepaliveExpiry: {"name":"is-within-keepaliveExpiry","access":"private","args":[{"name":"keepaliveTimestamp","type":"uint128"},{"name":"keepaliveExpiry","type":"uint128"},{"name":"tokenId","type":"uint128"}],"outputs":{"type":"bool"}} as TypedAbiFunction<[keepaliveTimestamp: TypedAbiArg<number | bigint, "keepaliveTimestamp">, keepaliveExpiry: TypedAbiArg<number | bigint, "keepaliveExpiry">, tokenId: TypedAbiArg<number | bigint, "tokenId">], boolean>,
     hatch: {"name":"hatch","access":"public","args":[{"name":"cnryName","type":{"string-utf8":{"length":32}}},{"name":"cnryStatement","type":{"string-utf8":{"length":280}}}],"outputs":{"type":{"response":{"ok":"uint128","error":"uint128"}}}} as TypedAbiFunction<[cnryName: TypedAbiArg<string, "cnryName">, cnryStatement: TypedAbiArg<string, "cnryStatement">], Response<bigint, bigint>>,
     keepalive: {"name":"keepalive","access":"public","args":[{"name":"tokenId","type":"uint128"}],"outputs":{"type":{"response":{"ok":"uint128","error":"uint128"}}}} as TypedAbiFunction<[tokenId: TypedAbiArg<number | bigint, "tokenId">], Response<bigint, bigint>>,
@@ -160,6 +160,7 @@ export const contracts = {
     setWatchPrice: {"name":"set-watchPrice","access":"public","args":[{"name":"new-watchPrice","type":"uint128"}],"outputs":{"type":{"response":{"ok":"bool","error":"uint128"}}}} as TypedAbiFunction<[newWatchPrice: TypedAbiArg<number | bigint, "newWatchPrice">], Response<boolean, bigint>>,
     transfer: {"name":"transfer","access":"public","args":[{"name":"tokenId","type":"uint128"},{"name":"sender","type":"principal"},{"name":"recipient","type":"principal"}],"outputs":{"type":{"response":{"ok":"none","error":"uint128"}}}} as TypedAbiFunction<[tokenId: TypedAbiArg<number | bigint, "tokenId">, sender: TypedAbiArg<string, "sender">, recipient: TypedAbiArg<string, "recipient">], Response<null, bigint>>,
     watch: {"name":"watch","access":"public","args":[{"name":"tokenId","type":"uint128"}],"outputs":{"type":{"response":{"ok":"uint128","error":"uint128"}}}} as TypedAbiFunction<[tokenId: TypedAbiArg<number | bigint, "tokenId">], Response<bigint, bigint>>,
+    getBaseUri: {"name":"get-base-uri","access":"read_only","args":[{"name":"id","type":"uint128"}],"outputs":{"type":{"string-ascii":{"length":210}}}} as TypedAbiFunction<[id: TypedAbiArg<number | bigint, "id">], string>,
     getHatchPrice: {"name":"get-hatchPrice","access":"read_only","args":[],"outputs":{"type":"uint128"}} as TypedAbiFunction<[], bigint>,
     getKeepaliveExpiry: {"name":"get-keepaliveExpiry","access":"read_only","args":[{"name":"tokenId","type":"uint128"}],"outputs":{"type":{"response":{"ok":"uint128","error":"uint128"}}}} as TypedAbiFunction<[tokenId: TypedAbiArg<number | bigint, "tokenId">], Response<bigint, bigint>>,
     getKeepalivePrice: {"name":"get-keepalivePrice","access":"read_only","args":[],"outputs":{"type":"uint128"}} as TypedAbiFunction<[], bigint>,
@@ -275,6 +276,16 @@ export const contracts = {
   },
   access: "constant",
 } as TypedAbiVariable<Response<null, bigint>>,
+    ERR_INVALID_KEEPALIVE_EXPIRY: {
+  name: "ERR_INVALID_KEEPALIVE_EXPIRY",
+  type: {
+    response: {
+      ok: "none",
+      error: "uint128",
+    },
+  },
+  access: "constant",
+} as TypedAbiVariable<Response<null, bigint>>,
     ERR_NOT_AUTHORIZED: {
   name: "ERR_NOT_AUTHORIZED",
   type: {
@@ -351,6 +362,10 @@ export const contracts = {
   ERR_INSUFFICIENT_BALANCE: {
     isOk: false,
     value: 505n,
+  },
+  ERR_INVALID_KEEPALIVE_EXPIRY: {
+    isOk: false,
+    value: 506n,
   },
   ERR_NOT_AUTHORIZED: {
     isOk: false,
