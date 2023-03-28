@@ -109,10 +109,10 @@
   (< (to-int keepaliveExpiry) 94670857) ;; 94670857 = three years plus one second
 )
 
-(define-private (get-base-uri (id uint))
+;; READ-ONLY
+(define-read-only (get-base-uri (id uint))
   (var-get base-uri))
 
-;; READ-ONLY
 
 (define-read-only (get-watcher-count (tokenId uint))
   (ok (default-to { count: u0 } (map-get? watcher-count { tokenId: tokenId })))
