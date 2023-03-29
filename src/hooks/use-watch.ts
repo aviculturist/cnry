@@ -6,7 +6,7 @@ import {
   createSTXPostCondition,
   FungibleConditionCode,
 } from 'micro-stacks/transactions';
-import { networkAtom, userStxAddressesAtom, useTransactionPopup } from '@micro-stacks/react';
+import { networkAtom, userStxAddressesAtom, useTransactionPopup } from '@micro-stacks/jotai';
 import { ChainID } from 'micro-stacks/common';
 import { currentCnryContractState } from '@utils/helpers';
 import { WATCH_FUNCTION } from '@utils/constants';

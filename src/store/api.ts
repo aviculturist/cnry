@@ -7,7 +7,7 @@ import {
   InfoApi,
 } from '@stacks/blockchain-api-client';
 // can't use hook here, so use the atom directly
-import { networkAtom } from '@micro-stacks/react';
+import { networkAtom } from '@micro-stacks/jotai';
 
 // set network
 const configAtom = atom(get => {

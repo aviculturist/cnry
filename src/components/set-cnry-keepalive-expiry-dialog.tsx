@@ -16,7 +16,7 @@ export const SetCnryKeepaliveExpiryDialog = ({ tokenId }: { tokenId: number }) =
     setSetCnryKeepaliveExpiryDialogisOpen(false);
   };
 
-  return ( cnryMetadata ?
+  return cnryMetadata ? (
     <>
       <Dialog
         fullWidth={true}
@@ -33,6 +33,8 @@ export const SetCnryKeepaliveExpiryDialog = ({ tokenId }: { tokenId: number }) =
           />
         </Stack>
       </Dialog>
-    </> : <></>
+    </>
+  ) : (
+    <></>
   );
 };

@@ -4,7 +4,7 @@ import { atom } from 'jotai';
 import { atomFamily, atomWithStorage } from 'jotai/utils';
 import { atomFamilyWithQuery } from 'jotai-query-toolkit';
 import { DEFAULT_NETWORK_LIST, DEFAULT_NETWORK_INDEX } from '@utils/constants';
-import { networkAtom } from '@micro-stacks/react';
+import { networkAtom } from '@micro-stacks/jotai';
 import { atomWithQuery } from 'jotai-query-toolkit';
 import { StacksMainnet } from 'micro-stacks/network';
 

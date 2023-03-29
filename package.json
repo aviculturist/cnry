@@ -36,6 +36,7 @@
     "formik-mui": "^5.0.0-alpha.0",
     "jotai": "1.8.6",
     "jotai-query-toolkit": "0.1.23",
+    "jotai-tanstack-query": "^0.6.0",
     "make-plural": "7.2.0",
     "micro-stacks": "1.1.5",
     "next": "13.2.4",

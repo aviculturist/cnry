@@ -12,13 +12,17 @@ import Typography from '@mui/material/Typography';
 import CircularProgress from '@mui/material/CircularProgress';
 import Popper, { PopperPlacementType } from '@mui/material/Popper';
 import AutorenewOutlinedIcon from '@mui/icons-material/AutorenewOutlined';
-import { cnryGetMetadataAtom, cnryGetMetadataQueryAtom, currentUpdatingCnrysAtom } from '@store/cnry';
+import {
+  cnryGetMetadataAtom,
+  cnryGetMetadataQueryAtom,
+  currentUpdatingCnrysAtom,
+} from '@store/cnry';
 import { userPendingTxAtom } from '@store/transactions';
 import { currentChainState, currentStacksExplorerState } from '@utils/helpers';
 import { truncateMiddle } from '@utils/common';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
-import { networkAtom, stacksSessionAtom } from '@micro-stacks/react';
+import { networkAtom, stacksSessionAtom } from '@micro-stacks/jotai';
 
 const CnryUpdate = ({ txid, tokenId }: { txid: string; tokenId: number }) => {
   const tx = useAtomValue(userPendingTxAtom(txid));
@@ -28,7 +32,9 @@ const CnryUpdate = ({ txid, tokenId }: { txid: string; tokenId: number }) => {
   const [updatingCnryIds, setUpdatingCnryIds] = useAtom(currentUpdatingCnrysAtom);
   const [network] = useAtom(networkAtom);
   const [session] = useAtom(stacksSessionAtom);
-  const [cnryMetadata, dispatchCnryMetadata] = useAtom(cnryGetMetadataQueryAtom([tokenId, network, session]));
+  const [cnryMetadata, dispatchCnryMetadata] = useAtom(
+    cnryGetMetadataQueryAtom([tokenId, network, session])
+  );
 
   useEffect(() => {
     console.log('within CnryUpdate');
@@ -49,13 +55,13 @@ const CnryUpdate = ({ txid, tokenId }: { txid: string; tokenId: number }) => {
   }, [dispatchCnryMetadata, setUpdatingCnryIds, tokenId, tx, txid, updatingCnryIds]);
 
   // useEffect(() => {
-    //   // fetch latest data
-    //   const refetch = () => {
-    //     dispatchCnryWatchCount({ type: 'refetch' });
-    //   };
-    //   refetch();
-    // }, [pendingTxIds, dispatchCnryWatchCount]);
-    // {updatingCnryIds[Number(cnryMetadata.index)] === undefined ? '' : 'Updating'}
+  //   // fetch latest data
+  //   const refetch = () => {
+  //     dispatchCnryWatchCount({ type: 'refetch' });
+  //   };
+  //   refetch();
+  // }, [pendingTxIds, dispatchCnryWatchCount]);
+  // {updatingCnryIds[Number(cnryMetadata.index)] === undefined ? '' : 'Updating'}
 
   return (
     <>

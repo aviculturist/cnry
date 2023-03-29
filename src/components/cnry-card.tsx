@@ -4,7 +4,7 @@ import { t } from '@lingui/macro';
 import { useAtom } from 'jotai';
 import { useAtomValue } from 'jotai/utils';
 import { ChainID } from 'micro-stacks/common';
-import { useAuth, networkAtom, userStxAddressesAtom } from '@micro-stacks/react';
+import { useAuth, networkAtom, userStxAddressesAtom } from '@micro-stacks/jotai';
 import { ContractCallTransaction } from '@stacks/stacks-blockchain-api-types';
 import { styled } from '@mui/material/styles';
 import { red } from '@mui/material/colors';

@@ -7,7 +7,7 @@ import { anyCnryNameDialogIsOpenAtomFamily } from '@store/ui/set-cnry-name-dialo
 import SetCnryNameForm from '@components/forms/set-cnry-name-form';
 import { cnryGetMetadataAtom } from '@store/cnry';
 
-export const SetCnryNameDialog = ({ tokenId }: { tokenId: number; }) => {
+export const SetCnryNameDialog = ({ tokenId }: { tokenId: number }) => {
   const [cnryMetadata] = useAtom(cnryGetMetadataAtom(tokenId));
   const [setCnryNameDialogIsOpen, setSetCnryNameDialogisOpen] = useAtom(
     anyCnryNameDialogIsOpenAtomFamily(tokenId)
@@ -16,14 +16,20 @@ export const SetCnryNameDialog = ({ tokenId }: { tokenId: number; }) => {
     setSetCnryNameDialogisOpen(false);
   };
 
-  return ( cnryMetadata ?
+  return cnryMetadata ? (
     <>
       <Dialog fullWidth={true} maxWidth="sm" onClose={handleClose} open={setCnryNameDialogIsOpen}>
         <DialogTitle>{t`Edit Name`}</DialogTitle>
         <Stack maxWidth="sm" sx={{ m: 'auto', p: 6 }}>
-          <SetCnryNameForm key={tokenId.toString()} tokenId={tokenId} cnryName={cnryMetadata.cnryName} />
+          <SetCnryNameForm
+            key={tokenId.toString()}
+            tokenId={tokenId}
+            cnryName={cnryMetadata.cnryName}
+          />
         </Stack>
       </Dialog>
-    </> : <></>
+    </>
+  ) : (
+    <></>
   );
 };

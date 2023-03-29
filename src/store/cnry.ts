@@ -3,7 +3,7 @@ import { atomFamily, atomWithStorage } from 'jotai/utils';
 import { atomWithQuery, atomFamilyWithQuery } from 'jotai-query-toolkit';
 import { StacksNetwork } from 'micro-stacks/network';
 import { StacksSessionState } from 'micro-stacks/connect';
-import { networkAtom, stacksSessionAtom, userStxAddressesAtom } from '@micro-stacks/react';
+import { networkAtom, stacksSessionAtom, userStxAddressesAtom } from '@micro-stacks/jotai';
 import { fetchReadOnlyFunction, fetchTransaction } from 'micro-stacks/api';
 import { ChainID } from 'micro-stacks/common';
 import { uintCV } from 'micro-stacks/clarity';

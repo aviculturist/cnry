@@ -1,40 +1,50 @@
-import { NodeProvider, NodeTransaction } from '@clarigen/node';
-import { Transaction, WebTransactionReceipt, TransactionReceipt } from '@clarigen/core';
-import { contracts } from '@contracts';
-import { StacksMocknet } from '@stacks/network';
+// import { NodeProvider, NodeTransaction } from '@clarigen/node';
+// import {
+//   Transaction,
+//   WebTransactionReceipt,
+//   TransactionReceipt,
+// } from 'https://deno.land/x/clarigen/src/index.ts';
+// import { contracts } from '@contracts';
+import { accounts } from '@utils/clarigen';
+import { contracts } from '../src/esm/clarigen.ts';
+import { contractFactory } from '@clarigen/core';
 
-// wallet_2 private key
-// this is the private key making transactions.
-const privateKey = '530d9f61984c888536871c6573073bdfc0058896dc1adfe9a6a10dfacadc209101';
+// import { StacksMocknet } from '@stacks/network';
 
-const name = process.argv[2];
-const statement = process.argv[3];
+// // wallet_2 private key
+// // this is the private key making transactions.
+// const privateKey = '530d9f61984c888536871c6573073bdfc0058896dc1adfe9a6a10dfacadc209101';
 
-const clarigenConfig = {
-  privateKey,
-  network: new StacksMocknet(),
-  deployerAddress: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM',
-};
+const name = Deno.args[0];
+const statement = Deno.args[1];
 
-const deployed = NodeProvider.fromContracts(contracts, clarigenConfig);
+console.log(name);
 
-async function run() {
-  const cnry = deployed.cnry.contract;
-  const hatchTx = cnry.hatch(name, statement) as Transaction<bigint, bigint>;
+// const clarigenConfig = {
+//   privateKey,
+//   network: new StacksMocknet(),
+//   deployerAddress: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM',
+// };
 
-  const result = (await hatchTx.submit({
-    postConditions: [],
-  })) as TransactionReceipt<bigint, bigint>;
+// const deployed = NodeProvider.fromContracts(contracts, clarigenConfig);
 
-  console.log(result);
-  // console.log(`curl -s 'http://localhost:3999/extended/v1/tx/0x${result.txId}' | jq -r .`);
-  // console.log(
-  //   `stx -I http://localhost:3999 -H http://localhost:3999 get_confirmations ${result.txId}`
-  // );
-}
+// async function run() {
+//   const cnry = deployed.cnry.contract;
+//   const hatchTx = cnry.hatch(name, statement) as Transaction<bigint, bigint>;
 
-run()
-  .catch(console.error)
-  .finally(() => {
-    process.exit();
-  });
+//   const result = (await hatchTx.submit({
+//     postConditions: [],
+//   })) as TransactionReceipt<bigint, bigint>;
+
+//   console.log(result);
+//   // console.log(`curl -s 'http://localhost:3999/extended/v1/tx/0x${result.txId}' | jq -r .`);
+//   // console.log(
+//   //   `stx -I http://localhost:3999 -H http://localhost:3999 get_confirmations ${result.txId}`
+//   // );
+// }
+
+// run()
+//   .catch(console.error)
+//   .finally(() => {
+//     process.exit();
+//   });

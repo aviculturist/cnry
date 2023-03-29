@@ -4,7 +4,7 @@ import { ChainID } from 'micro-stacks/common';
 import { stringAsciiCV } from 'micro-stacks/clarity';
 import { StacksNetwork } from 'micro-stacks/network';
 import { StacksSessionState } from 'micro-stacks/connect';
-import { networkAtom, stacksSessionAtom, userStxAddressesAtom } from '@micro-stacks/react';
+import { networkAtom, stacksSessionAtom, userStxAddressesAtom } from '@micro-stacks/jotai';
 import { fetchReadOnlyFunction } from 'micro-stacks/api';
 import { currentMaintenanceContractState } from '@utils/helpers';
 import { GET_MAINTENANCE_FUNCTION } from '@utils/constants';

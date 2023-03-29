@@ -11,12 +11,7 @@ import StacksIcon from '@assets/stacks-icon';
 const StacksChainTipButtonSkeleton = () => {
   return (
     <Tooltip title={t`Stacks Chain Tip`}>
-      <Button
-        startIcon={<StacksIcon/>}
-        variant="text"
-        size="small"
-        color={'success'}
-      >
+      <Button startIcon={<StacksIcon />} variant="text" size="small" color={'success'}>
         ????
       </Button>
     </Tooltip>

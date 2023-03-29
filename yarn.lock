@@ -1138,6 +1138,7 @@
     prop-types "^15.8.1"
 
 "@mui/styled-engine-sc@5.11.11", "@mui/styled-engine@^5.11.11", "@mui/styled-engine@npm:@mui/styled-engine-sc@latest":
+  name "@mui/styled-engine"
   version "5.11.11"
   resolved "https://registry.yarnpkg.com/@mui/styled-engine-sc/-/styled-engine-sc-5.11.11.tgz#030882bf991bd11e1a46efba7382ccbfdf7826d2"
   integrity sha512-6+HsfcKHlhjQklDoEup7Itl+Xgn+BCsqEpIdIIhlxED4YlOZ38xghxIKrx78XFZznTorbhAspUgDDKIaB5vDMg==
@@ -4974,6 +4975,11 @@ jotai-query-toolkit@0.1.23, jotai-query-toolkit@>=0.1.22:
     jotai latest
     react-query latest
     use-memo-one "1.1.2"
+
+jotai-tanstack-query@^0.6.0:
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/jotai-tanstack-query/-/jotai-tanstack-query-0.6.0.tgz#2786542d086570e41f49673bfc55c7b70df8f05e"
+  integrity sha512-87oD6MnjrgfLWeCJXB/dQt4xyCmyFYZeG9jw4Y2lIprtwLKS5s/vCEjNP5fnYG2nuPBkopiRECTEqtIysvHSxg==
 
 jotai@1.8.6:
   version "1.8.6"

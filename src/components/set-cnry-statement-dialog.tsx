@@ -16,8 +16,7 @@ export const SetCnryStatementDialog = ({ tokenId }: { tokenId: number }) => {
     setSetCnryStatementDialogisOpen(false);
   };
 
-  return (
-    cnryMetadata ?
+  return cnryMetadata ? (
     <>
       <Dialog
         fullWidth={true}
@@ -34,6 +33,8 @@ export const SetCnryStatementDialog = ({ tokenId }: { tokenId: number }) => {
           />
         </Stack>
       </Dialog>
-    </> : <></>
+    </>
+  ) : (
+    <></>
   );
 };

@@ -3,7 +3,11 @@ import { useAtom } from 'jotai';
 import { useTransactionPopup } from '@micro-stacks/react';
 import { currentCnryContractState } from '@utils/helpers';
 import { KEEPALIVE_FUNCTION } from '@utils/constants';
-import { cnryUserPendingTxIdsAtom, currentPendingTxIdsAtom, userPendingTxAtom } from '@store/transactions';
+import {
+  cnryUserPendingTxIdsAtom,
+  currentPendingTxIdsAtom,
+  userPendingTxAtom,
+} from '@store/transactions';
 //import { uintCV, intCV } from 'micro-stacks/clarity';
 import { noneCV, someCV, uintCV, stringUtf8CV } from '@stacks/transactions';
 import { anyCnryKeepaliveExpiryDialogIsOpenAtomFamily } from '@store/ui/set-cnry-keepalive-expiry-dialog-is-open';
@@ -25,7 +29,12 @@ const useSetCnryKeepaliveExpiry = (tokenId: number, cnryKeepaliveExpiry: number)
       setCnryUserPendingTxIds([...cnryUserPendingTxIds, data.txid]); // adds this txid to the array of pending transactions
       setSetCnryKeepaliveExpiryDialogIsOpen(false);
     },
-    [cnryUserPendingTxIds, setCnryUserPendingTxIds, setPendingTxIds, setSetCnryKeepaliveExpiryDialogIsOpen]
+    [
+      cnryUserPendingTxIds,
+      setCnryUserPendingTxIds,
+      setPendingTxIds,
+      setSetCnryKeepaliveExpiryDialogIsOpen,
+    ]
   );
 
   const onCancel = useCallback(errorMessage => {
