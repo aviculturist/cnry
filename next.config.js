@@ -7,7 +7,7 @@ module.exports = {
   assetPrefix: './',
   trailingSlash: true,
   // https://medium.com/@yashashr/next-js-optimization-for-better-performance-part-1-material-ui-mui-configs-plugins-6fdc48a4e984
-  transpilePackages: ["@mui/system", "@mui/material", "@mui/icons-material"],
+  transpilePackages: ['@mui/system', '@mui/material', '@mui/icons-material'],
   reactStrictMode: true,
   webpack(config, { isServer }) {
     const fallback = config.resolve.fallback || (config.resolve.fallback = {});

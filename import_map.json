@@ -4,6 +4,7 @@
     "@utils/clarigen": "./src/utils/clarigen.ts",
     "@clarigen/core": "npm:@clarigen/core",
     "@stacks/transactions": "npm:@stacks/transactions",
-    "@stacks/network": "npm:@stacks/network"
+    "@stacks/network": "npm:@stacks/network",
+    "@clarigen/core": "npm:@clarigen/core"
   }
 }

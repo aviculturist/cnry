@@ -1,14 +1,14 @@
 import * as React from 'react';
 import { NextPage } from 'next';
 import { GetQueries, getStaticQueryProps } from 'jotai-query-toolkit/nextjs';
-import { wrapWithMicroStacks } from '@micro-stacks/nextjs';
-import { StacksMainnet, StacksTestnet, StacksMocknet } from 'micro-stacks/network';
-import {
-  DEFAULT_MAINNET_SERVER,
-  DEFAULT_TESTNET_SERVER,
-  DEFAULT_DEVNET_SERVER,
-  ENV,
-} from '@utils/constants';
+// import { wrapWithMicroStacks } from '@micro-stacks/nextjs';
+// import { StacksMainnet, StacksTestnet, StacksMocknet } from 'micro-stacks/network';
+// import {
+//   DEFAULT_MAINNET_SERVER,
+//   DEFAULT_TESTNET_SERVER,
+//   DEFAULT_DEVNET_SERVER,
+//   ENV,
+// } from '@utils/constants';
 import Header from '@components/header';
 import CnryApp from '@components/cnry-app';
 import Footer from '@components/footer';
@@ -72,19 +72,19 @@ export const getStaticProps = getStaticQueryProps(getQueries)(async _ctx => {
 
 // .env.development and .env.production are source of truth for NEXT_PUBLIC_ENV
 // in development, default to devnet, in production, mainnet
-const initialNetwork =
-  ENV === 'development'
-    ? new StacksMocknet({ url: DEFAULT_DEVNET_SERVER })
-    : new StacksTestnet({ url: DEFAULT_TESTNET_SERVER });
+// const initialNetwork =
+//   ENV === 'development'
+//     ? new StacksMocknet({ url: DEFAULT_DEVNET_SERVER })
+//     : new StacksTestnet({ url: DEFAULT_TESTNET_SERVER });
 
-const withMicroStacks = wrapWithMicroStacks({
-  network: initialNetwork,
-  authOptions: {
-    appDetails: {
-      name: 'Cnry',
-      icon: `${typeof window !== 'undefined' ? window.location.href : ''}./favicon.ico`,
-    },
-  },
-});
+// const withMicroStacks = wrapWithMicroStacks({
+//   network: initialNetwork,
+//   authOptions: {
+//     appDetails: {
+//       name: 'Cnry',
+//       icon: `${typeof window !== 'undefined' ? window.location.href : ''}./favicon.ico`,
+//     },
+//   },
+// });
 
-export default withMicroStacks(Index);
+export default Index; //withMicroStacks(Index);

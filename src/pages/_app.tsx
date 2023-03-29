@@ -1,7 +1,7 @@
 import '../utils/wdyr';
 import * as React from 'react';
 import { ReactNode } from 'react';
-import { Provider } from 'jotai';
+import { Provider, useAtom } from 'jotai';
 import { HashRouter } from 'react-router-dom';
 import DarkModeProvider from 'src/contexts/darkmode-context';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -11,7 +11,6 @@ import { I18nProvider } from '@lingui/react';
 import { i18n } from '@lingui/core';
 import { useEffect } from 'react';
 import * as plurals from 'make-plural/plurals';
-import { useAtom } from 'jotai';
 import { userLocaleAtom, DEFAULT_MESSAGES, DEFAULT_LOCALE, Locale } from '@store/ui/user-locale';
 import { useActiveLocale, queryLocale, navigatorLocale } from '@hooks/use-active-locale';
 import NoSsr from '@mui/material/NoSsr';
@@ -19,6 +18,20 @@ import { StyleSheetManager } from 'styled-components';
 import rtlPlugin from 'stylis-plugin-rtl';
 import { StylisPlugin } from 'styled-components';
 import { ClientProvider } from '@micro-stacks/react';
+import { StacksMainnet, StacksTestnet, StacksMocknet } from 'micro-stacks/network';
+import {
+  DEFAULT_MAINNET_SERVER,
+  DEFAULT_TESTNET_SERVER,
+  DEFAULT_DEVNET_SERVER,
+  ENV,
+} from '@utils/constants';
+
+// .env.development and .env.production are source of truth for NEXT_PUBLIC_ENV
+// in development, default to devnet, in production, mainnet
+const initialNetwork =
+  ENV === 'development'
+    ? new StacksMocknet({ url: DEFAULT_DEVNET_SERVER })
+    : new StacksTestnet({ url: DEFAULT_TESTNET_SERVER });
 
 // https://dev.to/pffigueiredo/bullet-proof-rtl-rtl-in-a-web-platform-3-6-4bne
 // TODO: these props/children ?
@@ -75,7 +88,6 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
 function CnryApp(props: AppProps) {
   const { Component, pageProps } = props;
   return (
-    
     <Provider>
       <Head>
         <title>Cnry</title>
@@ -89,10 +101,8 @@ function CnryApp(props: AppProps) {
             <DirectionProvider>
               <DarkModeProvider>
                 <CssBaseline />
-                <ClientProvider
-                appName="Cnry"
-                appIconUrl="/vercel.png"
-                ><Component {...pageProps} />
+                <ClientProvider appName="Cnry" appIconUrl="/vercel.png" network={initialNetwork}>
+                  <Component {...pageProps} />
                 </ClientProvider>
               </DarkModeProvider>
             </DirectionProvider>
