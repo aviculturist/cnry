@@ -6,7 +6,7 @@
 // } from 'https://deno.land/x/clarigen/src/index.ts';
 // import { contracts } from '@contracts';
 import { accounts } from '@utils/clarigen';
-import { contracts } from '../src/esm/clarigen.ts';
+import { contracts } from '../src/esm/clarigen';
 import { contractFactory } from '@clarigen/core';
 
 // import { StacksMocknet } from '@stacks/network';
@@ -14,11 +14,12 @@ import { contractFactory } from '@clarigen/core';
 // // wallet_2 private key
 // // this is the private key making transactions.
 // const privateKey = '530d9f61984c888536871c6573073bdfc0058896dc1adfe9a6a10dfacadc209101';
+// eslint-disable-line
+// const name = Deno.args[0];
+// // eslint-disable-line
+// const statement = Deno.args[1];
 
-const name = Deno.args[0];
-const statement = Deno.args[1];
-
-console.log(name);
+// console.log(name);
 
 // const clarigenConfig = {
 //   privateKey,
