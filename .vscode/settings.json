@@ -16,7 +16,7 @@
     "editor.codeActionsOnSave": ["source.formatDocument", "source.fixAll.eslint"]
   },
   "[toml]": {
-    "editor.defaultFormatter": "bungcip.better-toml"
+    "editor.defaultFormatter": "tamasfe.even-better-toml"
   },
   "[clarity]": { "editor.defaultFormatter": "hirosystems.clarity-lsp" }
 }
